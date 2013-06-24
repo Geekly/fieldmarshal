@@ -2,33 +2,33 @@ package net.geeklythings.fieldmarshal.data;
 
 public class Player {
 
-	private String name;
-	private String faction;
+	private String firstName;
+	private String lastName;
 	
 	public Player()
 	{
 		
 	}
 	
-	public Player(String playerName, String playerFaction)
+	public Player(String firstName, String lastName )
 	{
-		this.setName(playerName);
-		this.setFaction(playerFaction);
+		this.setFirstName(firstName);
+		this.setLastName(lastName);
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String playerName) {
-		name = playerName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getFaction() {
-		return faction;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setFaction(String playerFaction) {
-		faction = playerFaction;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 }

@@ -8,25 +8,33 @@ public class Tournament {
 
 	private Date todaysDate;
 	private Date startTime;
-	private int numRounds;
-	private HashSet<Player> players;
+	private EventFormat tournamentFormat;
+	//private int numRounds;
+	private HashSet<Entrant> players;
 	//Standings
 	private Round[] rounds;
 		//RoundResults
 	
 	public Tournament (int numRounds)
 	{
+		tournamentFormat = new EventFormat(numRounds);
+		rounds = new Round[numRounds];		
+	}
+	
+	public Tournament (EventFormat format)
+	{
 		
-		rounds = new Round[numRounds];
+		tournamentFormat = format;
 		
 	}
 	
-	public void AddPlayer(Player newPlayer) {		
+	public void AddEntrant(Entrant newPlayer) {
 		players.add(newPlayer);
 	}
 	
-	public void AddPlayer(String playerName, String faction) {
-		players.add( new Player(playerName, faction));
+	public void AddEntrant(String firstName, String lastName, Faction faction) {
+		Player player = new Player(firstName, lastName);
+		players.add( new Entrant(player, faction));
 	}
 	
 }
