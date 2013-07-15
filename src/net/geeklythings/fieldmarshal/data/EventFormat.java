@@ -3,6 +3,7 @@ package net.geeklythings.fieldmarshal.data;
 public class EventFormat {
 	
 	protected int numRounds;
+	protected int formatID;
 	protected String tournamentFormat;
 	protected String timeFormat;
 	
@@ -19,6 +20,16 @@ public class EventFormat {
 		
 	}
 
+	public int getFormatID()
+	{
+		return formatID;
+	}
+	
+	public void setFormatID(int id)
+	{
+		formatID = id;
+	}
+	
 	public int getNumRounds() {
 		return numRounds;
 	}

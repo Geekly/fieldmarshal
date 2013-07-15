@@ -20,9 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 public class FieldMarshalApp {
 
 	protected Shell shlFieldMarshalTournament;
-	protected Tournament tournament;
-	//protected Connection dbConnection;
-	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
+	protected Tournament activeTournament;
 
 	/**
 	 * Launch the application.
@@ -79,8 +77,8 @@ public class FieldMarshalApp {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//TODO: create a new tournament
-				NewTournamentDialog ntd = new NewTournamentDialog(shlFieldMarshalTournament, SWT.PRIMARY_MODAL);
-				tournament = (Tournament)ntd.open();
+				EditTournamentDialog ntd = new EditTournamentDialog(shlFieldMarshalTournament, SWT.PRIMARY_MODAL);
+				activeTournament = (Tournament)ntd.open(activeTournament);
 				//tournament = new Tournament(3);
 				
 			}
@@ -92,6 +90,7 @@ public class FieldMarshalApp {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//TODO: open an existing tournament
+				//create an empty tournament, then open the tournament dialogue using that tournament
 
 			}
 		});
@@ -101,13 +100,24 @@ public class FieldMarshalApp {
 		btnNewTournament.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				NewTournamentDialog ntd = new NewTournamentDialog(shlFieldMarshalTournament, SWT.PRIMARY_MODAL);
-				tournament = (Tournament)ntd.open();
+				EditTournamentDialog ntd = new EditTournamentDialog(shlFieldMarshalTournament, SWT.PRIMARY_MODAL);
+				activeTournament = new Tournament(0);
+				ntd.open(activeTournament);
 			}
 		});
-		btnNewTournament.setBounds(36, 34, 124, 31);
-		formToolkit.adapt(btnNewTournament, true, true);
+		btnNewTournament.setBounds(10, 10, 124, 31);
 		btnNewTournament.setText("New Tournament");
+		
+		Button btnLoadTournament = new Button(shlFieldMarshalTournament, SWT.NONE);
+		btnLoadTournament.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+			}
+		});
+		btnLoadTournament.setToolTipText("Load Existing Tournament");
+		btnLoadTournament.setText("Load Tournament");
+		btnLoadTournament.setBounds(10, 62, 124, 31);
 
 	}
 }

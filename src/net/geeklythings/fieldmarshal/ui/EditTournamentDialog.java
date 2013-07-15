@@ -1,5 +1,9 @@
 package net.geeklythings.fieldmarshal.ui;
 
+import net.geeklythings.fieldmarshal.data.Tournament;
+import net.geeklythings.fieldmarshal.data.TournamentFactory;
+
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -11,12 +15,14 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.core.databinding.beans.PojoProperties;
 
-public class NewTournamentDialog extends Dialog {
+public class EditTournamentDialog extends Dialog {
 	private DataBindingContext m_bindingContext;
 
 	protected Object result;
@@ -25,15 +31,16 @@ public class NewTournamentDialog extends Dialog {
 	private Text textFormatSummary;
 	private String clockFormat = null;
 	private String eventFormat = null;
-	private int numRounds;
+	private int numRounds = 0;
 	private String eventFormatString = null;
+	private Tournament tournament;
 
 	/**
 	 * Create the dialog.
 	 * @param parent
 	 * @param style
 	 */
-	public NewTournamentDialog(Shell parent, int style) {
+	public EditTournamentDialog(Shell parent, int style) {
 		super(parent, style);
 		setText("SWT Dialog");
 	}
@@ -42,7 +49,8 @@ public class NewTournamentDialog extends Dialog {
 	 * Open the dialog.
 	 * @return the result
 	 */
-	public Object open() {
+	public Object open(Tournament tournament) {
+		this.tournament = tournament;
 		createContents();
 		shlCreateNewTournament.open();
 		shlCreateNewTournament.layout();
@@ -52,6 +60,7 @@ public class NewTournamentDialog extends Dialog {
 				display.sleep();
 			}
 		}
+		//result = new Tournament(3);
 		return result;
 	}
 
@@ -69,13 +78,25 @@ public class NewTournamentDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				//TODO: send a new tournament object back to the parent 
 				//int numRounds = 
-				//Tournament tournmanet = new Tournament();
+				tournament = TournamentFactory.createTournament(numRounds);
+				//collect all of the entries and update this tournament with the info
+				//return the tournament somehow
+				shlCreateNewTournament.close();
+				System.out.println(e);				
+				
 			}
 		});
 		btnok.setBounds(48, 365, 75, 25);
 		btnok.setText("&OK");
 		
 		Button btncancel = new Button(shlCreateNewTournament, SWT.NONE);
+		btncancel.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				shlCreateNewTournament.close();
+				System.out.println(e);
+			}
+		});
 		btncancel.setBounds(261, 365, 75, 25);
 		btncancel.setText("&Cancel");
 		
@@ -89,11 +110,14 @@ public class NewTournamentDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				Combo box = (Combo)e.widget;
 				numRounds = Integer.parseInt(box.getText());
+				tournament.getTournamentFormat().setNumRounds(numRounds);
 				updateEventFormat();
+				System.out.println(e);
+				//System.out.println(e.data);
 			}
 		});
-		comboNumRounds.setItems(new String[] {"1", "2", "3", "4", "5", "6"});
-		comboNumRounds.select(2);
+		comboNumRounds.setItems(new String[] {"1", "2", "3", "4", "5", "6", "7"});
+		comboNumRounds.select(3);
 		comboNumRounds.setBounds(216, 75, 91, 23);
 		
 		Label lblDate = new Label(shlCreateNewTournament, SWT.NONE);
@@ -114,11 +138,14 @@ public class NewTournamentDialog extends Dialog {
 		lblTournamentFormat.setBounds(48, 39, 130, 15);
 		lblTournamentFormat.setText("Tournament Format");
 		
-		final Combo comboFormat = new Combo(shlCreateNewTournament, SWT.NONE);
+		Combo comboFormat = new Combo(shlCreateNewTournament, SWT.NONE);
 		comboFormat.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				eventFormat = comboFormat.getText();
+				Combo box = (Combo)e.widget;
+				eventFormat = box.getText();
+				System.out.println(eventFormat);
+				System.out.println(e);
 			}
 		});
 		comboFormat.setItems(new String[] {"Steamroller", "Hardcore", "Iron Gauntlet", "Who's the Boss"});
@@ -132,23 +159,41 @@ public class NewTournamentDialog extends Dialog {
 		lblClockFormat.setBounds(48, 122, 91, 15);
 		lblClockFormat.setText("Clock Format");
 		
-		Combo comboClockFormat = new Combo(shlCreateNewTournament, SWT.NONE);
+		final Combo comboClockFormat = new Combo(shlCreateNewTournament, SWT.NONE);
 		comboClockFormat.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				Combo box = (Combo)e.widget;
+				clockFormat = box.getText();
 			}
 		});
 		comboClockFormat.setItems(new String[] {"Timed Turns", "Deathclock"});
 		comboClockFormat.setBounds(216, 119, 91, 23);
 
+		shlCreateNewTournament.addShellListener(new ShellAdapter() {
+			@Override
+			public void shellClosed(ShellEvent e) {
+				//do this on shell closing
+				//update the tournament with all the stuff
+				//tournament.
+				System.out.println(e);
+			}
+			
+		});
+		
 
 	}
 	private void updateEventFormat()
 	{
 		String format = null;
-		clockFormat = comboClockFormat.
+		//shlCreateNewTournament.
+		//clockFormat = comboClockFormat.
 		format += numRounds;
 		textFormatSummary.setText(format);
+		tournament.getTournamentFormat().setNumRounds(numRounds);
+		//tournament.getTournamentFormat().setTournamentFormat(tournamentFormat)
+		eventFormatString = format;
+		//comboFormat
 	}
 
 }
