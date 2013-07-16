@@ -28,9 +28,9 @@ public class TournamentFactory {
 			tournament.setDate(today);
 			
 			dao.insert(tournament);
-
-		
-			//TODO: Set up Rounds first
+                        //TODO: Set up Rounds first
+                        return tournament;
+			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -24,4 +24,6 @@ public class Round {
 		}	
 			
 	}
+        
+        public void setPairings(){}
 }

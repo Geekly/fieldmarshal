@@ -5,6 +5,7 @@
 package net.geeklythings.fieldmarshal.ui;
 
 import net.geeklythings.fieldmarshal.data.Tournament;
+import net.geeklythings.fieldmarshal.data.TournamentFactory;
 
 /**
  *
@@ -28,11 +29,21 @@ public class MainJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        fieldMarshalApp1 = new net.geeklythings.fieldmarshal.ui.FieldMarshalApp();
-        btnNewTournament = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         btnLoadTournament = new javax.swing.JButton();
+        btnNewTournament = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setName("panelStartup"); // NOI18N
+
+        btnLoadTournament.setText("Load Tournament");
+        btnLoadTournament.setToolTipText("Load Existing Tournament");
+        btnLoadTournament.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadTournamentActionPerformed(evt);
+            }
+        });
 
         btnNewTournament.setText("New Tournament");
         btnNewTournament.setToolTipText("Create New Tournament");
@@ -42,28 +53,42 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
 
-        btnLoadTournament.setText("Load Tournament");
-        btnLoadTournament.setToolTipText("Load Existing Tournament");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnLoadTournament)
+                    .addComponent(btnNewTournament))
+                .addContainerGap(45, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(75, 75, 75)
+                .addComponent(btnNewTournament)
+                .addGap(76, 76, 76)
+                .addComponent(btnLoadTournament)
+                .addContainerGap(103, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(btnNewTournament)
-                .addGap(29, 29, 29)
-                .addComponent(btnLoadTournament)
-                .addContainerGap(265, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(160, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNewTournament)
-                    .addComponent(btnLoadTournament))
-                .addContainerGap(370, Short.MAX_VALUE))
+                .addGap(17, 17, 17)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(244, Short.MAX_VALUE))
         );
 
         pack();
@@ -73,10 +98,18 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         // open the dialog here
         //Create the tournament, THEN open the edit tournament dialog
-        activeTournament = new Tournament();
+        activeTournament = TournamentFactory.createTournament(0);
         EditTournament et = new EditTournament(this, true);
+        et.setActiveTournament(activeTournament);
         et.setVisible(true);
     }//GEN-LAST:event_btnNewTournamentActionPerformed
+
+    private void btnLoadTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadTournamentActionPerformed
+        // TODO add your handling code here:
+        // open a load tournament dialog
+        // activeTournament = load the tournament
+        // load the edit tournament dialog
+    }//GEN-LAST:event_btnLoadTournamentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -115,6 +148,6 @@ public class MainJFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLoadTournament;
     private javax.swing.JButton btnNewTournament;
-    private net.geeklythings.fieldmarshal.ui.FieldMarshalApp fieldMarshalApp1;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

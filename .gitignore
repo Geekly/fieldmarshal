@@ -4,3 +4,5 @@ lib/
 /bin
 
 sample.db
+/build/
+/dist/

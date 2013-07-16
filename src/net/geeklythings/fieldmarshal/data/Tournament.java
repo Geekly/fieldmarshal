@@ -20,15 +20,17 @@ public class Tournament {
 	private String location="YLGS";
 	private String organizer="Joe McDougal";
 	private EventFormat format;
-	//private int numRounds;
+	private int numRounds=8;
+
+
 	private HashSet<Entrant> players;
 	//Standings
 	private ArrayList<Round> rounds;
-		//RoundResults
+	//RoundResults
 	
         public Tournament()
         {
-        
+            
         }
         
 	public Tournament (int numRounds)
@@ -51,7 +53,7 @@ public class Tournament {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Round getRound(int roundNumber)
 	{
 		if( (roundNumber <= rounds.size()) && ( roundNumber >= 1))
@@ -67,11 +69,11 @@ public class Tournament {
 	}
 	
 	
-	public void AddEntrant(Entrant newPlayer) {
+	public void addEntrant(Entrant newPlayer) {
 		players.add(newPlayer);
 	}
 	
-	public void AddEntrant(String firstName, String lastName, Faction faction) {
+	public void addEntrant(String firstName, String lastName, Faction faction) {
 		Player player = new Player(firstName, lastName);
 		players.add( new Entrant(player, faction));
 	}
@@ -123,6 +125,14 @@ public class Tournament {
 	public void setOrganizer(String organizer) {
 		this.organizer = organizer;
 	}
+
+        public Object getNumRounds() {
+            return this.numRounds;
+        }
 	
+        public void addRound()
+        {
+            //TODO: Add round factory or other creation method and add to list
+        }
 	
 }
