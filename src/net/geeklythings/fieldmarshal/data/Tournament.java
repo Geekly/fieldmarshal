@@ -26,6 +26,11 @@ public class Tournament {
 	private ArrayList<Round> rounds;
 		//RoundResults
 	
+        public Tournament()
+        {
+        
+        }
+        
 	public Tournament (int numRounds)
 	{		
 		setTournamentFormat(new EventFormat(numRounds));
@@ -36,10 +41,6 @@ public class Tournament {
 		}
 	}
 	
-	public Tournament (EventFormat format)
-	{	
-		setTournamentFormat(format);		
-	}
 	
 	public void update()
 	{

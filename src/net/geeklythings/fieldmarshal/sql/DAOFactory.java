@@ -9,8 +9,12 @@ public class DAOFactory {
 		return dao;
 		
 	}
-	//public static PlayerDAO getPlayerDAO(){}
-	//public static RoundDAO getRoundDAO(){}
+	
+	public static PlayerDAO getPlayerDAO(){
+		return null;}
+	public static RoundDAO getRoundDAO(){
+            return null;
+}
 	
 	
 }
