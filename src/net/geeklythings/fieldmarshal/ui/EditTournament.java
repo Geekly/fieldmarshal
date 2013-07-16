@@ -12,7 +12,7 @@ import net.geeklythings.fieldmarshal.data.Tournament;
  * @author khooks
  */
 public class EditTournament extends javax.swing.JDialog {
-    private Tournament activeTournament;
+    
 
     /**
      * Creates new form EditTournament
@@ -30,8 +30,11 @@ public class EditTournament extends javax.swing.JDialog {
         
         //TODO: update dialog values with the pass tournament.  This is appropriate for new and existing tournaments.
         //Integer numRounds = (Integer)this.cbRounds.getSelectedItem();
+        
         this.cbRounds.setSelectedItem( activeTournament.getNumRounds().toString() );
-    }
+        activeTournament.getAllRounds();
+    } 
+    
 
     public void setActiveTournament(Tournament activeTournament) {
         this.activeTournament = activeTournament;
@@ -226,7 +229,7 @@ public class EditTournament extends javax.swing.JDialog {
         });
     }
     
-    
+    private Tournament activeTournament;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbClock;
     private javax.swing.JComboBox cbFormat;
