@@ -50,7 +50,7 @@ public class TournamentDAO implements IDataAccessObject<Tournament>
 		int formatID = tournament.getTournamentFormat().getFormatID();  //key for the format table
 		
 		String updateString = "INSERT INTO Tournaments "
-				+ "(tournamentID, tournamentDate, tournamentLocation, tournamentOrganizer, formatID)"
+				+ "(tournamentID, tournamentDate, tournamentLocation, tournamentOrganizer, formatID_FK)"
 				+ "VALUES(?, ?, ?, ?, ?)";
 		PreparedStatement insert = db.prepareStatement(updateString);
 		
@@ -59,36 +59,28 @@ public class TournamentDAO implements IDataAccessObject<Tournament>
 		insert.setString(3, tournament.getLocation());
 		insert.setString(4, tournament.getOrganizer());
 		insert.setInt(5,  formatID);
-		
-		
-		/*String query = "INSERT INTO Tournaments "
-				+ "(tournamentID, tournamentDate, tournamentLocation, tournamentOrganizer, formatID)"
-				+ "VALUES(" + tournamentID + "," + tournamentDate + "," + tournamentLocation + "," 
-				+ tournamentOrganizer + "," + formatID + ")";*/
-			
-		//Statement statement = db.createStatement();
-		//statement.executeQuery(query);
+
 		boolean result = insert.execute();
 				
 	}
 	public void update(Tournament tournament) throws SQLException 
 	{		
 		int formatID = tournament.getTournamentFormat().getFormatID();  //key for the format table
-		
+		Date sqlDate = new java.sql.Date(tournament.getDate().getMillis());
 		String updateString = "UPDATE Tournaments "
-				+ SET tournamentID = ? 
-				"(tournamentID, tournamentDate, tournamentLocation, tournamentOrganizer, formatID)"
-				+ "VALUES(?, ?, ?, ?, ?)";
+				+ " SET tournamentID = ?, tournamentDate = ?, tournamentLocation = ?, tournamentOrganizer = ?," 
+				+ "formatID_FK = ?"; 
+
 		
 		PreparedStatement update = db.prepareStatement(updateString);
 		
-		insert.setInt(1, tournament.getID());
-		insert.setDate(2, sqlDate);
-		insert.setString(3, tournament.getLocation());
-		insert.setString(4, tournament.getOrganizer());
-		insert.setInt(5,  formatID);
+		update.setInt(1, tournament.getID());
+		update.setDate(2, sqlDate);
+		update.setString(3, tournament.getLocation());
+		update.setString(4, tournament.getOrganizer());
+		update.setInt(5,  formatID);
 		
-		boolean result = insert.execute();
+		boolean result = update.execute();
 		
 	}
 	

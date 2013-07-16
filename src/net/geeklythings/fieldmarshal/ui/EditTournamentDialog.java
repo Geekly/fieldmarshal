@@ -171,18 +171,32 @@ public class EditTournamentDialog extends Dialog {
 		comboClockFormat.setBounds(216, 119, 91, 23);
 
 		shlCreateNewTournament.addShellListener(new ShellAdapter() {
-			@Override
-			public void shellClosed(ShellEvent e) {
-				//do this on shell closing
-				//update the tournament with all the stuff
-				//tournament.
-				System.out.println(e);
-			}
+			
+				@Override
+				public void shellClosed(ShellEvent e)
+				{
+					
+					e.getSource();
+					EditTournamentDialog.this.updateTournamentOnClose(e);
+				}
 			
 		});
-		
-
+			
 	}
+	
+	
+	public void updateTournamentOnClose(ShellEvent e){
+		//do this on shell closing
+		//update the tournament with all the stuff
+		//tournament.
+		/*clockFormat = this.shlCreateNewTournament.comboNumRounds.
+		tournament.setDate(todaysDate);
+		tournament.setLocation(loc);
+		tournament.setOrganizer(organizer);
+		tournament.setTournamentFormat(tournamentFormat);*/
+		tournament.update();
+		System.out.println(e);}
+	
 	private void updateEventFormat()
 	{
 		String format = null;
