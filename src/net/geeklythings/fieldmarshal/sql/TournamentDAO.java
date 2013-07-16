@@ -42,21 +42,17 @@ public class TournamentDAO implements IDataAccessObject<Tournament>
 	}
 	public void insert(Tournament tournament) throws SQLException 
 	{
-	
-		PreparedStatement insert = null;
 		
 		//Convert java.util.Date to java.sql.Date
-	
-		
+			
 		Date sqlDate = new java.sql.Date(tournament.getDate().getMillis());
-		
-		
+			
 		int formatID = tournament.getTournamentFormat().getFormatID();  //key for the format table
 		
 		String updateString = "INSERT INTO Tournaments "
 				+ "(tournamentID, tournamentDate, tournamentLocation, tournamentOrganizer, formatID)"
 				+ "VALUES(?, ?, ?, ?, ?)";
-		insert = db.prepareStatement(updateString);
+		PreparedStatement insert = db.prepareStatement(updateString);
 		
 		insert.setInt(1, tournament.getID());
 		insert.setDate(2, sqlDate);
@@ -75,8 +71,34 @@ public class TournamentDAO implements IDataAccessObject<Tournament>
 		boolean result = insert.execute();
 				
 	}
-	public void update(Tournament tournament) throws SQLException {}
-	public void delete(Tournament tournament) throws SQLException {}
+	public void update(Tournament tournament) throws SQLException 
+	{		
+		int formatID = tournament.getTournamentFormat().getFormatID();  //key for the format table
+		
+		String updateString = "UPDATE Tournaments "
+				+ SET tournamentID = ? 
+				"(tournamentID, tournamentDate, tournamentLocation, tournamentOrganizer, formatID)"
+				+ "VALUES(?, ?, ?, ?, ?)";
+		
+		PreparedStatement update = db.prepareStatement(updateString);
+		
+		insert.setInt(1, tournament.getID());
+		insert.setDate(2, sqlDate);
+		insert.setString(3, tournament.getLocation());
+		insert.setString(4, tournament.getOrganizer());
+		insert.setInt(5,  formatID);
+		
+		boolean result = insert.execute();
+		
+	}
+	
+	public void delete(Tournament tournament) throws SQLException 
+	{
+		int id = tournament.getID();
+		
+		Statement delete = db.createStatement();
+		delete.execute("DELETE FROM Tournaments WHERE tournamentID = " + id );
+	}
 	
 	
 }
