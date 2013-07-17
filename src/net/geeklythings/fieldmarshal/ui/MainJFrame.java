@@ -98,9 +98,10 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         // open the dialog here
         //Create the tournament, THEN open the edit tournament dialog
-        activeTournament = TournamentFactory.createTournament(0);
+        //activeTournament = TournamentFactory.createTournament(0);
+        activeTournament = TournamentFactory.createTournament(4);
         EditTournament et = new EditTournament(this, true);
-        et.setActiveTournament(activeTournament);
+        et.setActiveTournament(activeTournament);       
         et.setVisible(true);
     }//GEN-LAST:event_btnNewTournamentActionPerformed
 

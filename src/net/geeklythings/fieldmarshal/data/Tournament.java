@@ -1,138 +1,139 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package net.geeklythings.fieldmarshal.data;
 
-import java.sql.SQLException;
+import java.io.Serializable;
 import java.util.ArrayList;
-//import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import org.joda.time.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+import org.joda.time.DateTime;
+import org.joda.time.MutableDateTime;
 
+/**
+ *
+ * @author khooks
+ */
+@Entity
+public class Tournament implements Serializable {
 
-import net.geeklythings.fieldmarshal.sql.TournamentDAO;
+    private static final long serialVersionUID = 1L;
+    private DateTime todaysDate = new DateTime();
+    private MutableDateTime startTime = new MutableDateTime();
+    private String location = "Your Local Game Store";
+    private String organizer = "Joe McDougal";
+    @OneToOne
+    private EventFormat format;
+    @Transient
+    private List<Entrant> players;
+    
+    @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL) //no reason to keep the rounds after the tournament has been deleted
+    private List<Round> rounds;
+    @Transient
+    private int currentRound = 1;
 
+    public Tournament() {
+        players = new ArrayList<>();
+        rounds = new ArrayList<>();
+    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-public class Tournament {
+    public Long getId() {
+        return id;
+    }
 
-	private TournamentDAO data;
-	private int databaseID;  //database primary key
-	private DateTime todaysDate;
-	private MutableDateTime startTime;
-	private String location="YLGS";
-	private String organizer="Joe McDougal";
-	private EventFormat format;
-	private int numRounds=8;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public EventFormat getFormat() {
+        return format;
+    }
 
-	private HashSet<Entrant> players;
-	//Standings
-	private ArrayList<Round> rounds;
-	//RoundResults
-	
-        public Tournament()
-        {
-            
+    public void setFormat(EventFormat format) {
+        this.format = format;
+    }
+
+    public DateTime getTodaysDate() {
+        return todaysDate;
+    }
+
+    public void setTodaysDate(DateTime todaysDate) {
+        this.todaysDate = todaysDate;
+    }
+
+    public MutableDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(MutableDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getOrganizer() {
+        return organizer;
+    }
+
+    public void setOrganizer(String organizer) {
+        this.organizer = organizer;
+    }
+
+    public int getNumRounds() {
+        return format.getNumRounds();
+    }
+
+    public void setNumRounds(int numRounds) {
+        this.format.setNumRounds(numRounds);
+    }
+
+    public void addPlayer(Entrant player) {
+        players.add(player);
+    }
+
+    public void addRound(Round round) {
+        rounds.add(round);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tournament)) {
+            return false;
         }
-        
-	public Tournament (int numRounds)
-	{		
-		setTournamentFormat(new EventFormat(numRounds));
-		this.rounds = new ArrayList<Round>(numRounds);
-		for( int idx = 0; idx < this.rounds.size(); idx++)
-		{
-			this.rounds.add(new Round(idx+1));
-		}
-	}
-	
-	
-	public void update()
-	{
-		try {
-			data.update(this);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public Round getRound(int roundNumber)
-	{
-		if( (roundNumber <= rounds.size()) && ( roundNumber >= 1))
-		{
-			return rounds.get(roundNumber);
-		}
-		return null;
-	}
-	
-	public Round[] getAllRounds()
-	{
-		return (Round[]) (this.rounds).toArray();
-	}
-	
-	
-	public void addEntrant(Entrant newPlayer) {
-		players.add(newPlayer);
-	}
-	
-	public void addEntrant(String firstName, String lastName, Faction faction) {
-		Player player = new Player(firstName, lastName);
-		players.add( new Entrant(player, faction));
-	}
-
-	public DateTime getDate() {
-		return todaysDate;
-	}
-
-	public void setDate(DateTime todaysDate) {
-		this.todaysDate = todaysDate;
-	}
-
-	public MutableDateTime getStartTime() {
-		return startTime;
-	}
-
-	public int getID() {
-		return databaseID;
-	}
-
-	public void setID(int databaseID) {
-		this.databaseID = databaseID;
-	}
-
-	public void setStartTime(MutableDateTime startTime) {
-		this.startTime = startTime;
-	}
-
-	public EventFormat getTournamentFormat() {
-		return format;
-	}
-
-	public void setTournamentFormat(EventFormat tournamentFormat) {
-		this.format = tournamentFormat;
-	}
-
-	public String getLocation() {
-		
-		return location;
-	}
-	public void setLocation(String loc) {
-		this.location = loc;
-	}
-
-	public String getOrganizer() {
-		return organizer;
-	}
-
-	public void setOrganizer(String organizer) {
-		this.organizer = organizer;
-	}
-
-        public Object getNumRounds() {
-            return this.numRounds;
+        Tournament other = (Tournament) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
         }
-	
-        public void addRound()
-        {
-            //TODO: Add round factory or other creation method and add to list
-        }
-	
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "net.geeklythings.fieldmarshal.data.ETournament[ id=" + id + " ]";
+    }
 }
