@@ -20,9 +20,10 @@ public class EventFormat implements Serializable {
     private static final long serialVersionUID = 1L;
   
     protected String formatType = "Steamroller 2013"; //Steamroller, etc...
-    protected String timeFormat = "Death Clock";
-    protected int turnLength = 4;
-    protected int clockTime = 37;
+    protected String formatDescription = "Description";
+    protected String clockType = "Death Clock";
+    protected int clockTime = 37;  //either turn time or death clock time depending on type
+    protected int numRounds = 6;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,7 +37,7 @@ public class EventFormat implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    protected int numRounds = 6;
+    
 
     public int getNumRounds() {
         return numRounds;
@@ -54,20 +55,20 @@ public class EventFormat implements Serializable {
         this.formatType = formatType;
     }
 
-    public String getTimeFormat() {
-        return timeFormat;
+    public String getClockType() {
+        return clockType;
     }
 
-    public void setTimeFormat(String timeFormat) {
-        this.timeFormat = timeFormat;
+    public void setClockType(String clockType) {
+        this.clockType = clockType;
     }
 
-    public int getTurnLength() {
-        return turnLength;
+    public int getClockTime() {
+        return clockTime;
     }
 
-    public void setTurnLength(int turnLength) {
-        this.turnLength = turnLength;
+    public void setClockTime(int turnLength) {
+        this.clockTime = turnLength;
     }
 
     public int getDeathClockTime() {
@@ -79,7 +80,7 @@ public class EventFormat implements Serializable {
     }
     public String getDescription()
     {
-        return String.format("$s, $s, $i rounds, Time: $i minutes", formatType, timeFormat, numRounds, clockTime);
+        return String.format("$s, $s, $i Rounds, Time: $i minutes", formatType, clockType, numRounds, clockTime);
     }
     
     @Override

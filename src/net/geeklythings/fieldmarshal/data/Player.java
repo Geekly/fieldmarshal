@@ -20,6 +20,7 @@ public class Player implements Serializable {
     
     private String firstName;
     private String lastName;
+    private String email;
     private String homeTown;
     
     @Id

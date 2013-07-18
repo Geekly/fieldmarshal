@@ -8,12 +8,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Transient;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
@@ -30,16 +34,20 @@ public class Tournament implements Serializable {
     private MutableDateTime startTime = new MutableDateTime();
     private String location = "Your Local Game Store";
     private String organizer = "Joe McDougal";
-    @OneToOne
+    private int numRounds;
+    
+    @JoinColumn(name="ID_EventFormat")
+    @OneToOne(cascade=CascadeType.PERSIST)
     private EventFormat format;
-    @Transient
+    
+    @OneToMany(cascade=CascadeType.PERSIST)
     private List<Entrant> players;
     
     @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL) //no reason to keep the rounds after the tournament has been deleted
     private List<Round> rounds;
     @Transient
     private int currentRound = 1;
-
+    
     public Tournament() {
         players = new ArrayList<>();
         rounds = new ArrayList<>();
@@ -110,6 +118,7 @@ public class Tournament implements Serializable {
 
     public void addRound(Round round) {
         rounds.add(round);
+        this.numRounds = rounds.size();
     }
 
     @Override
@@ -134,6 +143,6 @@ public class Tournament implements Serializable {
 
     @Override
     public String toString() {
-        return "net.geeklythings.fieldmarshal.data.ETournament[ id=" + id + " ]";
+        return "net.geeklythings.fieldmarshal.data.Tournament[ id=" + id + " ]";
     }
 }
