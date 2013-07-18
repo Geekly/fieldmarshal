@@ -11,16 +11,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NoResultException;
 import javax.persistence.OneToOne;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="ENTRANT")
 public class Entrant implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    @OneToOne(cascade=CascadeType.PERSIST)
+    @OneToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "ID_Player")
     protected Player player;
    
@@ -41,35 +44,44 @@ public class Entrant implements Serializable {
 
     public Entrant(){}
     
-    public Entrant(Player addPlayer, Faction addfaction) {
+    /*public Entrant(Player addPlayer, Faction addfaction) {
+        //When creating a new Entrant, we don't want to use an existing player if possible
+
+        this.setPlayer(addPlayer);
+        this.faction = addfaction;
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU");
-        EntityManager em = emf.createEntityManager();
         
-        Query query = em.createQuery("SELECT P FROM Player P WHERE P.firstName=?1 AND P.lastName=?2 ");
-        query.setParameter(1, addPlayer.getFirstName());
-        query.setParameter(2, addPlayer.getLastName());
-           
-        Player tempPlayer = (Player)query.getSingleResult();
-        if( tempPlayer != null) //exists
-        {
-            player = tempPlayer;
-        }
-        else
-        {   
-            player = addPlayer;
-        }
-        faction = addfaction; 
-        
-        emf.close();
-    }
+    }*/
 
     public Player getPlayer() {
         return player;
     }
 
     public void setPlayer(Player player) {
-        this.player = player;
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU");
+        EntityManager em = emf.createEntityManager();
+        
+        Query query = em.createQuery("SELECT P FROM Player P WHERE P.firstName=?1 AND P.lastName=?2 ");
+        query.setParameter(1, player.getFirstName());
+        query.setParameter(2, player.getLastName());
+        
+        Player tempPlayer = null; 
+        try {
+            tempPlayer = (Player)query.getSingleResult();
+        } catch (NoResultException e) {
+            
+        } 
+        if( tempPlayer == null) //exists
+        {   
+            this.player = player;
+        }
+        else
+        {
+            this.player = tempPlayer;
+        }
+         
+        emf.close();
     }
 
     public Faction getFaction() {

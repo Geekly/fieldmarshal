@@ -9,12 +9,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
  * @author khooks
  */
 @Entity
+@Table(name="PLAYER",
+        uniqueConstraints = { @UniqueConstraint(columnNames =
+                                                { "FIRSTNAME", "LASTNAME" }) })
+@NamedQuery(name="Player.findByName", query="SELECT p FROM Player p WHERE p.firstName LIKE :first AND p.lastName LIKE :last")
+
 public class Player implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -58,7 +66,14 @@ public class Player implements Serializable {
     public void setHomeTown(String homeTown) {
         this.homeTown = homeTown;
     }
+    
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
     @Override
     public int hashCode() {
         int hash = 0;

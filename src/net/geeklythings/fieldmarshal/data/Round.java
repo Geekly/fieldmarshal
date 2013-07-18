@@ -22,6 +22,8 @@ public class Round {
     }
     @Transient
     private List<RoundResult> roundResults;
+    
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
