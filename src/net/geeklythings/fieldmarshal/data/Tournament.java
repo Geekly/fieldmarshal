@@ -4,6 +4,8 @@
  */
 package net.geeklythings.fieldmarshal.data;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,8 @@ import org.joda.time.MutableDateTime;
  */
 @Entity
 public class Tournament implements Serializable {
+    @Transient
+    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     private static final long serialVersionUID = 1L;
     private DateTime todaysDate = new DateTime();
@@ -47,7 +51,8 @@ public class Tournament implements Serializable {
     private List<Round> rounds;
     @Transient
     private int currentRound = 1;
-    
+
+
     public Tournament() {
         players = new ArrayList<>();
         rounds = new ArrayList<>();
@@ -61,9 +66,15 @@ public class Tournament implements Serializable {
     }
 
     public void setId(Long id) {
+        Long oldId = this.id;
         this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
     }
-
+    
+    public int getCurrentRound() {
+        return currentRound;
+    }
+    
     public EventFormat getFormat() {
         return format;
     }
@@ -77,7 +88,9 @@ public class Tournament implements Serializable {
     }
 
     public void setTodaysDate(DateTime todaysDate) {
+        DateTime oldTodaysDate = this.todaysDate;
         this.todaysDate = todaysDate;
+        changeSupport.firePropertyChange("todaysDate", oldTodaysDate, todaysDate);
     }
 
     public MutableDateTime getStartTime() {
@@ -85,7 +98,9 @@ public class Tournament implements Serializable {
     }
 
     public void setStartTime(MutableDateTime startTime) {
+        MutableDateTime oldStartTime = this.startTime;
         this.startTime = startTime;
+        changeSupport.firePropertyChange("startTime", oldStartTime, startTime);
     }
 
     public String getLocation() {
@@ -93,7 +108,9 @@ public class Tournament implements Serializable {
     }
 
     public void setLocation(String location) {
+        String oldLocation = this.location;
         this.location = location;
+        changeSupport.firePropertyChange("location", oldLocation, location);
     }
 
     public String getOrganizer() {
@@ -101,15 +118,13 @@ public class Tournament implements Serializable {
     }
 
     public void setOrganizer(String organizer) {
+        String oldOrganizer = this.organizer;
         this.organizer = organizer;
+        changeSupport.firePropertyChange("organizer", oldOrganizer, organizer);
     }
 
     public int getNumRounds() {
         return format.getNumRounds();
-    }
-
-    public void setNumRounds(int numRounds) {
-        this.format.setNumRounds(numRounds);
     }
 
     public void addPlayer(Entrant player) {
@@ -144,5 +159,13 @@ public class Tournament implements Serializable {
     @Override
     public String toString() {
         return "net.geeklythings.fieldmarshal.data.Tournament[ id=" + id + " ]";
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
 }

@@ -246,7 +246,9 @@ public class EditTournament extends javax.swing.JDialog {
     private void cbRoundsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRoundsActionPerformed
         // TODO add your handling code here:
         String value = ((JComboBox)evt.getSource()).getSelectedItem().toString();
-        activeTournament.setNumRounds( Integer.valueOf(value) );
+        //activeTournament.getNumRounds( Integer.valueOf(value) );
+        //this can be complicated... need to check how many rounds exist, then possibly prune or add to them.  Editing should
+        //probably be disabled once the tournament has Started
     }//GEN-LAST:event_cbRoundsActionPerformed
 
     /**

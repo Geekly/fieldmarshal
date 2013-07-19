@@ -22,8 +22,8 @@ import javax.persistence.Table;
 public class Entrant implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    @OneToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE})
+
+    @OneToOne   //(cascade= {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "ID_Player")
     protected Player player;
    
