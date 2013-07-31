@@ -15,27 +15,49 @@ import net.geeklythings.fieldmarshal.data.Tournament;
  *
  * @author khooks
  */
-public class EditTournament extends javax.swing.JDialog {
-
+public class EditTournamentDialog extends javax.swing.JDialog {
+    /**
+     * A return status code - returned if Cancel button has been pressed
+     */
+    public static final int RET_CANCEL = 0;
+    /**
+     * A return status code - returned if OK button has been pressed
+     */
+    public static final int RET_OK = 1;
     /**
      * Creates new form EditTournament
      */
-    public EditTournament(java.awt.Frame parent, boolean modal) {
+    public EditTournamentDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
-
-    public Tournament getActiveTournament() {
-        return activeTournament;
+    /**
+     * @return the return status of this dialog - one of RET_OK or RET_CANCEL
+     */
+    
+    public int getReturnStatus() {
+        return returnStatus;
     }
-
+    
+    public Tournament getTournament() {
+        return localTournament;
+    }
+    
+    public Long showDialog()
+    {        
+        //loadInitialValues();
+        setVisible(true);
+        //return getSelectedTournamentID();
+        return 0L;
+    }
+    
     private void loadInitialValues() {
 
         //TODO: update dialog values with the pass tournament.  This is appropriate for new and existing tournaments.
-        this.cbRounds.setSelectedItem( String.valueOf(activeTournament.getNumRounds()) );
-        this.txtLocation.setText( activeTournament.getLocation() );
-        this.txtOrganizer.setText( activeTournament.getOrganizer() );
-        this.txtDate.setText( activeTournament.getTodaysDate().toString() );
+        //this.cbRounds.setSelectedItem( String.valueOf(activeTournament.getNumRounds()) );
+        //this.txtLocation.setText( activeTournament.getLocation() );
+        //this.txtOrganizer.setText( activeTournament.getOrganizer() );
+        //this.txtDate.setText( activeTournament.getTodaysDate().toString() );
 
         //this.cbClock.setSelectedItem( activeTournament.getTournamentFormat().getFormatType());
         //activeTournament.getAllRounds();
@@ -47,8 +69,8 @@ public class EditTournament extends javax.swing.JDialog {
     
     }
     
-    public void setActiveTournament(Tournament activeTournament) {
-        this.activeTournament = activeTournament;
+    public void setActiveTournament(Tournament localTournament) {
+        this.localTournament = localTournament;
         loadInitialValues();
     }
 
@@ -60,7 +82,9 @@ public class EditTournament extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        localTournament = new net.geeklythings.fieldmarshal.data.Tournament();
         btnOK = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -120,8 +144,10 @@ public class EditTournament extends javax.swing.JDialog {
         jLabel3.setText("Location:");
 
         txtLocation.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtLocation.setText("Game Store, City");
         txtLocation.setName(""); // NOI18N
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${location}"), txtLocation, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Format:");
@@ -145,6 +171,9 @@ public class EditTournament extends javax.swing.JDialog {
         txtDate.setText("today");
 
         txtOrganizer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${organizer}"), txtOrganizer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -224,6 +253,8 @@ public class EditTournament extends javax.swing.JDialog {
                 .addGap(35, 35, 35))
         );
 
+        bindingGroup.bind();
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -235,14 +266,24 @@ public class EditTournament extends javax.swing.JDialog {
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         // TODO add your handling code here:
         //activeTournament.update();
+        doClose(RET_OK);
+        
 
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
-        this.dispose();
+        doClose(RET_CANCEL);
     }//GEN-LAST:event_btnCancelActionPerformed
 
+    private void doClose(int retStatus)
+    {
+        returnStatus = retStatus;
+        setVisible(false);
+        dispose();
+        
+    }
+    
     private void cbRoundsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRoundsActionPerformed
         // TODO add your handling code here:
         String value = ((JComboBox)evt.getSource()).getSelectedItem().toString();
@@ -268,13 +309,13 @@ public class EditTournament extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditTournament.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditTournamentDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditTournament.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditTournamentDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditTournament.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditTournamentDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditTournament.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditTournamentDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -282,7 +323,7 @@ public class EditTournament extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                EditTournament dialog = new EditTournament(new javax.swing.JFrame(), true);
+                EditTournamentDialog dialog = new EditTournamentDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -293,7 +334,9 @@ public class EditTournament extends javax.swing.JDialog {
             }
         });
     }
-    private Tournament activeTournament;
+
+    private int returnStatus = RET_CANCEL;
+    //if the user clicks the OK button, copy this one to the activetournament.  If Cancel, discard it.
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnOK;
@@ -307,8 +350,10 @@ public class EditTournament extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private net.geeklythings.fieldmarshal.data.Tournament localTournament;
     private javax.swing.JTextField txtDate;
     private javax.swing.JTextField txtLocation;
     private javax.swing.JTextField txtOrganizer;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

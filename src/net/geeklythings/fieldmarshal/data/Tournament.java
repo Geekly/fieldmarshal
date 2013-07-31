@@ -36,8 +36,8 @@ public class Tournament implements Serializable {
     private static final long serialVersionUID = 1L;
     private DateTime todaysDate = new DateTime();
     private MutableDateTime startTime = new MutableDateTime();
-    private String location = "Your Local Game Store";
-    private String organizer = "Joe McDougal";
+    private String location = "Fort Bourne";
+    private String organizer = "Anastasia deBray";
     private int numRounds;
     
     @JoinColumn(name="ID_EventFormat")
@@ -64,7 +64,7 @@ public class Tournament implements Serializable {
     public Long getId() {
         return id;
     }
-
+    
     public void setId(Long id) {
         Long oldId = this.id;
         this.id = id;

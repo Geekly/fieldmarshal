@@ -25,6 +25,29 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;net.geeklythings.fieldmarshal.data.Tournament&gt;"/>
       </AuxValues>
     </Component>
+    <Component class="javax.persistence.EntityManager" name="FieldMarshalPU2EntityManager">
+      <Properties>
+        <Property name="persistenceUnit" type="java.lang.String" value="FieldMarshalPU2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.persistence.Query" name="tournamentQuery1">
+      <Properties>
+        <Property name="query" type="java.lang.String" value="SELECT t FROM Tournament t"/>
+        <Property name="entityManager" type="java.lang.Object" editor="org.netbeans.modules.form.j2ee.J2EEPropertyModifier$EMProperty$EntityManagerEditor">
+          <ComponentRef name="FieldMarshalPU2EntityManager"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="java.util.List" name="tournamentList1">
+      <Properties>
+        <Property name="query" type="java.lang.Object" editor="org.netbeans.modules.form.j2ee.J2EEPropertyModifier$QueryBeanProperty$QueryEditor">
+          <ComponentRef name="tournamentQuery1"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;net.geeklythings.fieldmarshal.data.Tournament&gt;"/>
+      </AuxValues>
+    </Component>
   </NonVisualComponents>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -115,31 +138,15 @@
       <SubComponents>
         <Component class="javax.swing.JTable" name="tableTournament">
           <Properties>
-            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="6" rowCount="0">
-                <Column editable="true" title="Id" type="java.lang.Long"/>
-                <Column editable="true" title="Num Rounds" type="java.lang.Integer"/>
-                <Column editable="true" title="Todays Date" type="java.lang.Object"/>
-                <Column editable="true" title="Organizer" type="java.lang.String"/>
-                <Column editable="true" title="Location" type="java.lang.String"/>
-                <Column editable="true" title="Format" type="java.lang.Object"/>
-              </Table>
-            </Property>
             <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
               <JTableSelectionModel selectionMode="0"/>
             </Property>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="elements" source="tournamentList" target="tableTournament" targetPath="elements" updateStrategy="0" immediately="true">
+            <BindingProperty name="elements" source="tournamentList1" target="tableTournament" targetPath="elements" updateStrategy="0" immediately="true">
               <Property name="name" type="java.lang.String" value=""/>
-              <Subbinding sourcePath="${id}">
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Long.class"/>
-              </Subbinding>
               <Subbinding sourcePath="${numRounds}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
-              </Subbinding>
-              <Subbinding sourcePath="${todaysDate}">
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="org.joda.time.DateTime.class"/>
               </Subbinding>
               <Subbinding sourcePath="${organizer}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
@@ -147,8 +154,20 @@
               <Subbinding sourcePath="${location}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
               </Subbinding>
+              <Subbinding sourcePath="${startTime}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="org.joda.time.MutableDateTime.class"/>
+              </Subbinding>
+              <Subbinding sourcePath="${todaysDate}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="org.joda.time.DateTime.class"/>
+              </Subbinding>
               <Subbinding sourcePath="${format}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="net.geeklythings.fieldmarshal.data.EventFormat.class"/>
+              </Subbinding>
+              <Subbinding sourcePath="${currentRound}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
+              </Subbinding>
+              <Subbinding sourcePath="${id}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Long.class"/>
               </Subbinding>
             </BindingProperty>
           </BindingProperties>

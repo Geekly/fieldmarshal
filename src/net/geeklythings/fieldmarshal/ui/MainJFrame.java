@@ -23,7 +23,6 @@ public class MainJFrame extends javax.swing.JFrame {
      */
     public MainJFrame() {
         initComponents();
-       //EntityManagerFactory _emf = Persistence.createEntityManagerFactory("FieldMarshalPU");
     }
 
     /**
@@ -35,7 +34,7 @@ public class MainJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        _em = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU").createEntityManager();
+        _em = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
         desktopFrame = new javax.swing.JDesktopPane();
         btnNewTournament = new javax.swing.JButton();
         btnLoadTournament = new javax.swing.JButton();
@@ -127,7 +126,7 @@ public class MainJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public EntityManager getEntityManagerFactory() {
+    public EntityManager getEntityManager() {
         return _em;
     }
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -156,6 +155,7 @@ public class MainJFrame extends javax.swing.JFrame {
             finally
             {
                 tournamentFrame.setActiveTournament(activeTournament);
+                //tournamentFrame.refresh();
                 tournamentFrame.setVisible(true);
                 
                 try {
@@ -174,9 +174,26 @@ public class MainJFrame extends javax.swing.JFrame {
         //Create the tournament, THEN open the edit tournament dialog
         //activeTournament = TournamentFactory.createTournament(0);
         activeTournament = TournamentFactory.createTournament(4);
-        EditTournament et = new EditTournament(this, true);
+        EditTournamentDialog et = new EditTournamentDialog(this, true);
         et.setActiveTournament(activeTournament);
-        et.setVisible(true);
+        et.showDialog();
+        int returnStatus = et.getReturnStatus();
+        if(returnStatus == EditTournamentDialog.RET_CANCEL)
+        {
+            _em.refresh(activeTournament);  //cancel the changes
+        }
+        else if(returnStatus == EditTournamentDialog.RET_OK)
+        {
+            _em.getTransaction().begin();
+            _em.persist(activeTournament);
+            _em.getTransaction().commit();
+        }
+        
+        tournamentFrame.setActiveTournament(activeTournament);
+                //tournamentFrame.refresh();
+        tournamentFrame.setVisible(true);
+        // comes back to here when dialog closes
+        //et.setVisible(true);
     }//GEN-LAST:event_btnNewTournamentActionPerformed
 
     private void mnuNewTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewTournamentActionPerformed

@@ -1,5 +1,7 @@
 package net.geeklythings.fieldmarshal.data;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
@@ -10,6 +12,8 @@ import javax.persistence.Transient;
 
 @Entity
 public class Round {
+    @Transient
+    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     private int roundNumber;
 
@@ -18,7 +22,9 @@ public class Round {
     }
 
     public void setRoundNumber(int roundNumber) {
+        int oldRoundNumber = this.roundNumber;
         this.roundNumber = roundNumber;
+        changeSupport.firePropertyChange("roundNumber", oldRoundNumber, roundNumber);
     }
     @Transient
     private List<RoundResult> roundResults;
@@ -33,7 +39,9 @@ public class Round {
     }
 
     public void setId(Long id) {
+        Long oldId = this.id;
         this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
     }    
     
     public Round(){}
@@ -54,5 +62,13 @@ public class Round {
     }
 
     public void setPairings() {
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
 }

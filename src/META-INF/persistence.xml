@@ -15,4 +15,19 @@
       <property name="eclipselink.ddl-generation" value="create-tables"/>
     </properties>
   </persistence-unit>
+  <persistence-unit name="FieldMarshalPU2" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>net.geeklythings.fieldmarshal.data.Tournament</class>
+    <class>net.geeklythings.fieldmarshal.data.Player</class>
+    <class>net.geeklythings.fieldmarshal.data.Entrant</class>
+    <class>net.geeklythings.fieldmarshal.data.EventFormat</class>
+    <class>net.geeklythings.fieldmarshal.data.Round</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/FieldMarshalDB"/>
+      <property name="javax.persistence.jdbc.password" value="fieldmarshal"/>
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+      <property name="javax.persistence.jdbc.user" value="fieldmarshal"/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
+    </properties>
+  </persistence-unit>
 </persistence>

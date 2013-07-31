@@ -29,7 +29,9 @@ public class TournamentFactory {
         DateTime today = new DateTime();
         tournament.setTodaysDate(today);
 
-        
+        tournament.setOrganizer("Coleman Stryker");
+        tournament.setLocation("Corvis Convention Center");
+       
 
         //TODO: Set up Rounds first
 
