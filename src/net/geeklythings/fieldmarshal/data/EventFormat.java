@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 
 /**
  *
@@ -20,7 +21,7 @@ public class EventFormat implements Serializable {
     private static final long serialVersionUID = 1L;
   
     protected String formatType = "Steamroller 2013"; //Steamroller, etc...
-    protected String formatDescription = "Description";
+    protected String formatDescription = "Format Description";   
     protected String clockType = "Death Clock";
     protected int clockTime = 37;  //either turn time or death clock time depending on type
     protected int numRounds = 6;
@@ -30,6 +31,17 @@ public class EventFormat implements Serializable {
     @Column(name="EventFormatID")
     private Long id;
 
+    public EventFormat()
+    {
+        this.updateDescription();
+    }
+    
+    @PrePersist
+    protected void updateDescription()
+    {
+        this.formatDescription = this.getDescription();
+    }
+    
     public Long getId() {
         return id;
     }
@@ -38,7 +50,12 @@ public class EventFormat implements Serializable {
         this.id = id;
     }
     
-
+    public String getFormatDescription()
+    {
+        this.formatDescription = this.getDescription();
+        return this.formatDescription;
+    }
+ 
     public int getNumRounds() {
         return numRounds;
     }
@@ -56,7 +73,7 @@ public class EventFormat implements Serializable {
     }
 
     public String getClockType() {
-        return clockType;
+        return this.clockType;
     }
 
     public void setClockType(String clockType) {
@@ -64,7 +81,7 @@ public class EventFormat implements Serializable {
     }
 
     public int getClockTime() {
-        return clockTime;
+        return this.clockTime;
     }
 
     public void setClockTime(int turnLength) {
@@ -72,15 +89,18 @@ public class EventFormat implements Serializable {
     }
 
     public int getDeathClockTime() {
-        return clockTime;
+        return this.clockTime;
     }
 
     public void setDeathClockTime(int deathClockTime) {
         this.clockTime = deathClockTime;
     }
+    
+
+    
     public String getDescription()
     {
-        return String.format("$s, $s, $i Rounds, Time: $i minutes", formatType, clockType, numRounds, clockTime);
+        return String.format("%s, %s, %d Rounds, Time: %d min", formatType, clockType, numRounds, clockTime);
     }
     
     @Override
