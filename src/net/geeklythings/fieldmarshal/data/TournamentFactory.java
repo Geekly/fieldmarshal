@@ -1,42 +1,42 @@
 package net.geeklythings.fieldmarshal.data;
 
-import java.sql.SQLException;
-import org.joda.time.*;
-
-import net.geeklythings.fieldmarshal.sql.TournamentDAO;
-import net.geeklythings.fieldmarshal.sql.DAOFactory;
-import net.geeklythings.fieldmarshal.util.Hash;
+import java.sql.Date;
+//import java.sql.SQLException;
+//import org.joda.time.*;
+import net.geeklythings.fieldmarshal.util.DateUtils;
 
 public class TournamentFactory {
 
-	public static Tournament loadTournament(int tournamentID) {
-		
-			TournamentDAO dao = DAOFactory.getTournamentDAO();
-			
-		return null;}
-	
-	public static Tournament createTournament(int numRounds) {
-		
-		try {
-			TournamentDAO dao = DAOFactory.getTournamentDAO();
-			Tournament tournament = new Tournament(numRounds);
-			int hash = Hash.getIntHash();
-			tournament.setID(hash);
-			
-			DateTime today = new DateTime();
-			
-			tournament.setDate(today);
-			
-			dao.insert(tournament);
+    public static Tournament loadTournament(int tournamentID) {
 
-		
-			//TODO: Set up Rounds first
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return null;}
-	
+        //TODO:  load the tournament from the database using persistance things
+        return null;
+    }
+
+    public static Tournament createTournament(int numRounds) {
+
+        Tournament tournament = null;
+
+        tournament = new Tournament();
+        
+        EventFormat ef = new EventFormat();       
+        ef.setNumRounds(numRounds);
+        
+        tournament.setFormat( ef );
+        for( int i=1; i<=numRounds; i++)
+        {
+            tournament.addRound(new Round(i));
+        }
+
+        Date today = DateUtils.todaysSQLDate();
+        tournament.setTodaysDate(today);
+        tournament.setOrganizer("Coleman Stryker");
+        tournament.setLocation("Corvis Convention Center");
+       
+
+        //TODO: Set up Rounds first
+
+
+        return tournament;
+    }
 }

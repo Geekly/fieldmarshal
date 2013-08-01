@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="FieldMarshalPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>net.geeklythings.fieldmarshal.data.Player</class>
+    <class>net.geeklythings.fieldmarshal.data.Tournament</class>
+    <class>net.geeklythings.fieldmarshal.data.EventFormat</class>
+    <class>net.geeklythings.fieldmarshal.data.Round</class>
+    <class>net.geeklythings.fieldmarshal.data.Entrant</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlite://C:\Users\khooks\Documents\Google Drive\workspace\FieldMarshal\database\fieldmarshal.db"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
+      <property name="javax.persistence.jdbc.user" value=""/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
+      <property name="eclipselink.logging.level" value="FINE"/>
+    </properties>
+  </persistence-unit>
+  <persistence-unit name="FieldMarshalPU2" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>net.geeklythings.fieldmarshal.data.Entrant</class>
+    <class>net.geeklythings.fieldmarshal.data.EventFormat</class>
+    <class>net.geeklythings.fieldmarshal.data.Player</class>
+    <class>net.geeklythings.fieldmarshal.data.Round</class>
+    <class>net.geeklythings.fieldmarshal.data.Tournament</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/FieldMarshalDB"/>
+      <property name="javax.persistence.jdbc.password" value="fieldmarshal"/>
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+      <property name="javax.persistence.jdbc.user" value="fieldmarshal"/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
+    </properties>
+  </persistence-unit>
+</persistence>

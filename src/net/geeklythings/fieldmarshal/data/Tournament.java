@@ -1,128 +1,194 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package net.geeklythings.fieldmarshal.data;
 
-import java.sql.SQLException;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.ArrayList;
-//import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import org.joda.time.*;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import net.geeklythings.fieldmarshal.util.DateUtils;
+import org.eclipse.persistence.annotations.Convert;
+import org.eclipse.persistence.annotations.Converter;
+//import org.joda.time.DateTime;
+//import org.joda.time.MutableDateTime;
+
+/**
+ *
+ * @author khooks
+ */
+@Entity
+@Access(AccessType.FIELD)
+@Table(name="TOURNAMENT")
+public class Tournament implements Serializable {
+    @Transient
+    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+
+    private static final long serialVersionUID = 1L;
+    
+    
+    //@Converter(name = "jodaDateConverter", converterClass = net.geeklythings.fieldmarshal.util.JodaDateTimeConverter.class)
+    //@Convert("jodaDateConverter")
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="TODAYSDATE")
+    private Date todaysDate;
+    @Column(name="LOCATION")
+    private String location = "Fort Bourne";
+    @Column(name="ORGANIZER")
+    private String organizer = "Anastasia deBray";
+    @Column(name="NUMROUNDS")
+    private int numRounds;
+    
+    @JoinColumn(name="ID_EVENTFORMAT")
+    @OneToOne(cascade=CascadeType.PERSIST)
+    private EventFormat format;
+    
+    //@JoinColumn(name="ID_PLAYER")
+    @OneToMany(cascade=CascadeType.PERSIST)
+    private List<Entrant> players;
+    
+    //@JoinColumn(name="ID_ROUND")
+    @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL) //no reason to keep the rounds after the tournament has been deleted
+    private List<Round> rounds;
+    
+    @Transient
+    private int currentRound = 1;
 
 
-import net.geeklythings.fieldmarshal.sql.TournamentDAO;
+    public Tournament() {
+        todaysDate = new Date();    //DateUtils.todaysSQLDate();
+        //startTime = todaysDate;
+        players = new ArrayList<>();
+        rounds = new ArrayList<>();
+    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
+    public Long getId() {
+        return id;
+    }
+    
+    public void setId(Long id) {
+        Long oldId = this.id;
+        this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
+    }
+    
+    public int getCurrentRound() {
+        return currentRound;
+    }
+    
+    public EventFormat getFormat() {
+        return format;
+    }
 
-public class Tournament {
+    public void setFormat(EventFormat format) {
+        this.format = format;
+    }
 
-	private TournamentDAO data;
-	private int databaseID;  //database primary key
-	private DateTime todaysDate;
-	private MutableDateTime startTime;
-	private String location="YLGS";
-	private String organizer="Joe McDougal";
-	private EventFormat format;
-	//private int numRounds;
-	private HashSet<Entrant> players;
-	//Standings
-	private ArrayList<Round> rounds;
-		//RoundResults
-	
-        public Tournament()
-        {
-        
+    public Date getTodaysDate() {
+        return todaysDate;
+    }
+
+    public void setTodaysDate(Date todaysDate) {
+        Date oldTodaysDate = this.todaysDate;
+        this.todaysDate = todaysDate;
+        changeSupport.firePropertyChange("todaysDate", oldTodaysDate, todaysDate);
+    }
+
+    /*public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        Date oldStartTime = this.startTime;
+        this.startTime = startTime;
+        changeSupport.firePropertyChange("startTime", oldStartTime, startTime);
+    }*/
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        String oldLocation = this.location;
+        this.location = location;
+        changeSupport.firePropertyChange("location", oldLocation, location);
+    }
+
+    public String getOrganizer() {
+        return organizer;
+    }
+
+    public void setOrganizer(String organizer) {
+        String oldOrganizer = this.organizer;
+        this.organizer = organizer;
+        changeSupport.firePropertyChange("organizer", oldOrganizer, organizer);
+    }
+
+    public int getNumRounds() {
+        return format.getNumRounds();
+    }
+
+    public void addPlayer(Entrant player) {
+        players.add(player);
+    }
+
+    public void addRound(Round round) {
+        rounds.add(round);
+        this.numRounds = rounds.size();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tournament)) {
+            return false;
         }
-        
-	public Tournament (int numRounds)
-	{		
-		setTournamentFormat(new EventFormat(numRounds));
-		this.rounds = new ArrayList<Round>(numRounds);
-		for( int idx = 0; idx < this.rounds.size(); idx++)
-		{
-			this.rounds.add(new Round(idx+1));
-		}
-	}
-	
-	
-	public void update()
-	{
-		try {
-			data.update(this);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public Round getRound(int roundNumber)
-	{
-		if( (roundNumber <= rounds.size()) && ( roundNumber >= 1))
-		{
-			return rounds.get(roundNumber);
-		}
-		return null;
-	}
-	
-	public Round[] getAllRounds()
-	{
-		return (Round[]) (this.rounds).toArray();
-	}
-	
-	
-	public void AddEntrant(Entrant newPlayer) {
-		players.add(newPlayer);
-	}
-	
-	public void AddEntrant(String firstName, String lastName, Faction faction) {
-		Player player = new Player(firstName, lastName);
-		players.add( new Entrant(player, faction));
-	}
+        Tournament other = (Tournament) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
 
-	public DateTime getDate() {
-		return todaysDate;
-	}
+    @Override
+    public String toString() {
+        return "net.geeklythings.fieldmarshal.data.Tournament[ id=" + id + " ]";
+    }
 
-	public void setDate(DateTime todaysDate) {
-		this.todaysDate = todaysDate;
-	}
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
 
-	public MutableDateTime getStartTime() {
-		return startTime;
-	}
-
-	public int getID() {
-		return databaseID;
-	}
-
-	public void setID(int databaseID) {
-		this.databaseID = databaseID;
-	}
-
-	public void setStartTime(MutableDateTime startTime) {
-		this.startTime = startTime;
-	}
-
-	public EventFormat getTournamentFormat() {
-		return format;
-	}
-
-	public void setTournamentFormat(EventFormat tournamentFormat) {
-		this.format = tournamentFormat;
-	}
-
-	public String getLocation() {
-		
-		return location;
-	}
-	public void setLocation(String loc) {
-		this.location = loc;
-	}
-
-	public String getOrganizer() {
-		return organizer;
-	}
-
-	public void setOrganizer(String organizer) {
-		this.organizer = organizer;
-	}
-	
-	
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
+    }
 }

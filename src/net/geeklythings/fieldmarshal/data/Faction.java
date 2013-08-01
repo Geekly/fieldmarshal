@@ -7,7 +7,7 @@ public enum Faction {
 	KHADOR ("Khador"),
 	MENOTH ("Protectorate of Menoth"),
 	RETRIBUTION ("Retribution of Scyrah"),
-	COC ("Convergence of Cyriss"),
+	CONVERGENCE ("Convergence of Cyriss"),
 	MERCS ("Mercenaries"),
 	CIRCLE ("Circle of Orboros"),
 	LEGION ("Legion of Everblight"),
