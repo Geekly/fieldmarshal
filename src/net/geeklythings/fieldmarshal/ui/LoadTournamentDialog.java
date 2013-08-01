@@ -90,14 +90,8 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         FieldMarshalPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU").createEntityManager();
-        tournamentQuery = java.beans.Beans.isDesignTime() ? null : FieldMarshalPUEntityManager.createQuery("SELECT t FROM Tournament t");
-        tournamentList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : tournamentQuery.getResultList();
-        FieldMarshalPU2EntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
-        tournamentQuery1 = java.beans.Beans.isDesignTime() ? null : FieldMarshalPU2EntityManager.createQuery("SELECT t FROM Tournament t");
-        tournamentList1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : tournamentQuery1.getResultList();
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -127,34 +121,6 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
         });
 
         tableTournament.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tournamentList1, tableTournament, "");
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${numRounds}"));
-        columnBinding.setColumnName("Num Rounds");
-        columnBinding.setColumnClass(Integer.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${organizer}"));
-        columnBinding.setColumnName("Organizer");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${location}"));
-        columnBinding.setColumnName("Location");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${startTime}"));
-        columnBinding.setColumnName("Start Time");
-        columnBinding.setColumnClass(org.joda.time.MutableDateTime.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${todaysDate}"));
-        columnBinding.setColumnName("Todays Date");
-        columnBinding.setColumnClass(org.joda.time.DateTime.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${format}"));
-        columnBinding.setColumnName("Format");
-        columnBinding.setColumnClass(net.geeklythings.fieldmarshal.data.EventFormat.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${currentRound}"));
-        columnBinding.setColumnName("Current Round");
-        columnBinding.setColumnClass(Integer.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
-        columnBinding.setColumnName("Id");
-        columnBinding.setColumnClass(Long.class);
-        bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();
         tableTournament.getSelectionModel().addListSelectionListener(this);
         jScrollPane1.setViewportView(tableTournament);
 
@@ -167,7 +133,7 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(27, Short.MAX_VALUE)
+                .addContainerGap(29, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -186,11 +152,11 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
+                .addGap(31, 31, 31)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton)
                     .addComponent(okButton))
@@ -198,8 +164,6 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
         );
 
         getRootPane().setDefaultButton(okButton);
-
-        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -268,7 +232,6 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.persistence.EntityManager FieldMarshalPU2EntityManager;
     private javax.persistence.EntityManager FieldMarshalPUEntityManager;
     private javax.swing.JButton cancelButton;
     private javax.swing.JScrollPane jScrollPane1;
@@ -276,11 +239,6 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
     private javax.swing.JButton okButton;
     private javax.swing.JTextArea output;
     private javax.swing.JTable tableTournament;
-    private java.util.List<net.geeklythings.fieldmarshal.data.Tournament> tournamentList;
-    private java.util.List<net.geeklythings.fieldmarshal.data.Tournament> tournamentList1;
-    private javax.persistence.Query tournamentQuery;
-    private javax.persistence.Query tournamentQuery1;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
     private int returnStatus = RET_CANCEL;
     private Long selectedTournamentID = 0L;

@@ -54,6 +54,8 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
 
+        desktopFrame.setBackground(new java.awt.Color(0, 153, 153));
+
         btnNewTournament.setText("New Tournament");
         btnNewTournament.setToolTipText("Create New Tournament");
         btnNewTournament.addActionListener(new java.awt.event.ActionListener() {
@@ -149,8 +151,7 @@ public class MainJFrame extends javax.swing.JFrame {
         {
             output.append("Trying to load Tournament " + String.valueOf(tournamentID));
             try{
-                activeTournament = (Tournament)_em.find(Tournament.class, tournamentID);
-                
+                activeTournament = (Tournament)_em.find(Tournament.class, tournamentID);             
             }
             finally
             {
@@ -179,8 +180,10 @@ public class MainJFrame extends javax.swing.JFrame {
         et.showDialog();
         int returnStatus = et.getReturnStatus();
         if(returnStatus == EditTournamentDialog.RET_CANCEL)
+        // cancel creating a new tournament and discard the object
         {
-            _em.refresh(activeTournament);  //cancel the changes
+            //  _em.refresh(activeTournament);  //cancel the changes
+            activeTournament = null;  
         }
         else if(returnStatus == EditTournamentDialog.RET_OK)
         {
@@ -193,7 +196,6 @@ public class MainJFrame extends javax.swing.JFrame {
                 //tournamentFrame.refresh();
         tournamentFrame.setVisible(true);
         // comes back to here when dialog closes
-        //et.setVisible(true);
     }//GEN-LAST:event_btnNewTournamentActionPerformed
 
     private void mnuNewTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewTournamentActionPerformed

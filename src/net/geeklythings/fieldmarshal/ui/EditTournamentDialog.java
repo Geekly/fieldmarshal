@@ -45,7 +45,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     
     public Long showDialog()
     {        
-        //loadInitialValues();
+        loadInitialValues();
         setVisible(true);
         //return getSelectedTournamentID();
         return 0L;
@@ -85,6 +85,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         localTournament = new net.geeklythings.fieldmarshal.data.Tournament();
+        dateConverter = new net.geeklythings.fieldmarshal.util.DateBindingConverter();
         btnOK = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -131,6 +132,10 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         cbRounds.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cbRounds.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8" }));
         cbRounds.setName(""); // NOI18N
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${format.numRounds}"), cbRounds, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
         cbRounds.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbRoundsActionPerformed(evt);
@@ -146,7 +151,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         txtLocation.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtLocation.setName(""); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${location}"), txtLocation, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${location}"), txtLocation, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -158,8 +163,14 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         cbFormat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cbFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Steamroller", "Hardcore", "Iron Gauntlet" }));
 
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${format.formatType}"), cbFormat, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
+
         cbClock.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cbClock.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Death Clock", "Timed Turns" }));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${format.clockType}"), cbClock, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel6.setText("Edit Tournament Information");
@@ -168,7 +179,6 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         jLabel7.setText("Organizer:");
 
         txtDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtDate.setText("today");
 
         txtOrganizer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -191,7 +201,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(46, 46, 46)
-                        .addComponent(txtOrganizer))
+                        .addComponent(txtOrganizer, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -343,6 +353,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox cbClock;
     private javax.swing.JComboBox cbFormat;
     private javax.swing.JComboBox cbRounds;
+    private net.geeklythings.fieldmarshal.util.DateBindingConverter dateConverter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

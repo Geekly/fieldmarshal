@@ -1,6 +1,8 @@
 package net.geeklythings.fieldmarshal.data;
 
 import java.io.Serializable;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -18,13 +20,14 @@ import javax.persistence.Query;
 import javax.persistence.Table;
 
 @Entity
+@Access(AccessType.FIELD)
 @Table(name="ENTRANT")
 public class Entrant implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @OneToOne   //(cascade= {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "ID_Player")
+    @JoinColumn(name = "ID_PLAYER")
     protected Player player;
    
     @Enumerated(EnumType.STRING)
@@ -48,9 +51,7 @@ public class Entrant implements Serializable {
         //When creating a new Entrant, we don't want to use an existing player if possible
 
         this.setPlayer(addPlayer);
-        this.faction = addfaction;
-        
-        
+        this.faction = addfaction;   
     }*/
 
     public Player getPlayer() {

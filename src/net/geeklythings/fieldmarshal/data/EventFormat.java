@@ -5,38 +5,43 @@
 package net.geeklythings.fieldmarshal.data;
 
 import java.io.Serializable;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.Table;
 
 /**
  *
  * @author khooks
  */
 @Entity
+@Access(AccessType.FIELD)
+@Table(name="EVENTFORMAT")
 public class EventFormat implements Serializable {
     private static final long serialVersionUID = 1L;
   
-    protected String formatType = "Steamroller 2013"; //Steamroller, etc...
-    protected String formatDescription = "Format Description";   
+    @Column(name="FORMATTYPE")
+    protected String formatType = "Steamroller 2013"; //Steamroller, etc..
+    @Column(name="FORMATDESCRIPTION")
+    protected String formatDescription = "Format Description"; 
+    @Column(name="CLOCKTYPE")
     protected String clockType = "Death Clock";
+    @Column(name="CLOCKTIME")
     protected int clockTime = 37;  //either turn time or death clock time depending on type
+    @Column(name="NUMROUNDS")
     protected int numRounds = 6;
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="EventFormatID")
+@Id
+@GeneratedValue(strategy = GenerationType.AUTO)
+@Column(name="ID")
     private Long id;
 
-    public EventFormat()
-    {
-        this.updateDescription();
-    }
-    
-    @PrePersist
+@PrePersist
     protected void updateDescription()
     {
         this.formatDescription = this.getDescription();
@@ -50,6 +55,7 @@ public class EventFormat implements Serializable {
         this.id = id;
     }
     
+
     public String getFormatDescription()
     {
         this.formatDescription = this.getDescription();

@@ -4,17 +4,24 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
+@Access(AccessType.FIELD)
+@Table(name="ROUND")
 public class Round {
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
+    @Column(name="ROUNDNUMBER")
     private int roundNumber;
 
     public int getRoundNumber() {

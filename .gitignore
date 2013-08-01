@@ -6,3 +6,5 @@ lib/
 sample.db
 /build/
 /dist/
+/database/FieldMarshalDB/
+/nbproject/private/

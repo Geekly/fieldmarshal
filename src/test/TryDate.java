@@ -24,6 +24,9 @@ public class TryDate {
 		Date date = new Date(dateTime.getMillis());
 		
 		out.println(date.toString());
+                
+                
+                out.println(String.format("%s, %s, %d Rounds, Time: %d minutes", "Deathclock", "Timed Turns", 6, 37));
 		
 		
 

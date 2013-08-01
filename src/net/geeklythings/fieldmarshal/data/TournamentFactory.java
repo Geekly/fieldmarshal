@@ -1,7 +1,9 @@
 package net.geeklythings.fieldmarshal.data;
 
-import java.sql.SQLException;
-import org.joda.time.*;
+import java.sql.Date;
+//import java.sql.SQLException;
+//import org.joda.time.*;
+import net.geeklythings.fieldmarshal.util.DateUtils;
 
 public class TournamentFactory {
 
@@ -26,9 +28,8 @@ public class TournamentFactory {
             tournament.addRound(new Round(i));
         }
 
-        DateTime today = new DateTime();
+        Date today = DateUtils.todaysSQLDate();
         tournament.setTodaysDate(today);
-
         tournament.setOrganizer("Coleman Stryker");
         tournament.setLocation("Corvis Convention Center");
        

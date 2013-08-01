@@ -7,53 +7,76 @@ package net.geeklythings.fieldmarshal.data;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import org.joda.time.DateTime;
-import org.joda.time.MutableDateTime;
+import net.geeklythings.fieldmarshal.util.DateUtils;
+import org.eclipse.persistence.annotations.Convert;
+import org.eclipse.persistence.annotations.Converter;
+//import org.joda.time.DateTime;
+//import org.joda.time.MutableDateTime;
 
 /**
  *
  * @author khooks
  */
 @Entity
+@Access(AccessType.FIELD)
+@Table(name="TOURNAMENT")
 public class Tournament implements Serializable {
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     private static final long serialVersionUID = 1L;
-    private DateTime todaysDate = new DateTime();
-    private MutableDateTime startTime = new MutableDateTime();
+    
+    
+    //@Converter(name = "jodaDateConverter", converterClass = net.geeklythings.fieldmarshal.util.JodaDateTimeConverter.class)
+    //@Convert("jodaDateConverter")
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="TODAYSDATE")
+    private Date todaysDate;
+    @Column(name="LOCATION")
     private String location = "Fort Bourne";
+    @Column(name="ORGANIZER")
     private String organizer = "Anastasia deBray";
+    @Column(name="NUMROUNDS")
     private int numRounds;
     
-    @JoinColumn(name="ID_EventFormat")
+    @JoinColumn(name="ID_EVENTFORMAT")
     @OneToOne(cascade=CascadeType.PERSIST)
     private EventFormat format;
     
+    //@JoinColumn(name="ID_PLAYER")
     @OneToMany(cascade=CascadeType.PERSIST)
     private List<Entrant> players;
     
+    //@JoinColumn(name="ID_ROUND")
     @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL) //no reason to keep the rounds after the tournament has been deleted
     private List<Round> rounds;
+    
     @Transient
     private int currentRound = 1;
 
 
     public Tournament() {
+        todaysDate = new Date();    //DateUtils.todaysSQLDate();
+        //startTime = todaysDate;
         players = new ArrayList<>();
         rounds = new ArrayList<>();
     }
@@ -83,25 +106,25 @@ public class Tournament implements Serializable {
         this.format = format;
     }
 
-    public DateTime getTodaysDate() {
+    public Date getTodaysDate() {
         return todaysDate;
     }
 
-    public void setTodaysDate(DateTime todaysDate) {
-        DateTime oldTodaysDate = this.todaysDate;
+    public void setTodaysDate(Date todaysDate) {
+        Date oldTodaysDate = this.todaysDate;
         this.todaysDate = todaysDate;
         changeSupport.firePropertyChange("todaysDate", oldTodaysDate, todaysDate);
     }
 
-    public MutableDateTime getStartTime() {
+    /*public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(MutableDateTime startTime) {
-        MutableDateTime oldStartTime = this.startTime;
+    public void setStartTime(Date startTime) {
+        Date oldStartTime = this.startTime;
         this.startTime = startTime;
         changeSupport.firePropertyChange("startTime", oldStartTime, startTime);
-    }
+    }*/
 
     public String getLocation() {
         return location;
