@@ -35,6 +35,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         _em = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
+        tournamentInternalFrameBeanInfo1 = new net.geeklythings.fieldmarshal.ui.TournamentInternalFrameBeanInfo();
         desktopFrame = new javax.swing.JDesktopPane();
         btnNewTournament = new javax.swing.JButton();
         btnLoadTournament = new javax.swing.JButton();
@@ -84,7 +85,7 @@ public class MainJFrame extends javax.swing.JFrame {
         desktopFrame.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         tournamentFrame.setVisible(true);
-        tournamentFrame.setBounds(440, 20, 480, 480);
+        tournamentFrame.setBounds(510, 80, 610, 490);
         desktopFrame.add(tournamentFrame, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         mnuFile.setText("File");
@@ -116,12 +117,12 @@ public class MainJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 941, Short.MAX_VALUE)
+            .addComponent(desktopFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 1276, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(desktopFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+                .addComponent(desktopFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -176,8 +177,8 @@ public class MainJFrame extends javax.swing.JFrame {
         //activeTournament = TournamentFactory.createTournament(0);
         activeTournament = TournamentFactory.createTournament(4);
         EditTournamentDialog et = new EditTournamentDialog(this, true);
-        et.setActiveTournament(activeTournament);
-        et.showDialog();
+        //et.setActiveTournament(activeTournament);
+        et.showDialog(activeTournament);
         int returnStatus = et.getReturnStatus();
         if(returnStatus == EditTournamentDialog.RET_CANCEL)
         // cancel creating a new tournament and discard the object
@@ -187,6 +188,8 @@ public class MainJFrame extends javax.swing.JFrame {
         }
         else if(returnStatus == EditTournamentDialog.RET_OK)
         {
+            //update number of rounds
+            
             _em.getTransaction().begin();
             _em.persist(activeTournament);
             _em.getTransaction().commit();
@@ -254,5 +257,6 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuNewTournament;
     private javax.swing.JTextArea output;
     private net.geeklythings.fieldmarshal.ui.TournamentInternalFrame tournamentFrame;
+    private net.geeklythings.fieldmarshal.ui.TournamentInternalFrameBeanInfo tournamentInternalFrameBeanInfo1;
     // End of variables declaration//GEN-END:variables
 }

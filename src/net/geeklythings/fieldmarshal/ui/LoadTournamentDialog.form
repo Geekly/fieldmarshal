@@ -4,7 +4,7 @@
   <NonVisualComponents>
     <Component class="javax.persistence.EntityManager" name="FieldMarshalPUEntityManager">
       <Properties>
-        <Property name="persistenceUnit" type="java.lang.String" value="FieldMarshalPU"/>
+        <Property name="persistenceUnit" type="java.lang.String" value="FieldMarshalPU2"/>
       </Properties>
     </Component>
   </NonVisualComponents>

@@ -20,7 +20,7 @@ public class TournamentFactory {
         tournament = new Tournament();
         
         EventFormat ef = new EventFormat();       
-        ef.setNumRounds(numRounds);
+        //ef.setNumRounds(numRounds);
         
         tournament.setFormat( ef );
         for( int i=1; i<=numRounds; i++)

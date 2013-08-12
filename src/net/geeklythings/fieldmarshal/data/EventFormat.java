@@ -33,13 +33,28 @@ public class EventFormat implements Serializable {
     protected String clockType = "Death Clock";
     @Column(name="CLOCKTIME")
     protected int clockTime = 37;  //either turn time or death clock time depending on type
-    @Column(name="NUMROUNDS")
-    protected int numRounds = 6;
+    //@Column(name="NUMROUNDS")
+    //protected int numRounds = 6;
     
 @Id
 @GeneratedValue(strategy = GenerationType.AUTO)
 @Column(name="ID")
     private Long id;
+
+    public EventFormat()
+    {
+    }
+    
+    public EventFormat(EventFormat ef)
+    {
+        formatType = ef.formatType;
+        formatDescription = ef.formatDescription;
+        clockType = ef.clockType;
+        clockTime = ef.clockTime;
+        
+    }
+    
+
 
 @PrePersist
     protected void updateDescription()
@@ -62,14 +77,15 @@ public class EventFormat implements Serializable {
         return this.formatDescription;
     }
  
-    public int getNumRounds() {
+    /*public int getNumRounds() {
         return numRounds;
     }
 
     public void setNumRounds(int numRounds) {
         this.numRounds = numRounds;
     }
-
+    */
+     
     public String getFormatType() {
         return formatType;
     }
@@ -106,7 +122,7 @@ public class EventFormat implements Serializable {
     
     public String getDescription()
     {
-        return String.format("%s, %s, %d Rounds, Time: %d min", formatType, clockType, numRounds, clockTime);
+        return String.format("%s, %s,  Time: %d min", formatType, clockType, clockTime);
     }
     
     @Override

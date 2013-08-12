@@ -29,6 +29,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
      */
     public EditTournamentDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        localTournament = new Tournament();
         initComponents();
     }
     /**
@@ -43,8 +44,9 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         return localTournament;
     }
     
-    public Long showDialog()
+    public Long showDialog(Tournament tournament)
     {        
+        localTournament = tournament.clone();
         loadInitialValues();
         setVisible(true);
         //return getSelectedTournamentID();
@@ -54,12 +56,12 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     private void loadInitialValues() {
 
         //TODO: update dialog values with the pass tournament.  This is appropriate for new and existing tournaments.
-        //this.cbRounds.setSelectedItem( String.valueOf(activeTournament.getNumRounds()) );
-        //this.txtLocation.setText( activeTournament.getLocation() );
-        //this.txtOrganizer.setText( activeTournament.getOrganizer() );
-        //this.txtDate.setText( activeTournament.getTodaysDate().toString() );
+        this.cbRounds.setSelectedItem( String.valueOf(localTournament.getNumRounds()) );
+        this.txtLocation.setText( localTournament.getLocation() );
+        this.txtOrganizer.setText( localTournament.getOrganizer() );
+        this.txtDate.setText( localTournament.getTodaysDate().toString() );
 
-        //this.cbClock.setSelectedItem( activeTournament.getTournamentFormat().getFormatType());
+        this.cbClock.setSelectedItem( localTournament.getFormat().getFormatType());
         //activeTournament.getAllRounds();
     }
 
@@ -69,8 +71,8 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     
     }
     
-    public void setActiveTournament(Tournament localTournament) {
-        this.localTournament = localTournament;
+    public void setActiveTournament(Tournament tournament) {
+        this.localTournament = tournament;
         loadInitialValues();
     }
 
@@ -297,7 +299,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     private void cbRoundsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRoundsActionPerformed
         // TODO add your handling code here:
         String value = ((JComboBox)evt.getSource()).getSelectedItem().toString();
-        //activeTournament.getNumRounds( Integer.valueOf(value) );
+        localTournament.setNumRounds( Integer.valueOf(value) );
         //this can be complicated... need to check how many rounds exist, then possibly prune or add to them.  Editing should
         //probably be disabled once the tournament has Started
     }//GEN-LAST:event_cbRoundsActionPerformed

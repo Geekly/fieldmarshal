@@ -56,7 +56,7 @@ public class Tournament implements Serializable {
     @Column(name="ORGANIZER")
     private String organizer = "Anastasia deBray";
     @Column(name="NUMROUNDS")
-    private int numRounds;
+    private int numRounds = 4;
     
     @JoinColumn(name="ID_EVENTFORMAT")
     @OneToOne(cascade=CascadeType.PERSIST)
@@ -67,7 +67,8 @@ public class Tournament implements Serializable {
     private List<Entrant> players;
     
     //@JoinColumn(name="ID_ROUND")
-    @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL) //no reason to keep the rounds after the tournament has been deleted
+    @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL) 
+    //no reason to keep the rounds after the tournament has been deleted
     private List<Round> rounds;
     
     @Transient
@@ -75,11 +76,25 @@ public class Tournament implements Serializable {
 
 
     public Tournament() {
-        todaysDate = new Date();    //DateUtils.todaysSQLDate();
+        todaysDate = new Date();    
+        //DateUtils.todaysSQLDate();
         //startTime = todaysDate;
         players = new ArrayList<>();
-        rounds = new ArrayList<>();
+        rounds = new ArrayList<>(numRounds);
     }
+    
+    public Tournament(Tournament master)
+    {
+        todaysDate = master.todaysDate;
+        numRounds = master.numRounds;
+        location = master.location;
+        organizer = master.organizer;
+        
+        // players = master.players;
+        // make copies of these rounds = master.rounds;
+        // format = master.format;
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -146,19 +161,56 @@ public class Tournament implements Serializable {
         changeSupport.firePropertyChange("organizer", oldOrganizer, organizer);
     }
 
+    public void setNumRounds(int targetRounds) {
+        
+        // Empty and recreate
+        
+        while (targetRounds < rounds.size())
+        {
+            removeLastRound();
+        }
+        while ( targetRounds > rounds.size())
+        {
+            addNewRound();
+        }
+        numRounds = rounds.size();
+
+    }
+    
     public int getNumRounds() {
-        return format.getNumRounds();
+        return numRounds;
     }
 
+    
     public void addPlayer(Entrant player) {
         players.add(player);
     }
 
+    public void addNewRound()
+    {
+        rounds.add( new Round() );
+    }
+        
     public void addRound(Round round) {
         rounds.add(round);
         this.numRounds = rounds.size();
     }
 
+    public void removeLastRound()
+    {
+        rounds.remove( rounds.size() );
+    }
+    
+    @Override
+    public Tournament clone()
+    // Returns a copy of itself
+    {
+        Tournament clone = new Tournament(this);
+        EventFormat newFormat = new EventFormat(this.format);
+        clone.setFormat(newFormat);
+        return clone;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
