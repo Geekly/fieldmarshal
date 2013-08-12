@@ -3,7 +3,7 @@ fieldmarshal
 
 Tournament Organizing Software
 
-This application utlizes JPA to create and manage Swiss-style tournaments for Warmachine/Hordes.  
+This application utlizes Netbeans and JPA to create and manage Swiss-style tournaments for Warmachine/Hordes.  
 
 The intended funtionality (few items have yet been implemented) are as follows:
 
