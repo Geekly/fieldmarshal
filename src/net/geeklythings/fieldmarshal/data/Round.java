@@ -33,10 +33,10 @@ public class Round {
         this.roundNumber = roundNumber;
         changeSupport.firePropertyChange("roundNumber", oldRoundNumber, roundNumber);
     }
+    
     @Transient
     private List<RoundResult> roundResults;
-    
-    
+   
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -51,11 +51,20 @@ public class Round {
         changeSupport.firePropertyChange("id", oldId, id);
     }    
     
-    public Round(){}
+    public Round()
+    {
+        roundResults = new ArrayList<>();
+    }
     
     public Round(int number) {
         roundNumber = number;
-        roundResults = null;
+        roundResults = new ArrayList<>();
+    }
+    
+    public Round(Round rnd)
+    {
+        roundNumber = rnd.roundNumber;
+        roundResults = rnd.roundResults;
     }
 
     public void addResult(RoundResult result) throws Exception {

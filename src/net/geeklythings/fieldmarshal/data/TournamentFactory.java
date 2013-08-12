@@ -31,7 +31,7 @@ public class TournamentFactory {
         Date today = DateUtils.todaysSQLDate();
         tournament.setTodaysDate(today);
         tournament.setOrganizer("Coleman Stryker");
-        tournament.setLocation("Corvis Convention Center");
+        tournament.setStore("Corvis Convention Center");
        
 
         //TODO: Set up Rounds first

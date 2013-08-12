@@ -44,37 +44,44 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         return localTournament;
     }
     
-    public Long showDialog(Tournament tournament)
-    {        
-        localTournament = tournament.clone();
+    /*public void setActiveTournament(Tournament tournament) {
+        this.localTournament = tournament;
         loadInitialValues();
-        setVisible(true);
-        //return getSelectedTournamentID();
-        return 0L;
+    }*/
+    
+    public Tournament showDialog(Tournament tournament)
+    {        
+        localTournament = new Tournament(tournament);  //start with a copy of the tournament
+        loadInitialValues();
+        setVisible(true);  //comes back here after the doClose() function
+        return localTournament;
+        //return 0L;
     }
     
     private void loadInitialValues() {
 
         //TODO: update dialog values with the pass tournament.  This is appropriate for new and existing tournaments.
         this.cbRounds.setSelectedItem( String.valueOf(localTournament.getNumRounds()) );
-        this.txtLocation.setText( localTournament.getLocation() );
+        this.jdcDate.setDate( localTournament.getTodaysDate() );
+        this.txtLocation.setText( localTournament.getStore() );
+        this.cbFormat.setSelectedItem( localTournament.getFormat().getFormatType());
+        this.cbClock.setSelectedItem( localTournament.getFormat().getClockType());
         this.txtOrganizer.setText( localTournament.getOrganizer() );
-        this.txtDate.setText( localTournament.getTodaysDate().toString() );
-
-        this.cbClock.setSelectedItem( localTournament.getFormat().getFormatType());
         //activeTournament.getAllRounds();
     }
 
     private void updateTournament()
     {
         //TODO: update all of the Tournament values with the dialog values
-    
+        localTournament.setNumRounds( Integer.parseInt( (String)this.cbRounds.getSelectedItem()) );
+        localTournament.setTodaysDate( this.jdcDate.getDate() );
+        localTournament.setStore( this.txtLocation.getText() );
+        localTournament.getFormat().setClockType( (String)this.cbClock.getSelectedItem() );
+        localTournament.getFormat().setFormatType( (String)this.cbFormat.getSelectedItem() );
+        localTournament.setOrganizer( this.txtOrganizer.getText());
     }
     
-    public void setActiveTournament(Tournament tournament) {
-        this.localTournament = tournament;
-        loadInitialValues();
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,8 +108,8 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         cbClock = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        txtDate = new javax.swing.JTextField();
         txtOrganizer = new javax.swing.JTextField();
+        jdcDate = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Edit Tournament");
@@ -180,8 +187,6 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Organizer:");
 
-        txtDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-
         txtOrganizer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${organizer}"), txtOrganizer, org.jdesktop.beansbinding.BeanProperty.create("text"));
@@ -203,7 +208,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(46, 46, 46)
-                        .addComponent(txtOrganizer, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
+                        .addComponent(txtOrganizer))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -225,8 +230,10 @@ public class EditTournamentDialog extends javax.swing.JDialog {
                             .addComponent(jLabel2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-                            .addComponent(txtDate))))
+                            .addComponent(txtLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jdcDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(4, 4, 4)))))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -239,10 +246,10 @@ public class EditTournamentDialog extends javax.swing.JDialog {
                     .addComponent(jLabel1)
                     .addComponent(cbRounds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
+                    .addComponent(jdcDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -272,12 +279,13 @@ public class EditTournamentDialog extends javax.swing.JDialog {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO update the activetournament with the values:
-        //activeTournament.update();
+        //updateTournament();  //ensure that all of the fields reflect current values
     }//GEN-LAST:event_formWindowClosing
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         // TODO add your handling code here:
         //activeTournament.update();
+        updateTournament();
         doClose(RET_OK);
         
 
@@ -290,6 +298,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
 
     private void doClose(int retStatus)
     {
+        
         returnStatus = retStatus;
         setVisible(false);
         dispose();
@@ -342,7 +351,11 @@ public class EditTournamentDialog extends javax.swing.JDialog {
                         System.exit(0);
                     }
                 });
-                dialog.setVisible(true);
+                
+                Tournament tournament = new Tournament();
+                dialog.showDialog(tournament);
+                
+                //dialog.setVisible(true);
             }
         });
     }
@@ -363,8 +376,8 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private com.toedter.calendar.JDateChooser jdcDate;
     private net.geeklythings.fieldmarshal.data.Tournament localTournament;
-    private javax.swing.JTextField txtDate;
     private javax.swing.JTextField txtLocation;
     private javax.swing.JTextField txtOrganizer;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

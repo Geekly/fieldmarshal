@@ -52,7 +52,7 @@ public class Tournament implements Serializable {
     @Column(name="TODAYSDATE")
     private Date todaysDate;
     @Column(name="LOCATION")
-    private String location = "Fort Bourne";
+    private String store = "Fort Bourne";
     @Column(name="ORGANIZER")
     private String organizer = "Anastasia deBray";
     @Column(name="NUMROUNDS")
@@ -77,22 +77,25 @@ public class Tournament implements Serializable {
 
     public Tournament() {
         todaysDate = new Date();    
-        //DateUtils.todaysSQLDate();
         //startTime = todaysDate;
+        format = new EventFormat();
         players = new ArrayList<>();
         rounds = new ArrayList<>(numRounds);
     }
     
     public Tournament(Tournament master)
     {
+        id = master.id;
         todaysDate = master.todaysDate;
         numRounds = master.numRounds;
-        location = master.location;
+        store = master.store;
         organizer = master.organizer;
         
-        // players = master.players;
-        // make copies of these rounds = master.rounds;
-        // format = master.format;
+        players = master.players;  //don't change this anywhere
+        rounds = master.rounds; //don't change this anywhere
+        
+        format = new EventFormat(master.format);  //assign to a copy
+
     }
     
     @Id
@@ -131,6 +134,12 @@ public class Tournament implements Serializable {
         changeSupport.firePropertyChange("todaysDate", oldTodaysDate, todaysDate);
     }
 
+    public void setTodaysDate(String todaysDate) {
+        Date newDate;
+        newDate = new Date();
+        this.setTodaysDate(newDate);
+    }
+    
     /*public Date getStartTime() {
         return startTime;
     }
@@ -141,14 +150,14 @@ public class Tournament implements Serializable {
         changeSupport.firePropertyChange("startTime", oldStartTime, startTime);
     }*/
 
-    public String getLocation() {
-        return location;
+    public String getStore() {
+        return store;
     }
 
-    public void setLocation(String location) {
-        String oldLocation = this.location;
-        this.location = location;
-        changeSupport.firePropertyChange("location", oldLocation, location);
+    public void setStore(String store) {
+        String oldLocation = this.store;
+        this.store = store;
+        changeSupport.firePropertyChange("location", oldLocation, store);
     }
 
     public String getOrganizer() {
@@ -199,6 +208,19 @@ public class Tournament implements Serializable {
     public void removeLastRound()
     {
         rounds.remove( rounds.size() );
+    }
+    
+    public void copyProperties(Tournament master)
+    {
+        id = master.id;
+        todaysDate = master.todaysDate;
+        numRounds = master.numRounds;
+        store = master.store;
+        organizer = master.organizer;
+        
+        //players = master.players;  //don't change this anywhere
+        //rounds = master.rounds; //don't change this anywhere
+        //format = master.format;  //assign to a copy
     }
     
     @Override

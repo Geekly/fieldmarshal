@@ -41,6 +41,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         output = new javax.swing.JTextArea();
         tournamentFrame = new net.geeklythings.fieldmarshal.ui.TournamentInternalFrame();
+        btnEdit = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuNewTournament = new javax.swing.JMenuItem();
@@ -63,7 +64,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 btnNewTournamentActionPerformed(evt);
             }
         });
-        btnNewTournament.setBounds(20, 30, 115, 23);
+        btnNewTournament.setBounds(20, 30, 120, 23);
         desktopFrame.add(btnNewTournament, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnLoadTournament.setText("Load Tournament");
@@ -73,7 +74,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 btnLoadTournamentActionPerformed(evt);
             }
         });
-        btnLoadTournament.setBounds(20, 60, 117, 23);
+        btnLoadTournament.setBounds(20, 110, 120, 23);
         desktopFrame.add(btnLoadTournament, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         output.setColumns(20);
@@ -84,8 +85,17 @@ public class MainJFrame extends javax.swing.JFrame {
         desktopFrame.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         tournamentFrame.setVisible(true);
-        tournamentFrame.setBounds(510, 80, 610, 490);
+        tournamentFrame.setBounds(510, 80, 705, 494);
         desktopFrame.add(tournamentFrame, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        btnEdit.setText("Edit Tournament");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+        btnEdit.setBounds(20, 70, 120, 23);
+        desktopFrame.add(btnEdit, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         mnuFile.setText("File");
 
@@ -147,58 +157,66 @@ public class MainJFrame extends javax.swing.JFrame {
         LoadTournamentDialog ltd = new LoadTournamentDialog(this, true);
         Long tournamentID = ltd.showDialog();
         //Long tournamentID = 
-        if( tournamentID != 0)
-        {
+        if (tournamentID != 0) {
             output.append("Trying to load Tournament " + String.valueOf(tournamentID));
-            try{
-                activeTournament = (Tournament)_em.find(Tournament.class, tournamentID);             
-            }
-            finally
-            {
+            try {
+                activeTournament = (Tournament) _em.find(Tournament.class, tournamentID);
+            } finally {
                 tournamentFrame.setActiveTournament(activeTournament);
                 //tournamentFrame.refresh();
                 tournamentFrame.setVisible(true);
-                
+
                 try {
                     tournamentFrame.setSelected(true);
-                }catch(Exception e){}
-                
+                } catch (Exception e) {
+                }
+
             }
-            
+
         }
-        
+
     }//GEN-LAST:event_btnLoadTournamentActionPerformed
 
     private void btnNewTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewTournamentActionPerformed
-        // TODO add your handling code here:
-        // open the dialog here
         //Create the tournament, THEN open the edit tournament dialog
         //activeTournament = TournamentFactory.createTournament(0);
+        //Are you sure you want to create a new Tournament?
         activeTournament = TournamentFactory.createTournament(4);
+        EditActiveTournament();
+
+    }//GEN-LAST:event_btnNewTournamentActionPerformed
+
+    private void EditActiveTournament() {
+
         EditTournamentDialog et = new EditTournamentDialog(this, true);
         //et.setActiveTournament(activeTournament);
         et.showDialog(activeTournament);
         int returnStatus = et.getReturnStatus();
-        if(returnStatus == EditTournamentDialog.RET_CANCEL)
-        // cancel creating a new tournament and discard the object
+        if (returnStatus == EditTournamentDialog.RET_CANCEL) // cancel creating a new tournament and discard the object
         {
             //  _em.refresh(activeTournament);  //cancel the changes
-            activeTournament = null;  
-        }
-        else if(returnStatus == EditTournamentDialog.RET_OK)
-        {
+            activeTournament = null;
+
+        } else if (returnStatus == EditTournamentDialog.RET_OK) {
             //update number of rounds
-            
+            Tournament edits = et.getTournament();  //this is a copy of the editted Tournament
+            activeTournament.copyProperties(edits);  //copy the updates
+            //copy the tournament 
             _em.getTransaction().begin();
-            _em.persist(activeTournament);
+            //_em.persist(activeTournament);
+            _em.persist(activeTournament);  // persist the changes
             _em.getTransaction().commit();
         }
-        
+
         tournamentFrame.setActiveTournament(activeTournament);
-                //tournamentFrame.refresh();
+        //tournamentFrame.refresh();
+        
+        tournamentFrame.updateUI();
         tournamentFrame.setVisible(true);
+        tournamentFrame.requestFocus();
         // comes back to here when dialog closes
-    }//GEN-LAST:event_btnNewTournamentActionPerformed
+
+    }
 
     private void mnuNewTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewTournamentActionPerformed
         // TODO add your handling code here:
@@ -208,6 +226,11 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         // load the Load Tournament dialog
     }//GEN-LAST:event_mnuLoadTournamentActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        // TODO add your handling code here:
+        EditActiveTournament();
+    }//GEN-LAST:event_btnEditActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,6 +268,7 @@ public class MainJFrame extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager _em;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnLoadTournament;
     private javax.swing.JButton btnNewTournament;
     private javax.swing.JDesktopPane desktopFrame;
