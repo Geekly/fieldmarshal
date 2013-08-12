@@ -35,7 +35,6 @@ public class MainJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         _em = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
-        tournamentInternalFrameBeanInfo1 = new net.geeklythings.fieldmarshal.ui.TournamentInternalFrameBeanInfo();
         desktopFrame = new javax.swing.JDesktopPane();
         btnNewTournament = new javax.swing.JButton();
         btnLoadTournament = new javax.swing.JButton();
@@ -257,6 +256,5 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuNewTournament;
     private javax.swing.JTextArea output;
     private net.geeklythings.fieldmarshal.ui.TournamentInternalFrame tournamentFrame;
-    private net.geeklythings.fieldmarshal.ui.TournamentInternalFrameBeanInfo tournamentInternalFrameBeanInfo1;
     // End of variables declaration//GEN-END:variables
 }

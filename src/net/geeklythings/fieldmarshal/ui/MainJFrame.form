@@ -7,8 +7,6 @@
         <Property name="persistenceUnit" type="java.lang.String" value="FieldMarshalPU2"/>
       </Properties>
     </Component>
-    <Component class="net.geeklythings.fieldmarshal.ui.TournamentInternalFrameBeanInfo" name="tournamentInternalFrameBeanInfo1">
-    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="mnuFile">
