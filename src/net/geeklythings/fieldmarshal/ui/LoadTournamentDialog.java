@@ -90,8 +90,11 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         FieldMarshalPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
+        tournamentQuery = java.beans.Beans.isDesignTime() ? null : FieldMarshalPUEntityManager.createQuery("SELECT t FROM Tournament t");
+        tournamentList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : tournamentQuery.getResultList();
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -121,6 +124,28 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
         });
 
         tableTournament.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tournamentList, tableTournament);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
+        columnBinding.setColumnName("Id");
+        columnBinding.setColumnClass(Long.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${todaysDate}"));
+        columnBinding.setColumnName("Todays Date");
+        columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${numRounds}"));
+        columnBinding.setColumnName("Num Rounds");
+        columnBinding.setColumnClass(Integer.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${format}"));
+        columnBinding.setColumnName("Format");
+        columnBinding.setColumnClass(net.geeklythings.fieldmarshal.data.EventFormat.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${organizer}"));
+        columnBinding.setColumnName("Organizer");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${store}"));
+        columnBinding.setColumnName("Store");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
         tableTournament.getSelectionModel().addListSelectionListener(this);
         jScrollPane1.setViewportView(tableTournament);
 
@@ -164,6 +189,8 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
         );
 
         getRootPane().setDefaultButton(okButton);
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -239,6 +266,9 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
     private javax.swing.JButton okButton;
     private javax.swing.JTextArea output;
     private javax.swing.JTable tableTournament;
+    private java.util.List<net.geeklythings.fieldmarshal.data.Tournament> tournamentList;
+    private javax.persistence.Query tournamentQuery;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
     private int returnStatus = RET_CANCEL;
     private Long selectedTournamentID = 0L;

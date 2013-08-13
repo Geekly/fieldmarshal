@@ -9,14 +9,14 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import net.geeklythings.fieldmarshal.data.Tournament;
 import net.geeklythings.fieldmarshal.data.TournamentFactory;
+import java.beans.PropertyChangeSupport;
+import java.beans.PropertyChangeListener;
 
 /**
  *
  * @author khooks
  */
 public class MainJFrame extends javax.swing.JFrame {
-
-    private Tournament activeTournament;
 
     /**
      * Creates new form MainJFrame
@@ -33,20 +33,47 @@ public class MainJFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         _em = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
+        activeTournament = new net.geeklythings.fieldmarshal.data.Tournament();
+        dateConverter = new net.geeklythings.fieldmarshal.util.DateConverter();
         desktopFrame = new javax.swing.JDesktopPane();
         btnNewTournament = new javax.swing.JButton();
         btnLoadTournament = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         output = new javax.swing.JTextArea();
-        tournamentFrame = new net.geeklythings.fieldmarshal.ui.TournamentInternalFrame();
         btnEdit = new javax.swing.JButton();
+        m_panelTournamentOverview = new javax.swing.JPanel();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableRounds = new javax.swing.JTable();
+        m_panelTournamentInfo = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        txtOrganizer = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtCurrentRound = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        txtStore = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtNumRounds = new javax.swing.JTextField();
+        txtDescription = new javax.swing.JTextField();
+        txtDate = new javax.swing.JTextField();
+        txtID = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuNewTournament = new javax.swing.JMenuItem();
         mnuLoadTournament = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+
+        activeTournament.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                activeTournamentPropertyChange(evt);
+            }
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -81,12 +108,8 @@ public class MainJFrame extends javax.swing.JFrame {
         output.setRows(5);
         jScrollPane1.setViewportView(output);
 
-        jScrollPane1.setBounds(30, 270, 390, 230);
+        jScrollPane1.setBounds(10, 250, 210, 410);
         desktopFrame.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        tournamentFrame.setVisible(true);
-        tournamentFrame.setBounds(510, 80, 705, 494);
-        desktopFrame.add(tournamentFrame, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnEdit.setText("Edit Tournament");
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
@@ -96,6 +119,147 @@ public class MainJFrame extends javax.swing.JFrame {
         });
         btnEdit.setBounds(20, 70, 120, 23);
         desktopFrame.add(btnEdit, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        jScrollPane2.setViewportView(tableRounds);
+
+        jSplitPane1.setBottomComponent(jScrollPane2);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setText("Date:");
+
+        txtOrganizer.setEditable(false);
+        txtOrganizer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${organizer}"), txtOrganizer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setText("Current Round:");
+
+        txtCurrentRound.setEditable(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${currentRound}"), txtCurrentRound, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jLabel6.setText("of");
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel7.setText("Tournament Format:");
+
+        txtStore.setEditable(false);
+        txtStore.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${store}"), txtStore, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("Rounds");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("Location:");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setText("Organizer:");
+
+        txtNumRounds.setEditable(false);
+        txtNumRounds.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${numRounds}"), txtNumRounds, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        txtDescription.setEditable(false);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${format.formatDescription}"), txtDescription, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${todaysDate}"), txtDate, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setConverter(dateConverter);
+        bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout m_panelTournamentInfoLayout = new javax.swing.GroupLayout(m_panelTournamentInfo);
+        m_panelTournamentInfo.setLayout(m_panelTournamentInfoLayout);
+        m_panelTournamentInfoLayout.setHorizontalGroup(
+            m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(m_panelTournamentInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(m_panelTournamentInfoLayout.createSequentialGroup()
+                        .addGroup(m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel5))
+                        .addGap(41, 41, 41)
+                        .addGroup(m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(m_panelTournamentInfoLayout.createSequentialGroup()
+                                    .addComponent(txtCurrentRound, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jLabel6)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(txtNumRounds, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtDate)
+                                .addComponent(txtOrganizer)
+                                .addComponent(txtStore))
+                            .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel1))
+                .addContainerGap(438, Short.MAX_VALUE))
+        );
+        m_panelTournamentInfoLayout.setVerticalGroup(
+            m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, m_panelTournamentInfoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtStore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtOrganizer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4)
+                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtCurrentRound, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtNumRounds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addContainerGap())
+        );
+
+        jSplitPane1.setTopComponent(m_panelTournamentInfo);
+
+        javax.swing.GroupLayout m_panelTournamentOverviewLayout = new javax.swing.GroupLayout(m_panelTournamentOverview);
+        m_panelTournamentOverview.setLayout(m_panelTournamentOverviewLayout);
+        m_panelTournamentOverviewLayout.setHorizontalGroup(
+            m_panelTournamentOverviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(m_panelTournamentOverviewLayout.createSequentialGroup()
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 878, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        m_panelTournamentOverviewLayout.setVerticalGroup(
+            m_panelTournamentOverviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
+            .addGroup(m_panelTournamentOverviewLayout.createSequentialGroup()
+                .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        m_panelTournamentOverview.setBounds(340, 0, 880, 670);
+        desktopFrame.add(m_panelTournamentOverview, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         mnuFile.setText("File");
 
@@ -126,14 +290,14 @@ public class MainJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 1276, Short.MAX_VALUE)
+            .addComponent(desktopFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 1223, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(desktopFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(desktopFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
         );
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -154,6 +318,7 @@ public class MainJFrame extends javax.swing.JFrame {
         // open a load tournament dialog
         // activeTournament = load the tournament
         // load the edit tournament dialog
+        Tournament oldTournament = new Tournament(activeTournament);
         LoadTournamentDialog ltd = new LoadTournamentDialog(this, true);
         Long tournamentID = ltd.showDialog();
         //Long tournamentID = 
@@ -161,18 +326,11 @@ public class MainJFrame extends javax.swing.JFrame {
             output.append("Trying to load Tournament " + String.valueOf(tournamentID));
             try {
                 activeTournament = (Tournament) _em.find(Tournament.class, tournamentID);
-            } finally {
-                tournamentFrame.setActiveTournament(activeTournament);
-                //tournamentFrame.refresh();
-                tournamentFrame.setVisible(true);
-
-                try {
-                    tournamentFrame.setSelected(true);
-                } catch (Exception e) {
-                }
-
+            } 
+            catch (Exception e) 
+            {
             }
-
+            firePropertyChange("activeTournament", oldTournament, activeTournament);
         }
 
     }//GEN-LAST:event_btnLoadTournamentActionPerformed
@@ -199,6 +357,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         } else if (returnStatus == EditTournamentDialog.RET_OK) {
             //update number of rounds
+            Tournament oldTournament = new Tournament(activeTournament);
             Tournament edits = et.getTournament();  //this is a copy of the editted Tournament
             activeTournament.copyProperties(edits);  //copy the updates
             //copy the tournament 
@@ -206,14 +365,9 @@ public class MainJFrame extends javax.swing.JFrame {
             //_em.persist(activeTournament);
             _em.persist(activeTournament);  // persist the changes
             _em.getTransaction().commit();
-        }
-
-        tournamentFrame.setActiveTournament(activeTournament);
-        //tournamentFrame.refresh();
         
-        tournamentFrame.updateUI();
-        tournamentFrame.setVisible(true);
-        tournamentFrame.requestFocus();
+            firePropertyChange("activeTournament", oldTournament, activeTournament);
+        }
         // comes back to here when dialog closes
 
     }
@@ -231,6 +385,11 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         EditActiveTournament();
     }//GEN-LAST:event_btnEditActionPerformed
+
+    private void activeTournamentPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_activeTournamentPropertyChange
+        // TODO add your handling code here:
+        firePropertyChange();
+    }//GEN-LAST:event_activeTournamentPropertyChange
 
     /**
      * @param args the command line arguments
@@ -266,19 +425,42 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
     }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager _em;
+    private net.geeklythings.fieldmarshal.data.Tournament activeTournament;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnLoadTournament;
     private javax.swing.JButton btnNewTournament;
+    private net.geeklythings.fieldmarshal.util.DateConverter dateConverter;
     private javax.swing.JDesktopPane desktopFrame;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JPanel m_panelTournamentInfo;
+    private javax.swing.JPanel m_panelTournamentOverview;
     private javax.swing.JMenu mnuFile;
     private javax.swing.JMenuItem mnuLoadTournament;
     private javax.swing.JMenuItem mnuNewTournament;
     private javax.swing.JTextArea output;
-    private net.geeklythings.fieldmarshal.ui.TournamentInternalFrame tournamentFrame;
+    private javax.swing.JTable tableRounds;
+    private javax.swing.JTextField txtCurrentRound;
+    private javax.swing.JTextField txtDate;
+    private javax.swing.JTextField txtDescription;
+    private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtNumRounds;
+    private javax.swing.JTextField txtOrganizer;
+    private javax.swing.JTextField txtStore;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

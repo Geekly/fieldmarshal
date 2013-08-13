@@ -121,7 +121,10 @@ public class Tournament implements Serializable {
     }
 
     public void setFormat(EventFormat format) {
+        EventFormat oldformat = this.format;
         this.format = format;
+        changeSupport.firePropertyChange("format", oldformat, format);
+        
     }
 
     public Date getTodaysDate() {
@@ -132,12 +135,6 @@ public class Tournament implements Serializable {
         Date oldTodaysDate = this.todaysDate;
         this.todaysDate = todaysDate;
         changeSupport.firePropertyChange("todaysDate", oldTodaysDate, todaysDate);
-    }
-
-    public void setTodaysDate(String todaysDate) {
-        Date newDate;
-        newDate = new Date();
-        this.setTodaysDate(newDate);
     }
     
     /*public Date getStartTime() {
@@ -172,8 +169,8 @@ public class Tournament implements Serializable {
 
     public void setNumRounds(int targetRounds) {
         
+        int oldRounds = this.numRounds;
         // Empty and recreate
-        
         while (targetRounds < rounds.size())
         {
             removeLastRound();
@@ -183,7 +180,7 @@ public class Tournament implements Serializable {
             addNewRound();
         }
         numRounds = rounds.size();
-
+        changeSupport.firePropertyChange("numRounds", oldRounds, numRounds);
     }
     
     public int getNumRounds() {
@@ -192,22 +189,32 @@ public class Tournament implements Serializable {
 
     
     public void addPlayer(Entrant player) {
+        List<Entrant> oldEntrants = this.players;
+        players = new ArrayList<>(oldEntrants);
         players.add(player);
+        changeSupport.firePropertyChange("player", oldEntrants, players);
     }
 
     public void addNewRound()
     {
+        List<Round> oldRounds = new ArrayList<>(this.rounds);
         rounds.add( new Round() );
+        changeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
         
     public void addRound(Round round) {
+        List<Round> oldRounds = new ArrayList<>(this.rounds);
         rounds.add(round);
         this.numRounds = rounds.size();
+        changeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
 
     public void removeLastRound()
     {
+        List<Round> oldRounds = new ArrayList<>(this.rounds);
         rounds.remove( rounds.size() );
+        this.numRounds = rounds.size();
+        changeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
     
     public void copyProperties(Tournament master)

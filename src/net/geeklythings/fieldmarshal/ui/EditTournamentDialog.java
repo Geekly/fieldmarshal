@@ -94,7 +94,6 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         localTournament = new net.geeklythings.fieldmarshal.data.Tournament();
-        dateConverter = new net.geeklythings.fieldmarshal.util.DateBindingConverter();
         btnOK = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -368,7 +367,6 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox cbClock;
     private javax.swing.JComboBox cbFormat;
     private javax.swing.JComboBox cbRounds;
-    private net.geeklythings.fieldmarshal.util.DateBindingConverter dateConverter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
