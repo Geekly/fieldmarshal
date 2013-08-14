@@ -59,22 +59,19 @@ public class Tournament implements Serializable {
     private int numRounds = 4;
     
     @JoinColumn(name="ID_EVENTFORMAT")
-    @OneToOne(cascade=CascadeType.PERSIST)
+    @OneToOne(cascade={CascadeType.ALL})
     private EventFormat format = new EventFormat();
-    
-    //@JoinColumn(name="ID_PLAYER")
-    @OneToMany(cascade=CascadeType.PERSIST)
+      
+    @OneToMany(cascade={CascadeType.ALL})
     private List<Entrant> players = new ArrayList<>();
     
-    //@JoinColumn(name="ID_ROUND")
     @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL) 
     //no reason to keep the rounds after the tournament has been deleted
     private List<Round> rounds = new ArrayList<>();
     
     @Transient
     private int currentRound = 1;
-
-
+    
     public Tournament() {
         todaysDate = new Date();    
         //startTime = todaysDate;
@@ -126,6 +123,7 @@ public class Tournament implements Serializable {
         changeSupport.firePropertyChange("format", oldformat, format);
         
     }
+
 
     public Date getTodaysDate() {
         return todaysDate;
@@ -187,12 +185,17 @@ public class Tournament implements Serializable {
         return numRounds;
     }
 
-    
+        /**
+     * @return the players
+     */
+    public List<Entrant> getPlayers() {
+        return players;
+    }
+
     public void addPlayer(Entrant player) {
-        List<Entrant> oldEntrants = this.players;
-        players = new ArrayList<>(oldEntrants);
+        List<Entrant> oldEntrants = new ArrayList<>( this.getPlayers() );
         players.add(player);
-        changeSupport.firePropertyChange("player", oldEntrants, players);
+        changeSupport.firePropertyChange("player", oldEntrants, getPlayers());
     }
 
     public List<Round> getRounds()

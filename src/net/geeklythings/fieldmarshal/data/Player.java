@@ -43,6 +43,14 @@ public class Player implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public Player(){}
+    
+    public Player(String first, String last)
+    {
+        firstName = first;
+        lastName = last;
+    }
+    
     public Long getId() {
         return id;
     }

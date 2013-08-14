@@ -11,6 +11,11 @@ import net.geeklythings.fieldmarshal.data.Tournament;
 import net.geeklythings.fieldmarshal.data.TournamentFactory;
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyChangeListener;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import net.geeklythings.fieldmarshal.data.Entrant;
+import net.geeklythings.fieldmarshal.data.Faction;
+import net.geeklythings.fieldmarshal.data.Player;
 
 /**
  *
@@ -76,6 +81,15 @@ public class FieldMarshal extends javax.swing.JFrame {
         txtDescription = new javax.swing.JTextField();
         txtDate = new javax.swing.JTextField();
         txtID = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
+        panelAddPlayer = new javax.swing.JPanel();
+        txtLastName = new javax.swing.JTextField();
+        txtFirstName = new javax.swing.JTextField();
+        btnAddPlayer = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuNewTournament = new javax.swing.JMenuItem();
@@ -98,7 +112,7 @@ public class FieldMarshal extends javax.swing.JFrame {
                 btnNewTournamentActionPerformed(evt);
             }
         });
-        btnNewTournament.setBounds(20, 30, 120, 23);
+        btnNewTournament.setBounds(10, 10, 120, 23);
         desktopFrame.add(btnNewTournament, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnLoadTournament.setText("Load Tournament");
@@ -108,14 +122,14 @@ public class FieldMarshal extends javax.swing.JFrame {
                 btnLoadTournamentActionPerformed(evt);
             }
         });
-        btnLoadTournament.setBounds(20, 110, 120, 23);
+        btnLoadTournament.setBounds(10, 70, 120, 23);
         desktopFrame.add(btnLoadTournament, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         output.setColumns(20);
         output.setRows(5);
         jScrollPane1.setViewportView(output);
 
-        jScrollPane1.setBounds(10, 250, 210, 410);
+        jScrollPane1.setBounds(10, 580, 320, 80);
         desktopFrame.add(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnEdit.setText("Edit Tournament");
@@ -124,7 +138,7 @@ public class FieldMarshal extends javax.swing.JFrame {
                 btnEditActionPerformed(evt);
             }
         });
-        btnEdit.setBounds(20, 70, 120, 23);
+        btnEdit.setBounds(10, 40, 120, 23);
         desktopFrame.add(btnEdit, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
@@ -285,6 +299,84 @@ public class FieldMarshal extends javax.swing.JFrame {
         m_panelTournamentOverview.setBounds(340, 0, 880, 670);
         desktopFrame.add(m_panelTournamentOverview, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        jList1.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+
+        eLProperty = org.jdesktop.beansbinding.ELProperty.create("${activeTournament.players}");
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, jList1);
+        jListBinding.setDetailBinding(org.jdesktop.beansbinding.ELProperty.create("${player.firstName} ${player.lastName}: ${faction.name}"));
+        bindingGroup.addBinding(jListBinding);
+
+        jScrollPane3.setViewportView(jList1);
+
+        jScrollPane3.setBounds(10, 270, 320, 300);
+        desktopFrame.add(jScrollPane3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtLastName.setText("jTextField2");
+
+        txtFirstName.setText("jTextField1");
+
+        btnAddPlayer.setText("Add Player");
+        btnAddPlayer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddPlayerActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("First Name");
+
+        jLabel9.setText("Last Name");
+
+        jLabel10.setText("Faction");
+
+        javax.swing.GroupLayout panelAddPlayerLayout = new javax.swing.GroupLayout(panelAddPlayer);
+        panelAddPlayer.setLayout(panelAddPlayerLayout);
+        panelAddPlayerLayout.setHorizontalGroup(
+            panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAddPlayerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelAddPlayerLayout.createSequentialGroup()
+                        .addGroup(panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelAddPlayerLayout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)))
+                    .addGroup(panelAddPlayerLayout.createSequentialGroup()
+                        .addGroup(panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnAddPlayer)
+                            .addComponent(jLabel10))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        panelAddPlayerLayout.setVerticalGroup(
+            panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAddPlayerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addComponent(btnAddPlayer)
+                .addContainerGap())
+        );
+
+        panelAddPlayer.setBounds(10, 120, 320, 130);
+        desktopFrame.add(panelAddPlayer, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         mnuFile.setText("File");
 
         mnuNewTournament.setText("New Tournament");
@@ -411,6 +503,49 @@ public class FieldMarshal extends javax.swing.JFrame {
         EditActiveTournament();
     }//GEN-LAST:event_btnEditActionPerformed
 
+    private void btnAddPlayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPlayerActionPerformed
+        // TODO add your handling code here:
+        String firstName = txtFirstName.getText();
+        String lastName = txtLastName.getText();
+        Faction faction = Faction.CIRCLE;
+        Entrant entrant = null;
+        Player player = null;
+        
+        // check if player exists in database
+        // query the database for first and last name
+        TypedQuery<Player> query = _em.createNamedQuery("Player.findByName", Player.class);
+        query.setParameter("first", firstName);
+        query.setParameter("last", lastName);
+        try {
+            player = query.getSingleResult();
+        } catch (NoResultException e)
+        {
+            System.out.println(e.toString());
+        }
+        if(player==null) //not null
+        {
+            player = new Player(firstName, lastName);
+            //persist the new player
+            //_em.getTransaction().begin();
+            //_em.persist(activeTournament);
+            //_em.persist(player);  // persist the changes
+            //_em.getTransaction().commit();
+            
+        }    
+        entrant = new Entrant(player, faction);
+        //_em.getTransaction().begin();
+        //_em.persist(entrant);  // persist the changes
+        //_em.getTransaction().commit();
+        activeTournament.addPlayer(entrant);
+        _em.getTransaction().begin();
+        _em.persist(activeTournament);  // persist the changes
+        _em.getTransaction().commit();
+        // if yes, load the player and create a new Entrant with it
+        // if no, create a new player and add it to the Entrant
+        // set the fact
+        // add the entrant to the List of players
+    }//GEN-LAST:event_btnAddPlayerActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -449,22 +584,28 @@ public class FieldMarshal extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager _em;
+    private javax.swing.JButton btnAddPlayer;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnLoadTournament;
     private javax.swing.JButton btnNewTournament;
     private net.geeklythings.fieldmarshal.util.DateConverter dateConverter;
     private javax.swing.JDesktopPane desktopFrame;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JList jList1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JPanel m_panelTournamentInfo;
     private javax.swing.JPanel m_panelTournamentOverview;
@@ -472,11 +613,14 @@ public class FieldMarshal extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuLoadTournament;
     private javax.swing.JMenuItem mnuNewTournament;
     private javax.swing.JTextArea output;
+    private javax.swing.JPanel panelAddPlayer;
     private javax.swing.JTable tableRounds;
     private javax.swing.JTextField txtCurrentRound;
     private javax.swing.JTextField txtDate;
     private javax.swing.JTextField txtDescription;
+    private javax.swing.JTextField txtFirstName;
     private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtLastName;
     private javax.swing.JTextField txtNumRounds;
     private javax.swing.JTextField txtOrganizer;
     private javax.swing.JTextField txtStore;

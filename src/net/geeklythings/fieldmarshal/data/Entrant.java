@@ -1,5 +1,6 @@
 package net.geeklythings.fieldmarshal.data;
 
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -13,11 +14,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NoResultException;
 import javax.persistence.OneToOne;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Access(AccessType.FIELD)
@@ -26,9 +29,10 @@ public class Entrant implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @OneToOne   //(cascade= {CascadeType.PERSIST, CascadeType.MERGE})
+    
     @JoinColumn(name = "ID_PLAYER")
-    protected Player player;
+    @ManyToOne(cascade= { CascadeType.MERGE })
+    private Player player;
    
     @Enumerated(EnumType.STRING)
     protected Faction faction;
@@ -36,6 +40,9 @@ public class Entrant implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @Transient
+    private final PropertyChangeSupport propertyChangeSupport = new java.beans.PropertyChangeSupport(this);
 
     public Long getId() {
         return id;
@@ -47,20 +54,24 @@ public class Entrant implements Serializable {
 
     public Entrant(){}
     
-    /*public Entrant(Player addPlayer, Faction addfaction) {
+    public Entrant(Player addPlayer, Faction addfaction) {
         //When creating a new Entrant, we don't want to use an existing player if possible
 
         this.setPlayer(addPlayer);
-        this.faction = addfaction;   
-    }*/
+        this.setFaction(addfaction);   
+    }
 
     public Player getPlayer() {
         return player;
     }
 
-    public void setPlayer(Player player) {
+    public final void setPlayer(Player player) {
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU");
+        Player oldPlayer = this.getPlayer();
+        
+        
+        
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
         EntityManager em = emf.createEntityManager();
         
         Query query = em.createQuery("SELECT P FROM Player P WHERE P.firstName=?1 AND P.lastName=?2 ");
@@ -71,18 +82,24 @@ public class Entrant implements Serializable {
         try {
             tempPlayer = (Player)query.getSingleResult();
         } catch (NoResultException e) {
-            
+            //no result found
         } 
-        if( tempPlayer == null) //exists
+        
+        em.getTransaction().begin();
+        if( tempPlayer == null) //no records found, doesn't exist
         {   
+            em.persist(player);  //persist the new player
             this.player = player;
         }
-        else
+        else // player exists int the database
         {
-            this.player = tempPlayer;
+            player = em.merge(player);
+            this.player = player;
         }
-         
+        em.getTransaction().commit();
         emf.close();
+        
+        propertyChangeSupport.firePropertyChange("player", oldPlayer, this.getPlayer());
     }
 
     public Faction getFaction() {
@@ -90,6 +107,8 @@ public class Entrant implements Serializable {
     }
 
     public void setFaction(Faction faction) {
+        Faction oldFaction = this.faction;
         this.faction = faction;
+        propertyChangeSupport.firePropertyChange("faction", oldFaction, this.faction);
     }
 }

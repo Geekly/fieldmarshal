@@ -21,11 +21,11 @@ public enum Faction {
 		name = s;
 	}
 	
-	public String toString()
-	{
-		return name;
-	}
-	
+        public String getName()
+        {
+            return name;    
+        }
+        
 	public static String[] enumsToStringArray() {
 		
 		String result[] = new String[Faction.values().length];
