@@ -16,15 +16,29 @@ import java.beans.PropertyChangeListener;
  *
  * @author khooks
  */
-public class MainJFrame extends javax.swing.JFrame {
+public class FieldMarshal extends javax.swing.JFrame {
 
     /**
      * Creates new form MainJFrame
      */
-    public MainJFrame() {
+    public FieldMarshal() {
         initComponents();
     }
 
+    Tournament activeTournament = TournamentFactory.createTournament(5);
+    
+    public Tournament getActiveTournament()
+    {
+        return activeTournament;
+    }
+    
+    public void setActiveTournament(Tournament tournament)
+    {
+        Tournament oldTournament = activeTournament;
+        activeTournament = tournament;
+        firePropertyChange("activeTournament", oldTournament, activeTournament);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,7 +50,6 @@ public class MainJFrame extends javax.swing.JFrame {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         _em = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
-        activeTournament = new net.geeklythings.fieldmarshal.data.Tournament();
         dateConverter = new net.geeklythings.fieldmarshal.util.DateConverter();
         desktopFrame = new javax.swing.JDesktopPane();
         btnNewTournament = new javax.swing.JButton();
@@ -68,12 +81,6 @@ public class MainJFrame extends javax.swing.JFrame {
         mnuNewTournament = new javax.swing.JMenuItem();
         mnuLoadTournament = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-
-        activeTournament.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                activeTournamentPropertyChange(evt);
-            }
-        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -122,6 +129,16 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${activeTournament.rounds}");
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, tableRounds);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${roundNumber}"));
+        columnBinding.setColumnName("Round Number");
+        columnBinding.setColumnClass(Integer.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
+        columnBinding.setColumnName("Id");
+        columnBinding.setColumnClass(Long.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
         jScrollPane2.setViewportView(tableRounds);
 
         jSplitPane1.setBottomComponent(jScrollPane2);
@@ -132,17 +149,20 @@ public class MainJFrame extends javax.swing.JFrame {
         txtOrganizer.setEditable(false);
         txtOrganizer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${organizer}"), txtOrganizer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.organizer}"), txtOrganizer, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Current Round:");
 
         txtCurrentRound.setEditable(false);
+        txtCurrentRound.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCurrentRound.setMinimumSize(new java.awt.Dimension(10, 20));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${currentRound}"), txtCurrentRound, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.currentRound}"), txtCurrentRound, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("of");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -151,7 +171,7 @@ public class MainJFrame extends javax.swing.JFrame {
         txtStore.setEditable(false);
         txtStore.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${store}"), txtStore, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.store}"), txtStore, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -166,15 +186,19 @@ public class MainJFrame extends javax.swing.JFrame {
         txtNumRounds.setEditable(false);
         txtNumRounds.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${numRounds}"), txtNumRounds, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.numRounds}"), txtNumRounds, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         txtDescription.setEditable(false);
+        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${format.formatDescription}"), txtDescription, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.format.description}"), txtDescription, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeTournament, org.jdesktop.beansbinding.ELProperty.create("${todaysDate}"), txtDate, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        txtDate.setEditable(false);
+        txtDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.todaysDate}"), txtDate, org.jdesktop.beansbinding.BeanProperty.create("text"), "");
         binding.setConverter(dateConverter);
         bindingGroup.addBinding(binding);
 
@@ -196,17 +220,17 @@ public class MainJFrame extends javax.swing.JFrame {
                         .addGroup(m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(m_panelTournamentInfoLayout.createSequentialGroup()
-                                    .addComponent(txtCurrentRound, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtCurrentRound, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(jLabel6)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txtNumRounds, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtNumRounds, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(txtDate)
-                                .addComponent(txtOrganizer)
+                                .addComponent(txtOrganizer, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                                 .addComponent(txtStore))
-                            .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel1))
-                .addContainerGap(438, Short.MAX_VALUE))
+                .addContainerGap(296, Short.MAX_VALUE))
         );
         m_panelTournamentInfoLayout.setVerticalGroup(
             m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -340,6 +364,7 @@ public class MainJFrame extends javax.swing.JFrame {
         //activeTournament = TournamentFactory.createTournament(0);
         //Are you sure you want to create a new Tournament?
         activeTournament = TournamentFactory.createTournament(4);
+        firePropertyChange("activeTournament", null, activeTournament);
         EditActiveTournament();
 
     }//GEN-LAST:event_btnNewTournamentActionPerformed
@@ -386,11 +411,6 @@ public class MainJFrame extends javax.swing.JFrame {
         EditActiveTournament();
     }//GEN-LAST:event_btnEditActionPerformed
 
-    private void activeTournamentPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_activeTournamentPropertyChange
-        // TODO add your handling code here:
-        firePropertyChange();
-    }//GEN-LAST:event_activeTournamentPropertyChange
-
     /**
      * @param args the command line arguments
      */
@@ -408,20 +428,20 @@ public class MainJFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FieldMarshal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FieldMarshal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FieldMarshal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FieldMarshal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainJFrame().setVisible(true);
+                new FieldMarshal().setVisible(true);
             }
         });
     }
@@ -429,7 +449,6 @@ public class MainJFrame extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager _em;
-    private net.geeklythings.fieldmarshal.data.Tournament activeTournament;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnLoadTournament;
     private javax.swing.JButton btnNewTournament;

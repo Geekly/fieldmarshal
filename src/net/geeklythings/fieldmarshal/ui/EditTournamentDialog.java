@@ -159,7 +159,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         txtLocation.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtLocation.setName(""); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${location}"), txtLocation, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${store}"), txtLocation, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N

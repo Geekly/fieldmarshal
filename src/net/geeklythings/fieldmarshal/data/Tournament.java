@@ -50,7 +50,7 @@ public class Tournament implements Serializable {
     
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="TODAYSDATE")
-    private Date todaysDate;
+    private Date todaysDate = new Date();
     @Column(name="LOCATION")
     private String store = "Fort Bourne";
     @Column(name="ORGANIZER")
@@ -60,16 +60,16 @@ public class Tournament implements Serializable {
     
     @JoinColumn(name="ID_EVENTFORMAT")
     @OneToOne(cascade=CascadeType.PERSIST)
-    private EventFormat format;
+    private EventFormat format = new EventFormat();
     
     //@JoinColumn(name="ID_PLAYER")
     @OneToMany(cascade=CascadeType.PERSIST)
-    private List<Entrant> players;
+    private List<Entrant> players = new ArrayList<>();
     
     //@JoinColumn(name="ID_ROUND")
     @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL) 
     //no reason to keep the rounds after the tournament has been deleted
-    private List<Round> rounds;
+    private List<Round> rounds = new ArrayList<>();
     
     @Transient
     private int currentRound = 1;
@@ -78,9 +78,9 @@ public class Tournament implements Serializable {
     public Tournament() {
         todaysDate = new Date();    
         //startTime = todaysDate;
-        format = new EventFormat();
-        players = new ArrayList<>();
-        rounds = new ArrayList<>(numRounds);
+        //format = new EventFormat();
+        //players = new ArrayList<>();
+        //rounds = new ArrayList<>(numRounds);
     }
     
     public Tournament(Tournament master)
@@ -195,6 +195,11 @@ public class Tournament implements Serializable {
         changeSupport.firePropertyChange("player", oldEntrants, players);
     }
 
+    public List<Round> getRounds()
+    {
+        return rounds;
+    }
+    
     public void addNewRound()
     {
         List<Round> oldRounds = new ArrayList<>(this.rounds);
@@ -212,25 +217,25 @@ public class Tournament implements Serializable {
     public void removeLastRound()
     {
         List<Round> oldRounds = new ArrayList<>(this.rounds);
-        rounds.remove( rounds.size() );
+        rounds.remove( rounds.size()-1 );
         this.numRounds = rounds.size();
         changeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
     
     public void copyProperties(Tournament master)
     {
-        id = master.id;
-        todaysDate = master.todaysDate;
-        numRounds = master.numRounds;
-        store = master.store;
-        organizer = master.organizer;
+        setId(master.id);
+        setTodaysDate(master.todaysDate);
+        setNumRounds (master.numRounds);
+        setStore(master.store);
+        setOrganizer(master.organizer);
         
         //players = master.players;  //don't change this anywhere
         //rounds = master.rounds; //don't change this anywhere
-        //format = master.format;  //assign to a copy
+        setFormat( new EventFormat(master.format) );  //assign to a copy
     }
     
-    @Override
+   /* @Override
     public Tournament clone()
     // Returns a copy of itself
     {
@@ -238,7 +243,7 @@ public class Tournament implements Serializable {
         EventFormat newFormat = new EventFormat(this.format);
         clone.setFormat(newFormat);
         return clone;
-    }
+    }*/
     
     @Override
     public int hashCode() {
