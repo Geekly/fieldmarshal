@@ -53,10 +53,14 @@ public class EventFormat implements Serializable {
         clockTime = ef.clockTime;
         
     }
-    
+    //TODO: make this work and make the field transient
+    //@Access(AccessType.PROPERTY)
+    private String getDescription()
+    {
+        return String.format("%s, %s,  Time: %d min", formatType, clockType, clockTime);
+    }
 
-
-@PrePersist
+    @PrePersist
     protected void updateDescription()
     {
         this.formatDescription = this.getDescription();
@@ -71,6 +75,7 @@ public class EventFormat implements Serializable {
     }
     
 
+    
     public String getFormatDescription()
     {
         this.formatDescription = this.getDescription();
@@ -116,13 +121,6 @@ public class EventFormat implements Serializable {
 
     public void setDeathClockTime(int deathClockTime) {
         this.clockTime = deathClockTime;
-    }
-    
-    
-    
-    private String getDescription()
-    {
-        return String.format("%s, %s,  Time: %d min", formatType, clockType, clockTime);
     }
     
     @Override

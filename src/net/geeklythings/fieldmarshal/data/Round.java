@@ -30,6 +30,11 @@ public class Round {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Override
+    public String toString() {
+        return "Round{" + "roundNumber=" + roundNumber + ", roundResults=" + roundResults + ", id=" + id + '}';
+    }
     
 
     

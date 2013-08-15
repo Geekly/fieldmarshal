@@ -112,7 +112,8 @@ public class Player implements Serializable {
 
     @Override
     public String toString() {
-        return "net.geeklythings.fieldmarshal.data.Player[ id=" + id + " ]";
+        return "Player{" + "firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", homeTown=" + homeTown + ", id=" + id + '}';
     }
+
     
 }

@@ -1,7 +1,11 @@
 package net.geeklythings.fieldmarshal.data;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -26,6 +30,11 @@ import javax.persistence.Transient;
 @Access(AccessType.FIELD)
 @Table(name="ENTRANT")
 public class Entrant implements Serializable {
+
+    @Override
+    public String toString() {
+        return "Entrant{" + "player=" + player + ", faction=" + faction + ", id=" + id + '}';
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -58,7 +67,7 @@ public class Entrant implements Serializable {
         //When creating a new Entrant, we don't want to use an existing player if possible
 
         this.setPlayer(addPlayer);
-        this.setFaction(addfaction);   
+        this.faction = addfaction;   
     }
 
     public Player getPlayer() {
@@ -68,9 +77,7 @@ public class Entrant implements Serializable {
     public final void setPlayer(Player player) {
         
         Player oldPlayer = this.getPlayer();
-        
-        
-        
+   
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
         EntityManager em = emf.createEntityManager();
         
@@ -79,6 +86,7 @@ public class Entrant implements Serializable {
         query.setParameter(2, player.getLastName());
         
         Player tempPlayer = null; 
+        //check if this player already exists in the database
         try {
             tempPlayer = (Player)query.getSingleResult();
         } catch (NoResultException e) {
@@ -88,14 +96,13 @@ public class Entrant implements Serializable {
         em.getTransaction().begin();
         if( tempPlayer == null) //no records found, doesn't exist
         {   
-            em.persist(player);  //persist the new player
-            this.player = player;
+            em.persist(player); //persist the new player
         }
         else // player exists int the database
         {
-            player = em.merge(player);
-            this.player = player;
+            player = em.merge(tempPlayer);
         }
+        this.player = player;
         em.getTransaction().commit();
         emf.close();
         
@@ -111,4 +118,6 @@ public class Entrant implements Serializable {
         this.faction = faction;
         propertyChangeSupport.firePropertyChange("faction", oldFaction, this.faction);
     }
+  
+
 }
