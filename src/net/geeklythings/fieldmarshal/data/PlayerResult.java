@@ -117,8 +117,8 @@ public class PlayerResult {
             }
             else
             {
-                net.geeklythings.fieldmarshal.data.Entrant oldOpponent = this.player;
-                this.player = player;
+                net.geeklythings.fieldmarshal.data.Entrant oldOpponent = this.opponent;
+                this.opponent = player;
                 propertyChangeSupport.firePropertyChange(PROP_OPPONENT, oldOpponent, player);
             }
         } catch(Exception e ){
@@ -153,6 +153,7 @@ public class PlayerResult {
      * @param resultType the result to set
      */
     public void setResult(ResultType resultType) {
+        //TODO: would be nice to check against the opponent's result as well
         net.geeklythings.fieldmarshal.data.ResultType oldResult = this.resultType;
         this.resultType = resultType;
         propertyChangeSupport.firePropertyChange(PROP_RESULT, oldResult, resultType);

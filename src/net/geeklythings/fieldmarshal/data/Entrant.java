@@ -53,6 +53,14 @@ public class Entrant implements Serializable {
     @Transient
     private final PropertyChangeSupport propertyChangeSupport = new java.beans.PropertyChangeSupport(this);
 
+    @Transient
+    public int getWins(){return 0;}
+    @Transient
+    public int getLosses() {return 0;}
+    @Transient
+    public int getStandings(){return 0;
+    }
+    
     public Long getId() {
         return id;
     }

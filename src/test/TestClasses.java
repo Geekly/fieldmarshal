@@ -13,6 +13,7 @@ import net.geeklythings.fieldmarshal.data.EventFormat;
 import net.geeklythings.fieldmarshal.data.Faction;
 import net.geeklythings.fieldmarshal.data.Player;
 import net.geeklythings.fieldmarshal.data.PlayerResult;
+import net.geeklythings.fieldmarshal.data.ResultType;
 import net.geeklythings.fieldmarshal.data.Round;
 import net.geeklythings.fieldmarshal.data.Tournament;
 
@@ -77,6 +78,11 @@ public class TestClasses {
         persist(e2);
         pr.setPlayer(e1);
         pr.setOpponent(e2);
+        pr.setResult(ResultType.WIN);  
+        pr.setArmyPointsDestroyed(27);
+        pr.setListPlayed(1);
+        pr.setControlPoints(4);
+        
         
         System.out.println(e1.toString());
         System.out.println(e2.toString());
