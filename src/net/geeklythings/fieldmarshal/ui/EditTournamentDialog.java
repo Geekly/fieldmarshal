@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JComboBox;
+import net.geeklythings.fieldmarshal.data.EventFormat;
 import net.geeklythings.fieldmarshal.data.Player;
 import net.geeklythings.fieldmarshal.data.Tournament;
 
@@ -29,7 +30,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
      */
     public EditTournamentDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        localTournament = new Tournament();
+        //localTournament = new Tournament();
         initComponents();
     }
     /**
@@ -51,7 +52,10 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     
     public Tournament showDialog(Tournament tournament)
     {        
+        EventFormat ef = new EventFormat( tournament.getFormat() );  //TODO: check to see if this is redundant
         localTournament = new Tournament(tournament);  //start with a copy of the tournament
+        localTournament.setFormat(ef);
+        // make sure that the eventformat is copied
         loadInitialValues();
         setVisible(true);  //comes back here after the doClose() function
         return localTournament;
@@ -60,7 +64,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     
     private void loadInitialValues() {
 
-        //TODO: update dialog values with the pass tournament.  This is appropriate for new and existing tournaments.
+        //TODO: update dialog values with the passed tournament. 
         this.cbRounds.setSelectedItem( String.valueOf(localTournament.getNumRounds()) );
         this.jdcDate.setDate( localTournament.getTodaysDate() );
         this.txtLocation.setText( localTournament.getStore() );
@@ -73,7 +77,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     private void updateTournament()
     {
         //TODO: update all of the Tournament values with the dialog values
-        localTournament.setNumRounds( Integer.parseInt( (String)this.cbRounds.getSelectedItem()) );
+        //localTournament.setNumRounds( Integer.parseInt( (String)this.cbRounds.getSelectedItem()) );
         localTournament.setTodaysDate( this.jdcDate.getDate() );
         localTournament.setStore( this.txtLocation.getText() );
         localTournament.getFormat().setClockType( (String)this.cbClock.getSelectedItem() );
@@ -113,11 +117,6 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Edit Tournament");
         setModal(true);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
         btnOK.setText("OK");
         btnOK.addActionListener(new java.awt.event.ActionListener() {
@@ -136,9 +135,9 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Number of Rounds:");
 
-        cbRounds.setEditable(true);
         cbRounds.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cbRounds.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8" }));
+        cbRounds.setEnabled(false);
         cbRounds.setName(""); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${format.numRounds}"), cbRounds, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
@@ -168,8 +167,9 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Clock:");
 
+        cbFormat.setEditable(true);
         cbFormat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cbFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Steamroller", "Hardcore", "Iron Gauntlet" }));
+        cbFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Steamroller", "Mangled Metal", "Hardcore", "Iron Gauntlet", "Release Event", " " }));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${format.formatType}"), cbFormat, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
@@ -190,6 +190,12 @@ public class EditTournamentDialog extends javax.swing.JDialog {
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${organizer}"), txtOrganizer, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        jdcDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jdcDatePropertyChange(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -212,17 +218,14 @@ public class EditTournamentDialog extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5))
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbClock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cbClock, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbFormat, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(jLabel6))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(37, 37, 37)
-                        .addComponent(cbRounds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -230,8 +233,10 @@ public class EditTournamentDialog extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jdcDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(cbRounds, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jdcDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(4, 4, 4)))))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
@@ -276,11 +281,6 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO update the activetournament with the values:
-        //updateTournament();  //ensure that all of the fields reflect current values
-    }//GEN-LAST:event_formWindowClosing
-
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         // TODO add your handling code here:
         //activeTournament.update();
@@ -306,11 +306,15 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     
     private void cbRoundsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRoundsActionPerformed
         // TODO add your handling code here:
-        String value = ((JComboBox)evt.getSource()).getSelectedItem().toString();
-        localTournament.setNumRounds( Integer.valueOf(value) );
+        //String value = ((JComboBox)evt.getSource()).getSelectedItem().toString();
+        //localTournament.setNumRounds( Integer.valueOf(value) );
         //this can be complicated... need to check how many rounds exist, then possibly prune or add to them.  Editing should
         //probably be disabled once the tournament has Started
     }//GEN-LAST:event_cbRoundsActionPerformed
+
+    private void jdcDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jdcDatePropertyChange
+        localTournament.setTodaysDate( this.jdcDate.getDate() );
+    }//GEN-LAST:event_jdcDatePropertyChange
 
     /**
      * @param args the command line arguments

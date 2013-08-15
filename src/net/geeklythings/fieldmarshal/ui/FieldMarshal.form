@@ -206,7 +206,8 @@
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="elements" source="Form" sourcePath="${activeTournament.rounds}" target="tableRounds" targetPath="elements" updateStrategy="0" immediately="true">
+                        <BindingProperty name="elements" source="Form" sourcePath="${activeTournament.rounds}" target="tableRounds" targetPath="elements" updateStrategy="1" immediately="true">
+                          <Property name="name" type="java.lang.String" value="bindingRounds"/>
                           <Subbinding sourcePath="${roundNumber}">
                             <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
                           </Subbinding>
@@ -231,32 +232,29 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="txtCurrentRound" min="-2" pref="25" max="-2" attributes="0"/>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Component id="txtNumRounds" min="-2" pref="25" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Component id="txtDate" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="txtOrganizer" alignment="0" pref="200" max="32767" attributes="0"/>
-                                              <Component id="txtStore" alignment="0" max="32767" attributes="0"/>
-                                          </Group>
-                                          <Component id="txtDescription" min="-2" pref="400" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
+                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="txtCurrentRound" min="-2" pref="25" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="txtNumRounds" min="-2" pref="25" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="txtDate" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtOrganizer" alignment="0" pref="200" max="32767" attributes="0"/>
+                                      <Component id="txtStore" alignment="0" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Component id="txtDescription" min="-2" pref="400" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace pref="296" max="32767" attributes="0"/>
                           </Group>
@@ -293,7 +291,10 @@
                                   <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -419,7 +420,7 @@
                         </Property>
                       </Properties>
                       <BindingProperties>
-                        <BindingProperty name="text" source="Form" sourcePath="${activeTournament.format.description}" target="txtDescription" targetPath="text" updateStrategy="0" immediately="false">
+                        <BindingProperty name="text" source="Form" sourcePath="${activeTournament.format.formatDescription}" target="txtDescription" targetPath="text" updateStrategy="0" immediately="false">
                           <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
                         </BindingProperty>
                       </BindingProperties>
@@ -441,6 +442,11 @@
                         </BindingProperty>
                       </BindingProperties>
                     </Component>
+                    <Component class="javax.swing.JButton" name="jButton1">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Add Round"/>
+                      </Properties>
+                    </Component>
                   </SubComponents>
                 </Container>
               </SubComponents>
@@ -461,7 +467,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JList" name="jList1">
+            <Component class="javax.swing.JList" name="playerList">
               <Properties>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
                   <StringArray count="5">
@@ -474,8 +480,9 @@
                 </Property>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="elements" source="Form" sourcePath="${activeTournament.players}" target="jList1" targetPath="elements" updateStrategy="0" immediately="false">
+                <BindingProperty name="elements" source="Form" sourcePath="${activeTournament.players}" target="playerList" targetPath="elements" updateStrategy="1" immediately="false">
                   <BindingParameter name="DISPLAY" value="${player.firstName} ${player.lastName}: ${faction.name}"/>
+                  <Property name="name" type="java.lang.String" value="bindingPlayerList"/>
                 </BindingProperty>
               </BindingProperties>
             </Component>
@@ -503,9 +510,9 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="92" max="32767" attributes="0"/>
                                   </Group>
-                                  <Component id="txtLastName" pref="142" max="32767" attributes="0"/>
+                                  <Component id="txtLastName" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
@@ -545,12 +552,12 @@
           <SubComponents>
             <Component class="javax.swing.JTextField" name="txtLastName">
               <Properties>
-                <Property name="text" type="java.lang.String" value="jTextField2"/>
+                <Property name="text" type="java.lang.String" value="Potter"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtFirstName">
               <Properties>
-                <Property name="text" type="java.lang.String" value="jTextField1"/>
+                <Property name="text" type="java.lang.String" value="Harry"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnAddPlayer">

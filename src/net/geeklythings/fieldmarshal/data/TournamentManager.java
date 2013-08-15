@@ -4,10 +4,18 @@
  */
 package net.geeklythings.fieldmarshal.data;
 
+import net.geeklythings.fieldmarshal.ui.EditTournamentDialog;
+
 /**
  *
  * @author khooks
  */
 public class TournamentManager {
+
+    public void copyProperties(EditTournamentDialog et, Tournament tournament) {
+    
+
+    
+    }
     
 }

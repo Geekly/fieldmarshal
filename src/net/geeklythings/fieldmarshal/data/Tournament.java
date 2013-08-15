@@ -15,19 +15,24 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Persistence;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import net.geeklythings.fieldmarshal.ui.EditTournamentDialog;
 import net.geeklythings.fieldmarshal.util.DateUtils;
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
+import sun.security.ssl.Debug;
 //import org.joda.time.DateTime;
 //import org.joda.time.MutableDateTime;
 
@@ -43,11 +48,7 @@ public class Tournament implements Serializable {
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     private static final long serialVersionUID = 1L;
-    
-    
-    //@Converter(name = "jodaDateConverter", converterClass = net.geeklythings.fieldmarshal.util.JodaDateTimeConverter.class)
-    //@Convert("jodaDateConverter")
-    
+       
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="TODAYSDATE")
     private Date todaysDate = new Date();
@@ -56,24 +57,27 @@ public class Tournament implements Serializable {
     @Column(name="ORGANIZER")
     private String organizer = "Anastasia deBray";
     @Column(name="NUMROUNDS")
-    private int numRounds = 4;
+    private int numRounds = 3;
     
     @JoinColumn(name="ID_EVENTFORMAT")
-    @OneToOne(cascade={CascadeType.ALL})
+    @OneToOne(cascade={CascadeType.PERSIST})
     private EventFormat format = new EventFormat();
       
-    @OneToMany(cascade={CascadeType.ALL})
+    @OneToMany(cascade={CascadeType.PERSIST})
     private List<Entrant> players = new ArrayList<>();
     
-    @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL) 
+    @OneToMany(orphanRemoval=true, cascade={CascadeType.PERSIST}) 
     //no reason to keep the rounds after the tournament has been deleted
     private List<Round> rounds = new ArrayList<>();
     
     @Transient
     private int currentRound = 1;
     
+    @Transient
+    private List<Entrant> activePlayers = new ArrayList<>();  //for tracking dropped players
+    
     public Tournament() {
-        todaysDate = new Date();    
+        //todaysDate = new Date();    
         //startTime = todaysDate;
         //format = new EventFormat();
         //players = new ArrayList<>();
@@ -82,17 +86,19 @@ public class Tournament implements Serializable {
     
     public Tournament(Tournament master)
     {
-        id = master.id;
+        //id = master.id;
+
+        format = new EventFormat(master.format);  //assign to a copy
+        
         todaysDate = master.todaysDate;
         numRounds = master.numRounds;
         store = master.store;
         organizer = master.organizer;
         
         players = master.players;  //don't change this anywhere
-        rounds = master.rounds; //don't change this anywhere
+        rounds = master.rounds;    //don't change this anywhere
         
-        format = new EventFormat(master.format);  //assign to a copy
-
+        // persist(format);
     }
     
     @Id
@@ -124,7 +130,11 @@ public class Tournament implements Serializable {
         
     }
 
-
+    public List<Entrant> getActivePlayers()
+    {
+        return this.activePlayers;
+    }
+    
     public Date getTodaysDate() {
         return todaysDate;
     }
@@ -152,7 +162,7 @@ public class Tournament implements Serializable {
     public void setStore(String store) {
         String oldLocation = this.store;
         this.store = store;
-        changeSupport.firePropertyChange("location", oldLocation, store);
+        changeSupport.firePropertyChange("store", oldLocation, store);
     }
 
     public String getOrganizer() {
@@ -172,12 +182,14 @@ public class Tournament implements Serializable {
         while (targetRounds < rounds.size())
         {
             removeLastRound();
+
         }
         while ( targetRounds > rounds.size())
         {
             addNewRound();
         }
         numRounds = rounds.size();
+        //this.persist(this);
         changeSupport.firePropertyChange("numRounds", oldRounds, numRounds);
     }
     
@@ -193,9 +205,10 @@ public class Tournament implements Serializable {
     }
 
     public void addPlayer(Entrant player) {
-        List<Entrant> oldEntrants = new ArrayList<>( this.getPlayers() );
+        //List<Entrant> oldEntrants = new ArrayList<>( this.getPlayers() );
         players.add(player);
-        changeSupport.firePropertyChange("player", oldEntrants, getPlayers());
+        activePlayers.add(player);
+        changeSupport.firePropertyChange("players", null, this.getPlayers());
     }
 
     public List<Round> getRounds()
@@ -205,37 +218,51 @@ public class Tournament implements Serializable {
     
     public void addNewRound()
     {
-        List<Round> oldRounds = new ArrayList<>(this.rounds);
+        List<Round> oldRounds = this.rounds;
+        this.rounds = new ArrayList<>(this.rounds);
         rounds.add( new Round() );
-        changeSupport.firePropertyChange("rounds", oldRounds, rounds);
+        changeSupport.firePropertyChange("rounds", null, rounds);
     }
         
     public void addRound(Round round) {
-        List<Round> oldRounds = new ArrayList<>(this.rounds);
-        rounds.add(round);
+        List<Round> oldRounds = this.rounds;
+        this.rounds = new ArrayList<>(this.rounds);
+        this.rounds.add(round);
         this.numRounds = rounds.size();
-        changeSupport.firePropertyChange("rounds", oldRounds, rounds);
+        changeSupport.firePropertyChange("rounds", null, rounds);
     }
 
     public void removeLastRound()
     {
-        List<Round> oldRounds = new ArrayList<>(this.rounds);
-        rounds.remove( rounds.size()-1 );
+        List<Round> oldRounds = this.rounds;
+        this.rounds = new ArrayList<>(this.rounds);
+        this.rounds.remove( rounds.size()-1 );
         this.numRounds = rounds.size();
+        System.out.println("");
         changeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
     
     public void copyProperties(Tournament master)
+    /* Don't create new objects in here */
     {
-        setId(master.id);
+        //setId(master.id);  //don't ever copy the id, or chaos will ensue
         setTodaysDate(master.todaysDate);
-        setNumRounds (master.numRounds);
-        setStore(master.store);
+        //setNumRounds (master.numRounds);  //we won't set this in the dialog any more
+        setStore(master.store);   
         setOrganizer(master.organizer);
-        
-        //players = master.players;  //don't change this anywhere
+        //setPlayers( master.players);  //don't change this anywhere
         //rounds = master.rounds; //don't change this anywhere
-        setFormat( new EventFormat(master.format) );  //assign to a copy
+        getFormat().setClockTime(master.getFormat().getClockTime());
+        getFormat().setClockType(master.getFormat().getClockType());
+        getFormat().setFormatType(master.getFormat().getFormatType());
+
+    }
+    
+    
+    public void dropPlayer(Player dropped)
+    {
+        //keep the player in the tournament, but eliminate from pairings
+        activePlayers.remove(dropped);
     }
     
    /* @Override
@@ -279,5 +306,20 @@ public class Tournament implements Serializable {
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
+    }
+
+    public void persist(Object object) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        try {
+            em.persist(object);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            em.getTransaction().rollback();
+        } finally {
+            em.close();
+        }
     }
 }

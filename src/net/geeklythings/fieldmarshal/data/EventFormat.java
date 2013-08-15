@@ -87,7 +87,7 @@ public class EventFormat implements Serializable {
     */
      
     public String getFormatType() {
-        return formatType;
+        return this.formatType;
     }
 
     public void setFormatType(String formatType) {
@@ -118,9 +118,9 @@ public class EventFormat implements Serializable {
         this.clockTime = deathClockTime;
     }
     
-
     
-    public String getDescription()
+    
+    private String getDescription()
     {
         return String.format("%s, %s,  Time: %d min", formatType, clockType, clockTime);
     }

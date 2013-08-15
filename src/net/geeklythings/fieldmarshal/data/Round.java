@@ -23,23 +23,32 @@ public class Round {
 
     @Column(name="ROUNDNUMBER")
     private int roundNumber;
-
-    public int getRoundNumber() {
-        return roundNumber;
-    }
-
-    public void setRoundNumber(int roundNumber) {
-        int oldRoundNumber = this.roundNumber;
-        this.roundNumber = roundNumber;
-        changeSupport.firePropertyChange("roundNumber", oldRoundNumber, roundNumber);
-    }
     
     @Transient
-    private List<RoundResult> roundResults;
+    private List<RoundResult> roundResults = new ArrayList<>();
    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+
+    
+    public Round()
+    {
+
+    }
+    
+    public Round(int number) {
+        roundNumber = number;
+        roundResults = new ArrayList<>();
+    }
+    
+    public Round(Round rnd)
+    {
+        id = rnd.getId();
+        roundNumber = rnd.getRoundNumber();
+        roundResults = new ArrayList<>(rnd.getRoundResults());
+    }
 
     public Long getId() {
         return id;
@@ -51,33 +60,31 @@ public class Round {
         changeSupport.firePropertyChange("id", oldId, id);
     }    
     
-    public Round()
+    public List<RoundResult> getRoundResults()
     {
-        roundResults = new ArrayList<>();
+        return roundResults;
     }
-    
-    public Round(int number) {
-        roundNumber = number;
-        roundResults = new ArrayList<>();
-    }
-    
-    public Round(Round rnd)
-    {
-        roundNumber = rnd.roundNumber;
-        roundResults = rnd.roundResults;
+        
+    public int getRoundNumber() {
+        return roundNumber;
     }
 
-    public void addResult(RoundResult result) throws Exception {
+    public void setRoundNumber(int roundNumber) {
+        int oldRoundNumber = this.roundNumber;
+        this.roundNumber = roundNumber;
+        changeSupport.firePropertyChange("roundNumber", oldRoundNumber, roundNumber);
+    }
+
+    public void addRoundResult(RoundResult result) throws Exception {
         int resultRound = result.getRoundNumber();
         if (resultRound == this.roundNumber) {
             roundResults.add(result);
         } else {
             throw new Exception("invalid round number");//check if round numbers match
         }
-
     }
 
-    public void setPairings() {
+    public void createPairings() {
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
