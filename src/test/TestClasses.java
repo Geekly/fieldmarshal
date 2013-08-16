@@ -11,6 +11,7 @@ import javax.persistence.Persistence;
 import net.geeklythings.fieldmarshal.model.Entrant;
 import net.geeklythings.fieldmarshal.model.EventFormat;
 import net.geeklythings.fieldmarshal.model.Faction;
+import net.geeklythings.fieldmarshal.model.MatchPairing;
 import net.geeklythings.fieldmarshal.model.Player;
 import net.geeklythings.fieldmarshal.model.PlayerResult;
 import net.geeklythings.fieldmarshal.model.ResultType;
@@ -30,12 +31,13 @@ public class TestClasses {
     public static void main(String[] args) {
         // TODO code application logic here
         TestClasses test = new TestClasses();
-        test.TestPlayer();
+        //test.TestPlayer();
+        test.TestPairings();
         //Player pl2 = new Player("Steve", "Adore");
         //Entrant et2 = new Entrant(pl2, Faction.RETRIBUTION);
         //test.TestRound();
         //test.TestPlayerResult();
-        
+        //test.TestRound();
         //System.out.println(gson.toJson(ef1));
         //System.out.println(gson.toJson(ef2));
         //System.out.println(gson.toJson(pl1));
@@ -57,6 +59,42 @@ public class TestClasses {
         persist(et2);
         System.out.println(pl1.toString());
         System.out.println(et2.toString());
+    }
+    
+    
+    public void TestPairings()
+    {
+        Player pl1 = new Player("Rufus", "McGillicutty");
+        Entrant e1 = new Entrant(pl1, Faction.CIRCLE);
+                
+        Player pl2 = new Player("Hank", "Haliburton");
+        Entrant e2 = new Entrant(pl2, Faction.CYGNAR);
+        
+        Player pl3 = new Player("Wil", "Wheaton");
+        Entrant e3 = new Entrant(pl3, Faction.KHADOR);
+        
+        Player pl4 = new Player("Stan", "The Man");
+        Entrant e4 = new Entrant(pl4, Faction.MERCS);
+        
+        persist(e1);
+        persist(e2);       
+        persist(e3);
+        persist(e4);
+        
+        MatchPairing pairing1 = new MatchPairing();
+        pairing1.addEntrant(e1);
+        pairing1.addEntrant(e2);
+        
+        MatchPairing pairing2 = new MatchPairing();
+        pairing2.addEntrant(e3);
+        pairing2.addEntrant(e4);
+        //pairing.addEntrant(e3);
+        
+        persist(pairing1);
+        persist(pairing2);
+        
+        System.out.println(pairing1);
+        System.out.println(pairing2);
     }
     
     private void TestPlayerResult()

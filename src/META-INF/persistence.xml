@@ -8,8 +8,9 @@
     <class>net.geeklythings.fieldmarshal.model.PlayerResult</class>
     <class>net.geeklythings.fieldmarshal.model.Round</class>
     <class>net.geeklythings.fieldmarshal.model.Tournament</class>
+    <class>net.geeklythings.fieldmarshal.model.MatchPairing</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby:fieldmarshaldb;create=true"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby:C:\Users\khooks\Documents\Google Drive\workspace\FieldMarshal\database\fieldmarshaldb2"/>
       <property name="javax.persistence.jdbc.password" value="fieldmarshal"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
       <property name="javax.persistence.jdbc.user" value="fieldmarshal"/>

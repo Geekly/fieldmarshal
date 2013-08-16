@@ -63,18 +63,18 @@ public class Tournament implements Serializable {
     @OneToOne(cascade={CascadeType.PERSIST})
     private EventFormat format = new EventFormat();
       
-    @OneToMany(cascade={CascadeType.PERSIST})
+    @OneToMany(cascade={CascadeType.MERGE})
     private List<Entrant> players = new ArrayList<>();
     
-    @OneToMany(orphanRemoval=true, cascade={CascadeType.PERSIST}) 
+    @OneToMany(orphanRemoval=true, cascade={CascadeType.MERGE}) 
     //no reason to keep the rounds after the tournament has been deleted
     private List<Round> rounds = new ArrayList<>();
     
     @Transient
     private int currentRound = 1;
     
-    @Transient
-    private List<Entrant> activePlayers = new ArrayList<>();  //for tracking dropped players
+    //@Transient
+    //private List<Entrant> activePlayers = new ArrayList<>();  //for tracking dropped players
     
     public Tournament() {
         //todaysDate = new Date();    
@@ -132,7 +132,16 @@ public class Tournament implements Serializable {
 
     public List<Entrant> getActivePlayers()
     {
-        return this.activePlayers;
+        List<Entrant> activePlayers = new ArrayList<>();
+        
+        for( Entrant e : players )
+        {
+            if( e.getActiveStatus() == EntrantStatus.ACTIVE)
+            {
+                activePlayers.add(e);
+            }
+        }
+        return activePlayers;
     }
     
     public Date getTodaysDate() {
@@ -207,7 +216,7 @@ public class Tournament implements Serializable {
     public void addPlayer(Entrant player) {
         //List<Entrant> oldEntrants = new ArrayList<>( this.getPlayers() );
         players.add(player);
-        activePlayers.add(player);
+        
         changeSupport.firePropertyChange("players", null, this.getPlayers());
     }
 
@@ -259,10 +268,10 @@ public class Tournament implements Serializable {
     }
     
     
-    public void dropPlayer(Player dropped)
+    public void dropPlayer(Entrant dropped)
     {
         //keep the player in the tournament, but eliminate from pairings
-        activePlayers.remove(dropped);
+        dropped.setActiveStatus(EntrantStatus.INACTIVE);
     }
     
    /* @Override

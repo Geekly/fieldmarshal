@@ -13,3 +13,5 @@ sample.db
 database/derby.log
 
 /fieldmarshaldb/
+/database/fieldmarshaldb2/
+derby.log
