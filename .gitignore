@@ -4,6 +4,7 @@ lib/
 /bin
 
 sample.db
+/old/
 /build/
 /dist/
 /database/FieldMarshalDB/
@@ -11,3 +12,4 @@ sample.db
 
 database/derby.log
 
+/fieldmarshaldb/

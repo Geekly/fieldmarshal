@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.geeklythings.fieldmarshal.data;
+package net.geeklythings.fieldmarshal.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

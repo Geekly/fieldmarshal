@@ -1,4 +1,4 @@
-package net.geeklythings.fieldmarshal.data;
+package net.geeklythings.fieldmarshal.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

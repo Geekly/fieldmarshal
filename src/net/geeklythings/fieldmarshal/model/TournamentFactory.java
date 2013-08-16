@@ -1,4 +1,4 @@
-package net.geeklythings.fieldmarshal.data;
+package net.geeklythings.fieldmarshal.model;
 
 import java.sql.Date;
 //import java.sql.SQLException;

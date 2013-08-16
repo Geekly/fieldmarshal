@@ -4,6 +4,10 @@
  */
 package test;
 
+import net.geeklythings.fieldmarshal.model.Entrant;
+import net.geeklythings.fieldmarshal.model.Faction;
+import net.geeklythings.fieldmarshal.model.Tournament;
+import net.geeklythings.fieldmarshal.model.Player;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -11,7 +15,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import net.geeklythings.fieldmarshal.data.*;
 
 /**
  *

@@ -22,7 +22,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;net.geeklythings.fieldmarshal.data.Tournament&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;net.geeklythings.fieldmarshal.model.Tournament&gt;"/>
       </AuxValues>
     </Component>
   </NonVisualComponents>
@@ -131,7 +131,7 @@
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
               </Subbinding>
               <Subbinding sourcePath="${format}">
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="net.geeklythings.fieldmarshal.data.EventFormat.class"/>
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="net.geeklythings.fieldmarshal.model.EventFormat.class"/>
               </Subbinding>
               <Subbinding sourcePath="${organizer}">
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>

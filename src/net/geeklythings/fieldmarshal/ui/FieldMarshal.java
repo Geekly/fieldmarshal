@@ -7,18 +7,18 @@ package net.geeklythings.fieldmarshal.ui;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import net.geeklythings.fieldmarshal.data.Tournament;
-import net.geeklythings.fieldmarshal.data.TournamentFactory;
+import net.geeklythings.fieldmarshal.model.Tournament;
+import net.geeklythings.fieldmarshal.model.TournamentFactory;
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import net.geeklythings.fieldmarshal.data.Entrant;
-import net.geeklythings.fieldmarshal.data.Faction;
-import net.geeklythings.fieldmarshal.data.Player;
-import net.geeklythings.fieldmarshal.data.TournamentManager;
+import net.geeklythings.fieldmarshal.model.Entrant;
+import net.geeklythings.fieldmarshal.model.Faction;
+import net.geeklythings.fieldmarshal.model.Player;
+import net.geeklythings.fieldmarshal.controller.TournamentController;
 
 /**
  *
@@ -472,7 +472,7 @@ public class FieldMarshal extends javax.swing.JFrame {
     private void EditActiveTournament() {
 
         EditTournamentDialog et = new EditTournamentDialog(this, true);
-        TournamentManager tm = new TournamentManager();
+        TournamentController tm = new TournamentController();
         //et.setActiveTournament(activeTournament);
         et.showDialog(activeTournament);
         int returnStatus = et.getReturnStatus();

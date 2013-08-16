@@ -1,4 +1,4 @@
-package net.geeklythings.fieldmarshal.data;
+package net.geeklythings.fieldmarshal.model;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;

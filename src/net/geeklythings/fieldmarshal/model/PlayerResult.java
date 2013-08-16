@@ -1,4 +1,4 @@
-package net.geeklythings.fieldmarshal.data;
+package net.geeklythings.fieldmarshal.model;
 
 import java.beans.PropertyChangeSupport;
 import javax.persistence.Access;
@@ -117,7 +117,7 @@ public class PlayerResult {
             }
             else
             {
-                net.geeklythings.fieldmarshal.data.Entrant oldOpponent = this.opponent;
+                net.geeklythings.fieldmarshal.model.Entrant oldOpponent = this.opponent;
                 this.opponent = player;
                 propertyChangeSupport.firePropertyChange(PROP_OPPONENT, oldOpponent, player);
             }
@@ -154,7 +154,7 @@ public class PlayerResult {
      */
     public void setResult(ResultType resultType) {
         //TODO: would be nice to check against the opponent's result as well
-        net.geeklythings.fieldmarshal.data.ResultType oldResult = this.resultType;
+        net.geeklythings.fieldmarshal.model.ResultType oldResult = this.resultType;
         this.resultType = resultType;
         propertyChangeSupport.firePropertyChange(PROP_RESULT, oldResult, resultType);
     }

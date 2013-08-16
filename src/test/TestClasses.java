@@ -8,14 +8,14 @@ import com.google.gson.Gson;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import net.geeklythings.fieldmarshal.data.Entrant;
-import net.geeklythings.fieldmarshal.data.EventFormat;
-import net.geeklythings.fieldmarshal.data.Faction;
-import net.geeklythings.fieldmarshal.data.Player;
-import net.geeklythings.fieldmarshal.data.PlayerResult;
-import net.geeklythings.fieldmarshal.data.ResultType;
-import net.geeklythings.fieldmarshal.data.Round;
-import net.geeklythings.fieldmarshal.data.Tournament;
+import net.geeklythings.fieldmarshal.model.Entrant;
+import net.geeklythings.fieldmarshal.model.EventFormat;
+import net.geeklythings.fieldmarshal.model.Faction;
+import net.geeklythings.fieldmarshal.model.Player;
+import net.geeklythings.fieldmarshal.model.PlayerResult;
+import net.geeklythings.fieldmarshal.model.ResultType;
+import net.geeklythings.fieldmarshal.model.Round;
+import net.geeklythings.fieldmarshal.model.Tournament;
 
 
 /**
@@ -30,11 +30,11 @@ public class TestClasses {
     public static void main(String[] args) {
         // TODO code application logic here
         TestClasses test = new TestClasses();
-        //test.TestPlayer();
+        test.TestPlayer();
         //Player pl2 = new Player("Steve", "Adore");
         //Entrant et2 = new Entrant(pl2, Faction.RETRIBUTION);
         //test.TestRound();
-        test.TestPlayerResult();
+        //test.TestPlayerResult();
         
         //System.out.println(gson.toJson(ef1));
         //System.out.println(gson.toJson(ef2));

@@ -2,7 +2,7 @@
 
 <Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <NonVisualComponents>
-    <Component class="net.geeklythings.fieldmarshal.data.Tournament" name="localTournament">
+    <Component class="net.geeklythings.fieldmarshal.model.Tournament" name="localTournament">
     </Component>
   </NonVisualComponents>
   <Properties>

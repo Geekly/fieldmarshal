@@ -8,9 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JComboBox;
-import net.geeklythings.fieldmarshal.data.EventFormat;
-import net.geeklythings.fieldmarshal.data.Player;
-import net.geeklythings.fieldmarshal.data.Tournament;
+import net.geeklythings.fieldmarshal.model.EventFormat;
+import net.geeklythings.fieldmarshal.model.Player;
+import net.geeklythings.fieldmarshal.model.Tournament;
 
 /**
  *
@@ -97,7 +97,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        localTournament = new net.geeklythings.fieldmarshal.data.Tournament();
+        localTournament = new net.geeklythings.fieldmarshal.model.Tournament();
         btnOK = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -379,7 +379,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private com.toedter.calendar.JDateChooser jdcDate;
-    private net.geeklythings.fieldmarshal.data.Tournament localTournament;
+    private net.geeklythings.fieldmarshal.model.Tournament localTournament;
     private javax.swing.JTextField txtLocation;
     private javax.swing.JTextField txtOrganizer;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
