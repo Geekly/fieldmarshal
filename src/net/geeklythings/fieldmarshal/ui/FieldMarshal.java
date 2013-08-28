@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import javax.swing.ListModel;
 import net.geeklythings.fieldmarshal.entity.Entrant;
 import net.geeklythings.fieldmarshal.model.Faction;
 import net.geeklythings.fieldmarshal.entity.Player;
 import net.geeklythings.fieldmarshal.managers.TournamentController;
+import net.geeklythings.fieldmarshal.model.CustomListModel;
 
 /**
  *
@@ -86,7 +88,7 @@ public class FieldMarshal extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         txtID = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
-        playerList = new javax.swing.JList();
+        playerJList = new javax.swing.JList();
         panelAddPlayer = new javax.swing.JPanel();
         txtLastName = new javax.swing.JTextField();
         txtFirstName = new javax.swing.JTextField();
@@ -221,6 +223,11 @@ public class FieldMarshal extends javax.swing.JFrame {
         bindingGroup.addBinding(binding);
 
         jButton1.setText("Add Round");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout m_panelTournamentInfoLayout = new javax.swing.GroupLayout(m_panelTournamentInfo);
         m_panelTournamentInfo.setLayout(m_panelTournamentInfoLayout);
@@ -306,20 +313,14 @@ public class FieldMarshal extends javax.swing.JFrame {
         m_panelTournamentOverview.setBounds(340, 0, 880, 670);
         desktopFrame.add(m_panelTournamentOverview, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        playerList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${activeTournament.players}");
-        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, eLProperty, playerList, "bindingPlayerList");
-        jListBinding.setDetailBinding(org.jdesktop.beansbinding.ELProperty.create("${player.firstName} ${player.lastName}: ${faction.name}"));
+        org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, playerJList, "bindingPlayerList");
         bindingGroup.addBinding(jListBinding);
 
-        jScrollPane3.setViewportView(playerList);
+        playerJList.setModel( new CustomListModel() );
+        jScrollPane3.setViewportView(playerJList);
 
-        jScrollPane3.setBounds(10, 270, 320, 300);
+        jScrollPane3.setBounds(10, 260, 320, 310);
         desktopFrame.add(jScrollPane3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtLastName.setText("Potter");
@@ -446,14 +447,14 @@ public class FieldMarshal extends javax.swing.JFrame {
         Long tournamentID = ltd.showDialog();
         //Long tournamentID = 
         if (tournamentID != 0) {
-            output.append("Trying to load Tournament " + String.valueOf(tournamentID));
+            output.append("Trying to load Tournament " + String.valueOf(tournamentID) + "\n");
             try {
                 activeTournament = (Tournament) _em.find(Tournament.class, tournamentID);
             } 
             catch (Exception e) 
             {
             }
-            firePropertyChange("activeTournament", oldTournament, activeTournament);
+            firePropertyChange("activeTournament", null, activeTournament);
         }
 
     }//GEN-LAST:event_btnLoadTournamentActionPerformed
@@ -483,8 +484,9 @@ public class FieldMarshal extends javax.swing.JFrame {
 
         } else if (returnStatus == EditTournamentDialog.RET_OK) {
             //update number of rounds
-            Tournament oldTournament = activeTournament;
+            Tournament oldTournament = new Tournament();
             activeTournament.copyProperties(et.getTournament());  //copy the updates
+            //oldTournament.setId(0L);
             //copy the tournament properties from the Dialog         
             merge(activeTournament);
         
@@ -537,6 +539,7 @@ public class FieldMarshal extends javax.swing.JFrame {
         }    
         Entrant entrant = new Entrant(player, faction);
         persist(entrant);
+        
         activeTournament.addPlayer(entrant);
         persist(activeTournament);
         //_em.getTransaction().begin();
@@ -547,8 +550,17 @@ public class FieldMarshal extends javax.swing.JFrame {
         // set the fact
         // add the entrant to the List of players
 
+        output.setText( activeTournament.getPlayers().toString() ); 
+        
+        firePropertyChange("activeTournament", null, null);
+        firePropertyChange("bindingPlayerList", null, null);
         firePropertyChange("activeTournament.players", oldPlayers, activeTournament.getPlayers());
+        firePropertyChange("activeTournament.players", null, null);
     }//GEN-LAST:event_btnAddPlayerActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -618,7 +630,7 @@ public class FieldMarshal extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuNewTournament;
     private javax.swing.JTextArea output;
     private javax.swing.JPanel panelAddPlayer;
-    private javax.swing.JList playerList;
+    private javax.swing.JList playerJList;
     private javax.swing.JTable tableRounds;
     private javax.swing.JTextField txtCurrentRound;
     private javax.swing.JTextField txtDate;

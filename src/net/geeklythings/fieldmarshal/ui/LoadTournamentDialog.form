@@ -136,6 +136,9 @@
               </Subbinding>
             </BindingProperty>
           </BindingProperties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="tableTournament.getSelectionModel().addListSelectionListener(this);"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

@@ -67,7 +67,8 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
             selectedTournamentID = id;
             
             output.append("ID: " + o.toString());
-            output.append(String.valueOf(row));
+            //output.append(String.valueOf(row));
+            output.append("\n");
             
             okButton.setEnabled(true);
             
@@ -143,6 +144,7 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
         columnBinding.setColumnClass(java.util.Date.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
+        tableTournament.getSelectionModel().addListSelectionListener(this);
         jScrollPane1.setViewportView(tableTournament);
 
         output.setColumns(20);
