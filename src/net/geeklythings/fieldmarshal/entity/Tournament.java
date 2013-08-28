@@ -67,8 +67,8 @@ public class Tournament implements Serializable {
     @OneToMany(cascade={CascadeType.MERGE})
     private List<Entrant> players = new ArrayList<>();
     
-    @OneToMany(orphanRemoval=true, cascade={CascadeType.MERGE}) 
-    //no reason to keep the rounds after the tournament has been deleted
+    /// The rounds need to be managed better.  orphanremoval has been removed temporarily
+    @OneToMany(cascade={CascadeType.MERGE}) 
     private List<Round> rounds = new ArrayList<>();
     
     @Transient
@@ -257,13 +257,16 @@ public class Tournament implements Serializable {
     {
         List<Round> oldRounds = this.rounds;
         this.rounds = new ArrayList<>(this.rounds);
-        rounds.add( new Round() );
+        Round newRound = new Round();
+        persist(newRound);
+        rounds.add( newRound );
         changeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
         
     public void addRound(Round round) {
         List<Round> oldRounds = this.rounds;
-        this.rounds = new ArrayList<>(this.rounds);
+        this.rounds = new ArrayList<>(this.rounds);      
+        if( round.getId() == null ) { persist(round); }
         this.rounds.add(round);
         this.numRounds = rounds.size();
         changeSupport.firePropertyChange("rounds", oldRounds, rounds);

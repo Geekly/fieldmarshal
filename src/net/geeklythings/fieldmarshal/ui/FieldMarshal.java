@@ -167,7 +167,7 @@ public class FieldMarshal extends javax.swing.JFrame {
         txtOrganizer.setEditable(false);
         txtOrganizer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.organizer}"), txtOrganizer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.organizer}"), txtOrganizer, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -189,7 +189,7 @@ public class FieldMarshal extends javax.swing.JFrame {
         txtStore.setEditable(false);
         txtStore.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.store}"), txtStore, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.store}"), txtStore, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -210,13 +210,13 @@ public class FieldMarshal extends javax.swing.JFrame {
         txtDescription.setEditable(false);
         txtDescription.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.format.formatDescription}"), txtDescription, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.format.formatDescription}"), txtDescription, org.jdesktop.beansbinding.BeanProperty.create("text"), "formatDescriptionBinding");
         bindingGroup.addBinding(binding);
 
         txtDate.setEditable(false);
         txtDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.todaysDate}"), txtDate, org.jdesktop.beansbinding.BeanProperty.create("text"), "");
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, this, org.jdesktop.beansbinding.ELProperty.create("${activeTournament.todaysDate}"), txtDate, org.jdesktop.beansbinding.BeanProperty.create("text"), "");
         binding.setConverter(dateConverter);
         bindingGroup.addBinding(binding);
 
@@ -642,7 +642,7 @@ public class FieldMarshal extends javax.swing.JFrame {
             e.printStackTrace();
             _em.getTransaction().rollback();
         } finally {
-            _em.close();
+            //_em.close();
         }
         return object;
     }
@@ -656,7 +656,7 @@ public class FieldMarshal extends javax.swing.JFrame {
             e.printStackTrace();
             _em.getTransaction().rollback();
         } finally {
-            _em.close();
+            //_em.close();
         }
     }
 }

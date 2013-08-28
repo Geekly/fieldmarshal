@@ -106,6 +106,9 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
             }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
         });
 
         okButton.setText("OK");
@@ -129,24 +132,17 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
         columnBinding.setColumnName("Id");
         columnBinding.setColumnClass(Long.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${todaysDate}"));
-        columnBinding.setColumnName("Todays Date");
-        columnBinding.setColumnClass(java.util.Date.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${numRounds}"));
-        columnBinding.setColumnName("Num Rounds");
-        columnBinding.setColumnClass(Integer.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${format}"));
-        columnBinding.setColumnName("Format");
-        columnBinding.setColumnClass(net.geeklythings.fieldmarshal.entity.EventFormat.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${organizer}"));
         columnBinding.setColumnName("Organizer");
         columnBinding.setColumnClass(String.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${store}"));
         columnBinding.setColumnName("Store");
         columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${todaysDate}"));
+        columnBinding.setColumnName("Todays Date");
+        columnBinding.setColumnClass(java.util.Date.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
-        tableTournament.getSelectionModel().addListSelectionListener(this);
         jScrollPane1.setViewportView(tableTournament);
 
         output.setColumns(20);
@@ -210,6 +206,10 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
         doClose(RET_CANCEL);
     }//GEN-LAST:event_closeDialog
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowOpened
     
     private void doClose(int retStatus) {
         returnStatus = retStatus;

@@ -47,21 +47,20 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     public Tournament getTournament() {
         return localTournament;
     }
-    
-    /*public void setActiveTournament(Tournament tournament) {
-        this.localTournament = tournament;
-        loadInitialValues();
-    }*/
-    
+
     public Tournament showDialog(Tournament tournament)
-    {        
-        EventFormat ef = new EventFormat( tournament.getFormat() );  //TODO: check to see if this is redundant
-        localTournament = tournament.copy();  //start with a copy of the tournament
-        localTournament.setFormat(ef);
-        // make sure that the eventformat is copied
-        loadInitialValues();
-        setVisible(true);  //comes back here after the doClose() function
-        return localTournament;
+    {   
+        if(tournament != null)
+        {
+            EventFormat ef = new EventFormat( tournament.getFormat() );  //TODO: check to see if this is redundant
+            localTournament = tournament.copy();  //start with a copy of the tournament
+            localTournament.setFormat(ef);
+            // make sure that the eventformat is copied
+            loadInitialValues();
+            setVisible(true);  //comes back here after the doClose() function
+            return localTournament;
+        }
+        return null;
         //return 0L;
     }
     
