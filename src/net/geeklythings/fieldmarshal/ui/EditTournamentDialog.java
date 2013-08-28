@@ -8,9 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JComboBox;
-import net.geeklythings.fieldmarshal.model.EventFormat;
-import net.geeklythings.fieldmarshal.model.Player;
-import net.geeklythings.fieldmarshal.model.Tournament;
+import net.geeklythings.fieldmarshal.entity.EventFormat;
+import net.geeklythings.fieldmarshal.entity.Player;
+import net.geeklythings.fieldmarshal.entity.Tournament;
 
 /**
  *
@@ -28,9 +28,12 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     /**
      * Creates new form EditTournament
      */
+    
+    private Tournament localTournament;
+    
     public EditTournamentDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        //localTournament = new Tournament();
+        localTournament = new Tournament();
         initComponents();
     }
     /**
@@ -53,7 +56,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     public Tournament showDialog(Tournament tournament)
     {        
         EventFormat ef = new EventFormat( tournament.getFormat() );  //TODO: check to see if this is redundant
-        localTournament = new Tournament(tournament);  //start with a copy of the tournament
+        localTournament = tournament.copy();  //start with a copy of the tournament
         localTournament.setFormat(ef);
         // make sure that the eventformat is copied
         loadInitialValues();
@@ -97,7 +100,6 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        localTournament = new net.geeklythings.fieldmarshal.model.Tournament();
         btnOK = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -140,7 +142,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         cbRounds.setEnabled(false);
         cbRounds.setName(""); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${format.numRounds}"), cbRounds, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${tournament.numRounds}"), cbRounds, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         cbRounds.addActionListener(new java.awt.event.ActionListener() {
@@ -158,7 +160,7 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         txtLocation.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtLocation.setName(""); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${store}"), txtLocation, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${tournament.store}"), txtLocation, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -171,13 +173,13 @@ public class EditTournamentDialog extends javax.swing.JDialog {
         cbFormat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cbFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Steamroller", "Mangled Metal", "Hardcore", "Iron Gauntlet", "Release Event", " " }));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${format.formatType}"), cbFormat, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${tournament.format.formatType}"), cbFormat, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         cbClock.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cbClock.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Death Clock", "Timed Turns" }));
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${format.clockType}"), cbClock, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${tournament.format.clockType}"), cbClock, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -188,7 +190,10 @@ public class EditTournamentDialog extends javax.swing.JDialog {
 
         txtOrganizer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, localTournament, org.jdesktop.beansbinding.ELProperty.create("${organizer}"), txtOrganizer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${tournament.organizer}"), txtOrganizer, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${tournament.todaysDate}"), jdcDate, org.jdesktop.beansbinding.BeanProperty.create("date"));
         bindingGroup.addBinding(binding);
 
         jdcDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -379,7 +384,6 @@ public class EditTournamentDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private com.toedter.calendar.JDateChooser jdcDate;
-    private net.geeklythings.fieldmarshal.model.Tournament localTournament;
     private javax.swing.JTextField txtLocation;
     private javax.swing.JTextField txtOrganizer;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;

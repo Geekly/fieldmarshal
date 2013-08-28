@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.geeklythings.fieldmarshal.model;
+package net.geeklythings.fieldmarshal.entity;
 
+import net.geeklythings.fieldmarshal.entity.Entrant;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;

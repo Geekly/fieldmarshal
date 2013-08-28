@@ -2,13 +2,14 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="FieldMarshalPU2" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>net.geeklythings.fieldmarshal.model.Entrant</class>
-    <class>net.geeklythings.fieldmarshal.model.EventFormat</class>
-    <class>net.geeklythings.fieldmarshal.model.Player</class>
-    <class>net.geeklythings.fieldmarshal.model.PlayerResult</class>
-    <class>net.geeklythings.fieldmarshal.model.Round</class>
-    <class>net.geeklythings.fieldmarshal.model.Tournament</class>
-    <class>net.geeklythings.fieldmarshal.model.MatchPairing</class>
+    <class>net.geeklythings.fieldmarshal.entity.Tournament</class>
+    <class>net.geeklythings.fieldmarshal.entity.Round</class>
+    <class>net.geeklythings.fieldmarshal.entity.Entrant</class>
+    <class>net.geeklythings.fieldmarshal.entity.EventFormat</class>
+    <class>net.geeklythings.fieldmarshal.entity.Player</class>
+    <class>net.geeklythings.fieldmarshal.entity.PlayerResult</class>
+    <class>net.geeklythings.fieldmarshal.entity.MatchPairing</class>
+    <class>net.geeklythings.fieldmarshal.entity.MatchResult</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby:C:\Users\khooks\Documents\Google Drive\workspace\FieldMarshal\database\fieldmarshaldb2"/>
       <property name="javax.persistence.jdbc.password" value="fieldmarshal"/>

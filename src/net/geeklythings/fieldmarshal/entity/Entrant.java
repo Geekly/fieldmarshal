@@ -1,4 +1,4 @@
-package net.geeklythings.fieldmarshal.model;
+package net.geeklythings.fieldmarshal.entity;
 
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
@@ -24,6 +24,8 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import net.geeklythings.fieldmarshal.model.EntrantStatus;
+import net.geeklythings.fieldmarshal.model.Faction;
 
 @Entity
 @Access(AccessType.FIELD)

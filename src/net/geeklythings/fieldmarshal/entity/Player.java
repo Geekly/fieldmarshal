@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.geeklythings.fieldmarshal.model;
+package net.geeklythings.fieldmarshal.entity;
 
 import java.io.Serializable;
 import javax.persistence.Access;

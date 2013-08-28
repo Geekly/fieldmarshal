@@ -1,5 +1,8 @@
 package net.geeklythings.fieldmarshal.model;
 
+import net.geeklythings.fieldmarshal.entity.EventFormat;
+import net.geeklythings.fieldmarshal.entity.Round;
+import net.geeklythings.fieldmarshal.entity.Tournament;
 import java.util.Date;
 //import java.sql.SQLException;
 //import org.joda.time.*;
@@ -13,30 +16,4 @@ public class TournamentFactory {
         return null;
     }
 
-    public static Tournament createTournament(int numRounds) {
-
-        Tournament tournament = null;
-
-        tournament = new Tournament();
-        
-        EventFormat ef = new EventFormat();       
-        //ef.setNumRounds(numRounds);
-        
-        tournament.setFormat( ef );
-        for( int i=1; i<=numRounds; i++)
-        {
-            tournament.addRound(new Round(i));
-        }
-
-        Date today = new Date();
-        tournament.setTodaysDate(today);
-        tournament.setOrganizer("Coleman Stryker");
-        tournament.setStore("Corvis Convention Center");
-       
-
-        //TODO: Set up Rounds first
-
-
-        return tournament;
-    }
 }

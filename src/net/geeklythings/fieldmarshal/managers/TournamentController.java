@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.geeklythings.fieldmarshal.controller;
+package net.geeklythings.fieldmarshal.managers;
 
-import net.geeklythings.fieldmarshal.model.Tournament;
+import net.geeklythings.fieldmarshal.entity.Tournament;
 import net.geeklythings.fieldmarshal.ui.EditTournamentDialog;
 
 /**
@@ -13,6 +13,9 @@ import net.geeklythings.fieldmarshal.ui.EditTournamentDialog;
  */
 public class TournamentController {
 
+    
+    
+    
     public void copyProperties(EditTournamentDialog et, Tournament tournament) {
     
 

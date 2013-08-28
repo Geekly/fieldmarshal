@@ -15,7 +15,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import net.geeklythings.fieldmarshal.model.Tournament;
+import net.geeklythings.fieldmarshal.entity.Tournament;
 
 /**
  *
@@ -137,7 +137,7 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
         columnBinding.setColumnClass(Integer.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${format}"));
         columnBinding.setColumnName("Format");
-        columnBinding.setColumnClass(net.geeklythings.fieldmarshal.model.EventFormat.class);
+        columnBinding.setColumnClass(net.geeklythings.fieldmarshal.entity.EventFormat.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${organizer}"));
         columnBinding.setColumnName("Organizer");
         columnBinding.setColumnClass(String.class);
@@ -266,7 +266,7 @@ public class LoadTournamentDialog extends javax.swing.JDialog implements ListSel
     private javax.swing.JButton okButton;
     private javax.swing.JTextArea output;
     private javax.swing.JTable tableTournament;
-    private java.util.List<net.geeklythings.fieldmarshal.model.Tournament> tournamentList;
+    private java.util.List<net.geeklythings.fieldmarshal.entity.Tournament> tournamentList;
     private javax.persistence.Query tournamentQuery;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

@@ -1,5 +1,6 @@
-package net.geeklythings.fieldmarshal.model;
+package net.geeklythings.fieldmarshal.entity;
 
+import net.geeklythings.fieldmarshal.entity.Entrant;
 import java.beans.PropertyChangeSupport;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -15,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import net.geeklythings.fieldmarshal.model.ResultType;
 
 @Entity
 @Access(AccessType.FIELD)
@@ -117,7 +119,7 @@ public class PlayerResult {
             }
             else
             {
-                net.geeklythings.fieldmarshal.model.Entrant oldOpponent = this.opponent;
+                net.geeklythings.fieldmarshal.entity.Entrant oldOpponent = this.opponent;
                 this.opponent = player;
                 propertyChangeSupport.firePropertyChange(PROP_OPPONENT, oldOpponent, player);
             }

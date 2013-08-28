@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.geeklythings.fieldmarshal.model;
+package net.geeklythings.fieldmarshal.entity;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -28,6 +28,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import net.geeklythings.fieldmarshal.model.EntrantStatus;
 import net.geeklythings.fieldmarshal.ui.EditTournamentDialog;
 import net.geeklythings.fieldmarshal.util.DateUtils;
 import org.eclipse.persistence.annotations.Convert;
@@ -84,21 +85,48 @@ public class Tournament implements Serializable {
         //rounds = new ArrayList<>(numRounds);
     }
     
-    public Tournament(Tournament master)
+    public Tournament copy()
     {
         //id = master.id;
-
-        format = new EventFormat(master.format);  //assign to a copy
         
-        todaysDate = master.todaysDate;
-        numRounds = master.numRounds;
-        store = master.store;
-        organizer = master.organizer;
+        Tournament copy = new Tournament();
         
-        players = master.players;  //don't change this anywhere
-        rounds = master.rounds;    //don't change this anywhere
+        copy.format = new EventFormat(format);  //assign to a copy
         
+        copy.todaysDate = todaysDate;
+        copy.numRounds = numRounds;
+        copy.store = store;
+        copy.organizer = organizer;
+        
+        copy.players = players;  //don't change this anywhere
+        copy.rounds = rounds;    //don't change this anywhere
+        
+        return copy;
         // persist(format);
+    }
+    
+    public static Tournament createTournament(int numRounds) 
+    {
+
+        Tournament tournament = new Tournament();
+        
+        EventFormat ef = new EventFormat();       
+        //ef.setNumRounds(numRounds);
+        
+        tournament.setFormat( ef );
+        for( int i=1; i<=numRounds; i++)
+        {
+            tournament.addRound(new Round(i));
+        }
+
+        Date today = new Date();
+        tournament.setTodaysDate(today);
+        tournament.setOrganizer("Coleman Stryker");
+        tournament.setStore("Corvis Convention Center");
+       
+        //TODO: Set up Rounds first
+
+        return tournament;
     }
     
     @Id
@@ -230,7 +258,7 @@ public class Tournament implements Serializable {
         List<Round> oldRounds = this.rounds;
         this.rounds = new ArrayList<>(this.rounds);
         rounds.add( new Round() );
-        changeSupport.firePropertyChange("rounds", null, rounds);
+        changeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
         
     public void addRound(Round round) {
@@ -238,7 +266,7 @@ public class Tournament implements Serializable {
         this.rounds = new ArrayList<>(this.rounds);
         this.rounds.add(round);
         this.numRounds = rounds.size();
-        changeSupport.firePropertyChange("rounds", null, rounds);
+        changeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
 
     public void removeLastRound()

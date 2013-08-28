@@ -8,15 +8,15 @@ import com.google.gson.Gson;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import net.geeklythings.fieldmarshal.model.Entrant;
-import net.geeklythings.fieldmarshal.model.EventFormat;
+import net.geeklythings.fieldmarshal.entity.Entrant;
+import net.geeklythings.fieldmarshal.entity.EventFormat;
 import net.geeklythings.fieldmarshal.model.Faction;
-import net.geeklythings.fieldmarshal.model.MatchPairing;
-import net.geeklythings.fieldmarshal.model.Player;
-import net.geeklythings.fieldmarshal.model.PlayerResult;
+import net.geeklythings.fieldmarshal.entity.MatchPairing;
+import net.geeklythings.fieldmarshal.entity.Player;
+import net.geeklythings.fieldmarshal.entity.PlayerResult;
 import net.geeklythings.fieldmarshal.model.ResultType;
-import net.geeklythings.fieldmarshal.model.Round;
-import net.geeklythings.fieldmarshal.model.Tournament;
+import net.geeklythings.fieldmarshal.entity.Round;
+import net.geeklythings.fieldmarshal.entity.Tournament;
 
 
 /**

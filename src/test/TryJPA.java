@@ -4,10 +4,10 @@
  */
 package test;
 
-import net.geeklythings.fieldmarshal.model.Entrant;
+import net.geeklythings.fieldmarshal.entity.Entrant;
 import net.geeklythings.fieldmarshal.model.Faction;
-import net.geeklythings.fieldmarshal.model.Tournament;
-import net.geeklythings.fieldmarshal.model.Player;
+import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.entity.Player;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;

@@ -7,7 +7,7 @@ package net.geeklythings.fieldmarshal.ui;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import net.geeklythings.fieldmarshal.model.Tournament;
+import net.geeklythings.fieldmarshal.entity.Tournament;
 import net.geeklythings.fieldmarshal.model.TournamentFactory;
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyChangeListener;
@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import net.geeklythings.fieldmarshal.model.Entrant;
+import net.geeklythings.fieldmarshal.entity.Entrant;
 import net.geeklythings.fieldmarshal.model.Faction;
-import net.geeklythings.fieldmarshal.model.Player;
-import net.geeklythings.fieldmarshal.controller.TournamentController;
+import net.geeklythings.fieldmarshal.entity.Player;
+import net.geeklythings.fieldmarshal.managers.TournamentController;
 
 /**
  *
@@ -462,7 +462,7 @@ public class FieldMarshal extends javax.swing.JFrame {
         //Create the tournament, THEN open the edit tournament dialog
         //activeTournament = TournamentFactory.createTournament(0);
         //Are you sure you want to create a new Tournament?
-        activeTournament = TournamentFactory.createTournament(3);
+        activeTournament = Tournament.createTournament(3);
         persist(activeTournament);
         firePropertyChange("activeTournament", null, activeTournament);
         //EditActiveTournament();
@@ -510,11 +510,11 @@ public class FieldMarshal extends javax.swing.JFrame {
 
     private void btnAddPlayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPlayerActionPerformed
         // TODO add your handling code here:
-        Tournament oldTournament = new Tournament(activeTournament);
+        //Tournament oldTournament = activeTournament.copy();
         String firstName = txtFirstName.getText();
         String lastName = txtLastName.getText();
         Faction faction = Faction.CIRCLE;
-        Entrant entrant = null;
+        
         Player player = null;
         
         List<Entrant> oldPlayers = new ArrayList<>(activeTournament.getPlayers());
@@ -533,15 +533,9 @@ public class FieldMarshal extends javax.swing.JFrame {
         if(player==null) //player not found in DB
         {
             player = new Player(firstName, lastName);
-            persist(player);
-            //persist the new player
-            //_em.getTransaction().begin();
-            //_em.persist(activeTournament);
-            //_em.persist(player);  // persist the changes
-            //_em.getTransaction().commit();
-            
+            persist(player);           
         }    
-        entrant = new Entrant(player, faction);
+        Entrant entrant = new Entrant(player, faction);
         persist(entrant);
         activeTournament.addPlayer(entrant);
         persist(activeTournament);

@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Fri Aug 16 09:42:52 EDT 2013:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.9.1.0 - (1344872): instance a816c00e-0140-875d-4742-0000064e0978 
-on database directory C:\Users\khooks\Documents\Google Drive\workspace\FieldMarshal\fieldmarshaldb  with class loader sun.misc.Launcher$AppClassLoader@5e8e918a 
+Wed Aug 28 11:24:58 EDT 2013:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.9.1.0 - (1344872): instance a816c00e-0140-c587-1128-000006449348 
+on database directory C:\Users\khooks\Documents\Google Drive\workspace\FieldMarshal\database\fieldmarshaldb2  with class loader sun.misc.Launcher$AppClassLoader@6140c973 
 Loaded from file:/C:/Program%20Files/glassfish-4.0/javadb/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.7.0_21-b11
