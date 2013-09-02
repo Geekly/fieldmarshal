@@ -11,9 +11,9 @@
     <class>net.geeklythings.fieldmarshal.entity.MatchPairing</class>
     <class>net.geeklythings.fieldmarshal.entity.MatchResult</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby:C:\Users\khooks\Documents\Google Drive\workspace\FieldMarshal\database\fieldmarshaldb2"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/fieldmarshaldb"/>
       <property name="javax.persistence.jdbc.password" value="fieldmarshal"/>
-      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
       <property name="javax.persistence.jdbc.user" value="fieldmarshal"/>
       <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="eclipselink.logging.level" value="FINE"/>
