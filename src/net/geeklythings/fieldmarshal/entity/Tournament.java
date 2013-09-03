@@ -29,11 +29,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import net.geeklythings.fieldmarshal.model.EntrantStatus;
-import net.geeklythings.fieldmarshal.ui.EditTournamentDialog;
-import net.geeklythings.fieldmarshal.util.DateUtils;
-import org.eclipse.persistence.annotations.Convert;
-import org.eclipse.persistence.annotations.Converter;
-import sun.security.ssl.Debug;
 //import org.joda.time.DateTime;
 //import org.joda.time.MutableDateTime;
 

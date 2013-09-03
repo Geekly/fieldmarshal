@@ -6,10 +6,10 @@
     <class>net.geeklythings.fieldmarshal.entity.Round</class>
     <class>net.geeklythings.fieldmarshal.entity.Entrant</class>
     <class>net.geeklythings.fieldmarshal.entity.EventFormat</class>
-    <class>net.geeklythings.fieldmarshal.entity.Player</class>
     <class>net.geeklythings.fieldmarshal.entity.PlayerResult</class>
     <class>net.geeklythings.fieldmarshal.entity.MatchPairing</class>
     <class>net.geeklythings.fieldmarshal.entity.MatchResult</class>
+    <class>net.geeklythings.fieldmarshal.entity.Player</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/fieldmarshaldb"/>
       <property name="javax.persistence.jdbc.password" value="fieldmarshal"/>

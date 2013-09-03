@@ -1,9 +1,5 @@
 package net.geeklythings.fieldmarshal.entity;
 
-import net.geeklythings.fieldmarshal.entity.MatchPairing;
-import net.geeklythings.fieldmarshal.entity.PlayerResult;
-import net.geeklythings.fieldmarshal.entity.Player;
-import net.geeklythings.fieldmarshal.entity.Entrant;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;

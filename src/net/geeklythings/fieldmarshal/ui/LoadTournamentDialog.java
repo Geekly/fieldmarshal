@@ -13,9 +13,6 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import net.geeklythings.fieldmarshal.entity.Tournament;
 
 /**
  *

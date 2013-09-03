@@ -1,6 +1,5 @@
 package net.geeklythings.fieldmarshal.entity;
 
-import net.geeklythings.fieldmarshal.entity.Entrant;
 import java.beans.PropertyChangeSupport;
 import javax.persistence.Access;
 import javax.persistence.AccessType;

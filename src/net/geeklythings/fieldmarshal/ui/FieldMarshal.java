@@ -513,6 +513,8 @@ public class FieldMarshal extends javax.swing.JFrame {
     private void btnAddPlayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPlayerActionPerformed
         // TODO add your handling code here:
         //Tournament oldTournament = activeTournament.copy();
+        if(activeTournament == null) { return; }
+        
         String firstName = txtFirstName.getText();
         String lastName = txtLastName.getText();
         Faction faction = Faction.CIRCLE;
