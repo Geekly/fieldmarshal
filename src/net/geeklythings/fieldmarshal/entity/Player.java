@@ -24,17 +24,17 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import net.geeklythings.fieldmarshal.model.EntrantStatus;
+import net.geeklythings.fieldmarshal.model.PlayerStatus;
 import net.geeklythings.fieldmarshal.model.Faction;
 
 @Entity
 @Access(AccessType.FIELD)
-@Table(name="ENTRANT")
-public class Entrant implements Serializable {
+@Table(name="PLAYER")
+public class Player implements Serializable {
 
     @Override
     public String toString() {
-        return "Entrant{" + "id=" + id + ", player=" + player + ", faction=" + faction + ", activeStatus=" + activeStatus + '}';
+        return "Player{" + "id=" + id + ", person=" + person + ", faction=" + faction + ", activeStatus=" + activeStatus + '}';
     }
     
     private static final long serialVersionUID = 1L;
@@ -45,7 +45,7 @@ public class Entrant implements Serializable {
     
     @JoinColumn(name = "ID_PLAYER")
     @ManyToOne(cascade= { CascadeType.MERGE })
-    private Player player;
+    private Person person;
     
     @Enumerated(EnumType.STRING)
     protected Faction faction;
@@ -86,7 +86,7 @@ public class Entrant implements Serializable {
     private final PropertyChangeSupport propertyChangeSupport = new java.beans.PropertyChangeSupport(this);
 
     @Transient
-    private EntrantStatus activeStatus = EntrantStatus.ACTIVE;
+    private PlayerStatus activeStatus = PlayerStatus.ACTIVE;
  
     public Long getId() {
         return id;
@@ -96,12 +96,12 @@ public class Entrant implements Serializable {
         this.id = id;
     }
 
-    public Entrant(){}
+    public Player(){}
     
-    public Entrant(Player addPlayer, Faction addfaction) {
-        //When creating a new Entrant, we don't want to use an existing player if possible
+    public Player(Person addPerson, Faction addfaction) {
+        //When creating a new Player, we don't want to use an existing person if possible
 
-        this.setPlayer(addPlayer);
+        this.setPerson(addPerson);
         this.faction = addfaction;   
     }
 
@@ -112,44 +112,44 @@ public class Entrant implements Serializable {
     public int getStandings(){return 0;
     }
     
-    public Player getPlayer() {
-        return player;
+    public Person getPerson() {
+        return person;
     }
 
-    public final void setPlayer(Player player) {
-        // add an un-persisted player 
+    public final void setPerson(Person person) {
+        // add an un-persisted person 
         try {
             
-            Player oldPlayer = this.getPlayer();
+            Person oldPerson = this.getPerson();
         
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
             EntityManager em = emf.createEntityManager();
 
-            Query query = em.createQuery("SELECT P FROM Player P WHERE P.firstName=?1 AND P.lastName=?2 ");
-            query.setParameter(1, player.getFirstName());
-            query.setParameter(2, player.getLastName());
+            Query query = em.createQuery("SELECT P FROM Person P WHERE P.firstName=?1 AND P.lastName=?2 ");
+            query.setParameter(1, person.getFirstName());
+            query.setParameter(2, person.getLastName());
 
-            Player tempPlayer = null; 
-            //check if this player already exists in the database
+            Person tempPerson = null; 
+            //check if this person already exists in the database
             try {
-                tempPlayer = (Player)query.getSingleResult();
+                tempPerson = (Person)query.getSingleResult();
             } catch (NoResultException e) {
                 //no result found
             } 
 
             em.getTransaction().begin();
-            if( tempPlayer == null) //no records found, doesn't exist
+            if( tempPerson == null) //no records found, doesn't exist
             {   
-                em.persist(player); //persist the new player
+                em.persist(person); //persist the new person
             }
-            else // player exists in the database
+            else // person exists in the database
             {
-                player = em.merge(tempPlayer);
+                person = em.merge(tempPerson);
             }
-            this.player = player;
+            this.person = person;
             em.getTransaction().commit();
             emf.close();
-            propertyChangeSupport.firePropertyChange("player", oldPlayer, this.getPlayer());
+            propertyChangeSupport.firePropertyChange("person", oldPerson, this.getPerson());
 
             } 
         catch( Exception e) { 
@@ -168,11 +168,11 @@ public class Entrant implements Serializable {
         propertyChangeSupport.firePropertyChange("faction", oldFaction, this.faction);
     }
 
-    public EntrantStatus getActiveStatus() {
+    public PlayerStatus getActiveStatus() {
         return activeStatus;
     }
 
-    public void setActiveStatus(EntrantStatus activeStatus) {
+    public void setActiveStatus(PlayerStatus activeStatus) {
         this.activeStatus = activeStatus;
     }
   

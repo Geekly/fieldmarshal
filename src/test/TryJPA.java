@@ -4,12 +4,11 @@
  */
 package test;
 
-import net.geeklythings.fieldmarshal.entity.Entrant;
+import net.geeklythings.fieldmarshal.entity.Player;
 import net.geeklythings.fieldmarshal.model.Faction;
 import net.geeklythings.fieldmarshal.entity.Tournament;
-import net.geeklythings.fieldmarshal.entity.Player;
+import net.geeklythings.fieldmarshal.entity.Person;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -30,15 +29,15 @@ public class TryJPA {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
         //Tournament activeTournament = TournamentFactory.createTournament(3);
         //EventFormat ef = new EventFormat();
-        Player player1 = new Player();
-        player1.setFirstName("Greygore");
-        player1.setLastName("Boomhowler");
-        player1.setHomeTown("Thornwood Kriels");
+        Person person1 = new Person();
+        person1.setFirstName("Greygore");
+        person1.setLastName("Boomhowler");
+        person1.setHomeTown("Thornwood Kriels");
 
-        Player player2 = new Player();
-        player2.setFirstName("Neil deGrasse");
-        player2.setLastName("Tyson");
-        player2.setHomeTown("Bitches");
+        Person person2 = new Person();
+        person2.setFirstName("Neil deGrasse");
+        person2.setLastName("Tyson");
+        person2.setHomeTown("Bitches");
         
         Faction faction1 = Faction.TROLLS;
         Faction faction2 = Faction.KHADOR;
@@ -48,21 +47,21 @@ public class TryJPA {
         try {
             
              
-            TypedQuery<Player> query = em.createNamedQuery("Player.findByName", Player.class);
-            query.setParameter("first", player1.getFirstName());
-            query.setParameter("last", player1.getLastName());
-            //Player player3 = query.getSingleResult();
+            TypedQuery<Person> query = em.createNamedQuery("Person.findByName", Person.class);
+            query.setParameter("first", person1.getFirstName());
+            query.setParameter("last", person1.getLastName());
+            //Person person3 = query.getSingleResult();
             
-            Entrant entrant1 = new Entrant();
+            Player player1 = new Player();
 
-            //entrant1.setPlayer(player3);
-            //entrant1.setFaction(faction1);
+            //player1.setPerson(person3);
+            //player1.setFaction(faction1);
 
-            //Entrant entrant2 = new Entrant();
-            //entrant2.setPlayer(player3);
-            //entrant2.setFaction(faction2);
+            //Player player2 = new Player();
+            //player2.setPerson(person3);
+            //player2.setFaction(faction2);
 
-            //activeTournament.addPlayer(entrant);
+            //activeTournament.addPerson(player);
 
             
             Tournament to = new Tournament();
@@ -72,24 +71,24 @@ public class TryJPA {
             System.out.println(today.getTime());
             em.getTransaction().begin();
 
-            player1.setEmail("notworking@home.com");
-            //player1 = (Player)em.merge(player1);
-            //player2 = (Player)em.merge(player2);
+            person1.setEmail("notworking@home.com");
+            //person1 = (Person)em.merge(person1);
+            //person2 = (Person)em.merge(person2);
             //Tournament otherTournament = em.find(Tournament.class, 801L);
             Query q = em.createQuery("SELECT t from Tournament t");
             //List<Tournament> tournamentList = q.getResultList();
             //System.out.println(otherTournament);
 
+            //em.persist(person1);
+            //em.persist(person2);
+            //em.persist(person3);
             //em.persist(player1);
             //em.persist(player2);
-            //em.persist(player3);
-            //em.persist(entrant1);
-            //em.persist(entrant2);
             em.persist(to);
             //em.persist(activeTournament);
-            //System.out.println(em.contains(player1));
+            //System.out.println(em.contains(person1));
 
-            //next create an entrant and test persistance
+            //next create an player and test persistance
 
             //em.persist(ef);
             em.getTransaction().commit();

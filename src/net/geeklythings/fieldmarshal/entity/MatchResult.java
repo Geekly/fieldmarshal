@@ -28,7 +28,7 @@ public class MatchResult implements Serializable {
     private MatchPairing pairing;
     
     @OneToMany
-    private List<Entrant> players = new ArrayList<>(2);  //two players
+    private List<Player> players = new ArrayList<>(2);  //two players
     
     //private PlayerResult player1Result;
     //private PlayerResult player2Result;

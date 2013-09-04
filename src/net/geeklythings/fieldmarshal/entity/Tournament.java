@@ -28,7 +28,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import net.geeklythings.fieldmarshal.model.EntrantStatus;
+import net.geeklythings.fieldmarshal.model.PlayerStatus;
 //import org.joda.time.DateTime;
 //import org.joda.time.MutableDateTime;
 
@@ -60,7 +60,7 @@ public class Tournament implements Serializable {
     private EventFormat format = new EventFormat();
       
     @OneToMany(cascade={CascadeType.MERGE})
-    private List<Entrant> players = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
     
     /// The rounds need to be managed better.  orphanremoval has been removed temporarily
     @OneToMany(cascade={CascadeType.MERGE}) 
@@ -70,7 +70,7 @@ public class Tournament implements Serializable {
     private int currentRound = 1;
     
     //@Transient
-    //private List<Entrant> activePlayers = new ArrayList<>();  //for tracking dropped players
+    //private List<Player> activePlayers = new ArrayList<>();  //for tracking dropped players
     
     public Tournament() {
         //todaysDate = new Date();    
@@ -153,13 +153,13 @@ public class Tournament implements Serializable {
         
     }
 
-    public List<Entrant> getActivePlayers()
+    public List<Player> getActivePlayers()
     {
-        List<Entrant> activePlayers = new ArrayList<>();
+        List<Player> activePlayers = new ArrayList<>();
         
-        for( Entrant e : players )
+        for( Player e : players )
         {
-            if( e.getActiveStatus() == EntrantStatus.ACTIVE)
+            if( e.getActiveStatus() == PlayerStatus.ACTIVE)
             {
                 activePlayers.add(e);
             }
@@ -232,12 +232,12 @@ public class Tournament implements Serializable {
         /**
      * @return the players
      */
-    public List<Entrant> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
-    public void addPlayer(Entrant player) {
-        //List<Entrant> oldEntrants = new ArrayList<>( this.getPlayers() );
+    public void addPlayer(Player player) {
+        //List<Player> oldPlayers = new ArrayList<>( this.getPlayers() );
         players.add(player);
         
         changeSupport.firePropertyChange("players", null, this.getPlayers());
@@ -294,10 +294,10 @@ public class Tournament implements Serializable {
     }
     
     
-    public void dropPlayer(Entrant dropped)
+    public void dropPlayer(Player dropped)
     {
         //keep the player in the tournament, but eliminate from pairings
-        dropped.setActiveStatus(EntrantStatus.INACTIVE);
+        dropped.setActiveStatus(PlayerStatus.INACTIVE);
     }
     
    /* @Override

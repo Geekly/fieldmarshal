@@ -16,7 +16,7 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.swing.ListModel;
-import net.geeklythings.fieldmarshal.entity.Entrant;
+import net.geeklythings.fieldmarshal.entity.Person;
 import net.geeklythings.fieldmarshal.model.Faction;
 import net.geeklythings.fieldmarshal.entity.Player;
 import net.geeklythings.fieldmarshal.managers.TournamentController;
@@ -519,38 +519,38 @@ public class FieldMarshal extends javax.swing.JFrame {
         String lastName = txtLastName.getText();
         Faction faction = Faction.CIRCLE;
         
-        Player player = null;
+        Person person = null;
         
-        List<Entrant> oldPlayers = new ArrayList<>(activeTournament.getPlayers());
+        List<Player> oldPlayers = new ArrayList<>(activeTournament.getPlayers());
         
         // check if player exists in database
         // query the database for first and last name
-        TypedQuery<Player> query = _em.createNamedQuery("Player.findByName", Player.class);
+        TypedQuery<Person> query = _em.createNamedQuery("Person.findByName", Person.class);
         query.setParameter("first", firstName);
         query.setParameter("last", lastName);
         try {
-            player = query.getSingleResult();
+            person = query.getSingleResult();
         } catch (NoResultException e)
         {
             System.out.println(e.toString());
         }
-        if(player==null) //player not found in DB
+        if(person==null) //person not found in DB
         {
-            player = new Player(firstName, lastName);
-            persist(player);           
+            person = new Person(firstName, lastName);
+            persist(person);           
         }    
-        Entrant entrant = new Entrant(player, faction);
-        persist(entrant);
+        Player player = new Player(person, faction);
+        persist(player);
         
-        activeTournament.addPlayer(entrant);
+        activeTournament.addPlayer(player);
         persist(activeTournament);
         //_em.getTransaction().begin();
         //_em.persist(activeTournament);  // persist the changes
         //_em.getTransaction().commit();
-        // if yes, load the player and create a new Entrant with it
-        // if no, create a new player and add it to the Entrant
+        // if yes, load the player and create a new Player with it
+        // if no, create a new player and add it to the Player
         // set the fact
-        // add the entrant to the List of players
+        // add the player to the List of players
 
         output.setText( activeTournament.getPlayers().toString() ); 
         

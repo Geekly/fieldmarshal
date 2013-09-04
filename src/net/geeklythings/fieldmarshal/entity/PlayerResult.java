@@ -32,11 +32,11 @@ public class PlayerResult {
     
     @JoinColumn(name="ID_PLAYER")
     @ManyToOne(cascade= { CascadeType.MERGE })
-    private Entrant player;
+    private Player player;
     
     @JoinColumn(name="ID_OPPONENT")
     @ManyToOne(cascade= { CascadeType.MERGE })
-    private Entrant opponent;
+    private Player opponent;
     
     @Column(name="LISTPLAYED")
     private int listPlayed;
@@ -74,14 +74,14 @@ public class PlayerResult {
     /**
      * @return the player
      */
-    public Entrant getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
     /**
      * @param player the player to set
      */
-    public void setPlayer(Entrant player) {
+    public void setPlayer(Player player) {
         
         try {
             if( player.getId() == null) {
@@ -89,9 +89,9 @@ public class PlayerResult {
             }
             else
             {
-                Entrant oldEntrant = this.player;
+                Player oldPlayer = this.player;
                 this.player = player;
-                propertyChangeSupport.firePropertyChange(PROP_PLAYER, oldEntrant, player);
+                propertyChangeSupport.firePropertyChange(PROP_PLAYER, oldPlayer, player);
             }
             
         } catch (Exception e) {
@@ -103,22 +103,22 @@ public class PlayerResult {
     /**
      * @return the opponent
      */
-    public Entrant getOpponent() {
+    public Player getOpponent() {
         return opponent;
     }
 
     /**
      * @param player the opponent to set
      */
-    public void setOpponent(Entrant player) {
+    public void setOpponent(Player player) {
         try {
             if( player.getId() == null) 
             {
-                throw new Exception("Entrant must be persisted before setting");
+                throw new Exception("Player must be persisted before setting");
             }
             else
             {
-                net.geeklythings.fieldmarshal.entity.Entrant oldOpponent = this.opponent;
+                net.geeklythings.fieldmarshal.entity.Player oldOpponent = this.opponent;
                 this.opponent = player;
                 propertyChangeSupport.firePropertyChange(PROP_OPPONENT, oldOpponent, player);
             }

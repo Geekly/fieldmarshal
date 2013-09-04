@@ -8,7 +8,7 @@ package net.geeklythings.fieldmarshal.model;
  *
  * @author khooks
  */
-public enum EntrantStatus {
+public enum PlayerStatus {
     ACTIVE,
     INACTIVE
 }

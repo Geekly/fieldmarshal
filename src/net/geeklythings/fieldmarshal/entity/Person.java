@@ -22,12 +22,12 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Access(AccessType.FIELD)
-@Table(name="PLAYER",
+@Table(name="PERSON",
         uniqueConstraints = { @UniqueConstraint(columnNames =
                                                 { "FIRSTNAME", "LASTNAME" }) })
-@NamedQuery(name="Player.findByName", query="SELECT p FROM Player p WHERE p.firstName LIKE :first AND p.lastName LIKE :last")
+@NamedQuery(name="Person.findByName", query="SELECT p FROM Person p WHERE p.firstName LIKE :first AND p.lastName LIKE :last")
 
-public class Player implements Serializable {
+public class Person implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Column(name="FIRSTNAME")
@@ -43,9 +43,9 @@ public class Player implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public Player(){}
+    public Person(){}
     
-    public Player(String first, String last)
+    public Person(String first, String last)
     {
         firstName = first;
         lastName = last;
@@ -100,10 +100,10 @@ public class Player implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Player)) {
+        if (!(object instanceof Person)) {
             return false;
         }
-        Player other = (Player) object;
+        Person other = (Person) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -112,7 +112,7 @@ public class Player implements Serializable {
 
     @Override
     public String toString() {
-        return "Player{" + "firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", homeTown=" + homeTown + ", id=" + id + '}';
+        return "Person{" + "firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", homeTown=" + homeTown + ", id=" + id + '}';
     }
 
     

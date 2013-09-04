@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import net.geeklythings.fieldmarshal.entity.Entrant;
+import net.geeklythings.fieldmarshal.entity.Person;
 import net.geeklythings.fieldmarshal.entity.EventFormat;
 import net.geeklythings.fieldmarshal.model.Faction;
 import net.geeklythings.fieldmarshal.entity.MatchPairing;
@@ -34,7 +34,7 @@ public class TestClasses {
         //test.TestPlayer();
         test.TestPairings();
         //Player pl2 = new Player("Steve", "Adore");
-        //Entrant et2 = new Entrant(pl2, Faction.RETRIBUTION);
+        //Player et2 = new Player(pl2, Faction.RETRIBUTION);
         //test.TestRound();
         //test.TestPlayerResult();
         //test.TestRound();
@@ -49,12 +49,12 @@ public class TestClasses {
     
     public void TestPlayer()
     {
-        Player pl1 = new Player("Rufus", "McGillicutty");
+        Person pl1 = new Person("Rufus", "McGillicutty");
         pl1.setEmail("rufus@warmachine.com");
         pl1.setHomeTown("Dallas");
-        //Entrant et1 = new Entrant(pl1, Faction.CRYX);
-        Entrant et2 = new Entrant();
-        et2.setPlayer(pl1);
+        //Person et1 = new Person(pl1, Faction.CRYX);
+        Player et2 = new Player();
+        et2.setPerson(pl1);
         et2.setFaction(Faction.CRYX);
         persist(et2);
         System.out.println(pl1.toString());
@@ -64,17 +64,17 @@ public class TestClasses {
     
     public void TestPairings()
     {
-        Player pl1 = new Player("Rufus", "McGillicutty");
-        Entrant e1 = new Entrant(pl1, Faction.CIRCLE);
+        Person pl1 = new Person("Rufus", "McGillicutty");
+        Player e1 = new Player(pl1, Faction.CIRCLE);
                 
-        Player pl2 = new Player("Hank", "Haliburton");
-        Entrant e2 = new Entrant(pl2, Faction.CYGNAR);
+        Person pl2 = new Person("Hank", "Haliburton");
+        Player e2 = new Player(pl2, Faction.CYGNAR);
         
-        Player pl3 = new Player("Wil", "Wheaton");
-        Entrant e3 = new Entrant(pl3, Faction.KHADOR);
+        Person pl3 = new Person("Wil", "Wheaton");
+        Player e3 = new Player(pl3, Faction.KHADOR);
         
-        Player pl4 = new Player("Stan", "The Man");
-        Entrant e4 = new Entrant(pl4, Faction.MERCS);
+        Person pl4 = new Person("Stan", "The Man");
+        Player e4 = new Player(pl4, Faction.MERCS);
         
         persist(e1);
         persist(e2);       
@@ -82,13 +82,13 @@ public class TestClasses {
         persist(e4);
         
         MatchPairing pairing1 = new MatchPairing();
-        pairing1.addEntrant(e1);
-        pairing1.addEntrant(e2);
+        pairing1.addPlayer(e1);
+        pairing1.addPlayer(e2);
         
         MatchPairing pairing2 = new MatchPairing();
-        pairing2.addEntrant(e3);
-        pairing2.addEntrant(e4);
-        //pairing.addEntrant(e3);
+        pairing2.addPlayer(e3);
+        pairing2.addPlayer(e4);
+        //pairing.addPlayer(e3);
         
         persist(pairing1);
         persist(pairing2);
@@ -99,15 +99,15 @@ public class TestClasses {
     
     private void TestPlayerResult()
     {
-        Player pl1 = new Player("Rufus", "McGillicutty");
+        Person pl1 = new Person("Rufus", "McGillicutty");
         pl1.setEmail("rufus@warmachine.com");
         pl1.setHomeTown("Dallas");
-        Entrant e1 = new Entrant(pl1, Faction.CIRCLE);
+        Player e1 = new Player(pl1, Faction.CIRCLE);
                 
-        Player pl2 = new Player("Hank", "Haliburton");
+        Person pl2 = new Person("Hank", "Haliburton");
         pl2.setEmail("hank@warmachine.com");
         pl2.setHomeTown("Toledo");
-        Entrant e2 = new Entrant(pl2, Faction.CYGNAR);
+        Player e2 = new Player(pl2, Faction.CYGNAR);
         
         PlayerResult pr = new PlayerResult();
         

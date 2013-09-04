@@ -30,7 +30,7 @@ public class MatchPairing implements Serializable {
     private Long id;
 
     @OneToMany(cascade=CascadeType.MERGE)
-    Set<Entrant> pairs = new HashSet<>();
+    Set<Player> pairs = new HashSet<>();
 
     @OneToOne(cascade=CascadeType.ALL)
     MatchResult result = new MatchResult();
@@ -43,35 +43,35 @@ public class MatchPairing implements Serializable {
         this.result = result;
     }
     
-    public Set<Entrant> getPairs() {
+    public Set<Player> getPairs() {
         return pairs;
     }
     
-    public boolean addEntrant(Entrant entrant)
+    public boolean addPlayer(Player player)
     {      
-        //check if Entrant is persisted.  
+        //check if Player is persisted.  
         try {
             if ( pairs.size() < 2 )
             {          
-                if (entrant.getId() == null) // not persisted yet
+                if (player.getId() == null) // not persisted yet
                 {
-                    //persist(entrant);
-                    throw new Exception("Entrant should be persisted before adding to Pairing");
+                    //persist(player);
+                    throw new Exception("Player should be persisted before adding to Pairing");
                 }                      
-                pairs.add(entrant);
+                pairs.add(player);
                 return true;
             }
             else
             { 
-                throw new Exception("Cannot exceed two entrants per pairing");
+                throw new Exception("Cannot exceed two players per pairing");
             }
         } catch (Exception e) {e.printStackTrace();}
         return false;
     }
     
-    public void removeEntrant(Entrant entrant)
+    public void removePlayer(Player player)
     {
-        pairs.remove(entrant);
+        pairs.remove(player);
     }
     
     public Long getId() {
