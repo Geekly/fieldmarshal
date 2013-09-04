@@ -96,6 +96,8 @@ public class FieldMarshal extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        loadTournamentView1 = new net.geeklythings.fieldmarshal.ui.LoadTournamentView();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuNewTournament = new javax.swing.JMenuItem();
@@ -256,7 +258,7 @@ public class FieldMarshal extends javax.swing.JFrame {
                         .addComponent(txtOrganizer, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                         .addComponent(txtStore))
                     .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(296, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         m_panelTournamentInfoLayout.setVerticalGroup(
             m_panelTournamentInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,7 +299,8 @@ public class FieldMarshal extends javax.swing.JFrame {
         m_panelTournamentOverviewLayout.setHorizontalGroup(
             m_panelTournamentOverviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(m_panelTournamentOverviewLayout.createSequentialGroup()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 878, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -310,7 +313,7 @@ public class FieldMarshal extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        m_panelTournamentOverview.setBounds(340, 0, 880, 670);
+        m_panelTournamentOverview.setBounds(620, 0, 600, 670);
         desktopFrame.add(m_panelTournamentOverview, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${activeTournament.players}");
@@ -345,7 +348,7 @@ public class FieldMarshal extends javax.swing.JFrame {
         panelAddPlayerLayout.setHorizontalGroup(
             panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelAddPlayerLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(196, 196, 196)
                 .addGroup(panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelAddPlayerLayout.createSequentialGroup()
                         .addGroup(panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -355,7 +358,7 @@ public class FieldMarshal extends javax.swing.JFrame {
                         .addGroup(panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelAddPlayerLayout.createSequentialGroup()
                                 .addComponent(jLabel9)
-                                .addGap(0, 92, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(txtLastName)))
                     .addGroup(panelAddPlayerLayout.createSequentialGroup()
                         .addGroup(panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -367,7 +370,7 @@ public class FieldMarshal extends javax.swing.JFrame {
         panelAddPlayerLayout.setVerticalGroup(
             panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelAddPlayerLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(131, 131, 131)
                 .addGroup(panelAddPlayerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jLabel9))
@@ -377,13 +380,18 @@ public class FieldMarshal extends javax.swing.JFrame {
                     .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAddPlayer)
                 .addContainerGap())
         );
 
         panelAddPlayer.setBounds(10, 120, 320, 130);
         desktopFrame.add(panelAddPlayer, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jTabbedPane1.addTab("Load Tournament", loadTournamentView1);
+
+        jTabbedPane1.setBounds(350, 30, 260, 250);
+        desktopFrame.add(jTabbedPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         mnuFile.setText("File");
 
@@ -625,6 +633,8 @@ public class FieldMarshal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private net.geeklythings.fieldmarshal.ui.LoadTournamentView loadTournamentView1;
     private javax.swing.JPanel m_panelTournamentInfo;
     private javax.swing.JPanel m_panelTournamentOverview;
     private javax.swing.JMenu mnuFile;

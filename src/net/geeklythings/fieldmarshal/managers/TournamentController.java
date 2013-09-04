@@ -14,12 +14,15 @@ import net.geeklythings.fieldmarshal.ui.EditTournamentDialog;
 public class TournamentController {
 
     
-    
+    public void LoadTournament(long id)
+    {
+    }
     
     public void copyProperties(EditTournamentDialog et, Tournament tournament) {
     
 
     
     }
+
     
 }
