@@ -11,11 +11,18 @@ package net.geeklythings.fieldmarshal.ui;
 //import java.util.logging.Logger;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.swing.DefaultListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
+import net.geeklythings.fieldmarshal.entity.Tournament;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.simple.SimpleLogger;
+
 
 /**
  *
@@ -24,11 +31,11 @@ import org.apache.logging.log4j.simple.SimpleLogger;
 public class LoadTournamentView extends javax.swing.JPanel implements ListSelectionListener {
 
     public static final String LOAD_TOURNAMENT_ID = "LoadTournamentId"; 
-             
+    private EntityManager em;         
     private static final Logger logger = LogManager.getLogger(LoadTournamentView.class.getName());
    
     private long selectedTournamentId = 0L;
-
+    
     public long getSelectedTournamentID() {
         return selectedTournamentId;
     }
@@ -38,10 +45,29 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
      */
     public LoadTournamentView() {
         
-        //LogManager.getLogger(). logger.setLevel(Level.DEBUG);
-        //logger.setLevel(FINE); 
-        
         initComponents();
+        //updateList();
+    }
+    
+
+    private void updateList()
+    {
+        // load the contents of the tournaments from the DB and display them in the list
+
+        Query query = em.createQuery("SELECT t FROM Tournament t");
+        List<Tournament> tournamentList = query.getResultList();
+        logger.debug(tournamentList.toString());
+        DefaultListModel listModel;
+        listModel = new DefaultListModel();
+        
+        if( tournamentList != null){
+            for(Tournament t: tournamentList ){
+                listModel.addElement(t.getId());
+            }
+        }
+        
+        tournamentJList.setModel(listModel);
+        
     }
     
 
@@ -50,7 +76,7 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
         logger.debug(lse.toString());
         if(!lse.getValueIsAdjusting())
         {
-
+/*
             int row = tableTournament.getSelectedRow();          
             int column = 0;
             logger.debug("Row {}, Column {} selected", row, column);
@@ -59,7 +85,7 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
             selectedTournamentId = id;
             
             logger.debug("Tournament selected, ID: {}", o.toString());
-         
+         */
             loadButton.setEnabled(true);
         }
        
@@ -73,15 +99,11 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        fieldmarshaldb2PUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
-        tournamentQuery1 = java.beans.Beans.isDesignTime() ? null : fieldmarshaldb2PUEntityManager.createQuery("SELECT t FROM Tournament t");
-        tournamentList1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : tournamentQuery1.getResultList();
         loadButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tableTournament = new javax.swing.JTable();
+        tournamentJList = new javax.swing.JList();
+        jButton1 = new javax.swing.JButton();
 
         loadButton.setText("Load");
         loadButton.setEnabled(false);
@@ -91,30 +113,21 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
             }
         });
 
-        tableTournament.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tournamentJList.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tournamentJList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        tournamentJList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(tournamentJList);
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tournamentList1, tableTournament, "");
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
-        columnBinding.setColumnName("Id");
-        columnBinding.setColumnClass(Long.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${store}"));
-        columnBinding.setColumnName("Store");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${todaysDate}"));
-        columnBinding.setColumnName("Todays Date");
-        columnBinding.setColumnClass(java.util.Date.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${organizer}"));
-        columnBinding.setColumnName("Organizer");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${numRounds}"));
-        columnBinding.setColumnName("Num Rounds");
-        columnBinding.setColumnClass(Integer.class);
-        bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();
-        tableTournament.getSelectionModel().addListSelectionListener(this);
-        jScrollPane1.setViewportView(tableTournament);
-
-        jScrollPane2.setViewportView(jScrollPane1);
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -122,7 +135,9 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -131,11 +146,11 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(loadButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(loadButton)
+                    .addComponent(jButton1))
                 .addContainerGap())
         );
-
-        bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
@@ -144,16 +159,21 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
         firePropertyChange(LOAD_TOURNAMENT_ID, 0L, selectedTournamentId);
     }//GEN-LAST:event_loadButtonActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        updateList();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.persistence.EntityManager fieldmarshaldb2PUEntityManager;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loadButton;
-    private javax.swing.JTable tableTournament;
-    private java.util.List<net.geeklythings.fieldmarshal.entity.Tournament> tournamentList1;
-    private javax.persistence.Query tournamentQuery1;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    private javax.swing.JList tournamentJList;
     // End of variables declaration//GEN-END:variables
+
+    void setEntityManager(EntityManager _em) {
+        this.em = _em;
+    }
 
 
 }

@@ -4,6 +4,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -18,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.NoResultException;
 import javax.persistence.OneToMany;
 import javax.persistence.Persistence;
@@ -30,32 +32,55 @@ import net.geeklythings.fieldmarshal.model.Faction;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name="PLAYER")
+@NamedQuery(name="Player.findByName", query="SELECT p FROM Player p WHERE p.firstName LIKE :first AND p.lastName LIKE :last")
 public class Player implements Serializable {
+
+
 
     @Override
     public String toString() {
-        return "Player{" + "id=" + id + ", person=" + person + ", faction=" + faction + ", activeStatus=" + activeStatus + '}';
+        return "Player{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", homeTown=" + homeTown + ", faction=" + faction + ", lastRoundPlayed=" + lastRoundPlayed + ", activeStatus=" + activeStatus + '}';
     }
-    
+  
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="ID")
     private Long id;
     
-    @JoinColumn(name = "ID_PERSON")
+    @Column(name="FIRSTNAME")
+    private String firstName;
+    @Column(name="LASTNAME")
+    private String lastName;
+    @Column(name="EMAIL")
+    private String email;
+    @Column(name="HOMETOWN")
+    private String homeTown;
+    
+    /*@JoinColumn(name = "ID_PERSON")
     @ManyToOne(cascade= { CascadeType.MERGE })
-    private Person person;
+    private Person person;*/
     
     @Enumerated(EnumType.STRING)
-    protected Faction faction;
+    @Column(name="FACTION")
+    private Faction faction;
     
     @Column(name="LASTROUNDPLAYED")
     private int lastRoundPlayed = 1;
 
-    @OneToMany(cascade = {CascadeType.MERGE}) 
+    //@OneToMany(cascade = {CascadeType.MERGE}) 
+    // TODO: make this persisted
+    @Transient
     private List<PlayerResult> results = new ArrayList<>();
+  
+    @Transient
+    private final PropertyChangeSupport propertyChangeSupport = new java.beans.PropertyChangeSupport(this);
 
+    @Transient
+    private PlayerStatus activeStatus = PlayerStatus.ACTIVE;
+   
+    
     /**
      * Get the value of results
      *
@@ -81,13 +106,6 @@ public class Player implements Serializable {
     public void setLastRoundPlayed(int lastRoundPlayed) {
         this.lastRoundPlayed = lastRoundPlayed;
     }
-       
-    @Transient
-    private final PropertyChangeSupport propertyChangeSupport = new java.beans.PropertyChangeSupport(this);
-
-    @Transient
-    private PlayerStatus activeStatus = PlayerStatus.ACTIVE;
- 
     public Long getId() {
         return id;
     }
@@ -98,10 +116,11 @@ public class Player implements Serializable {
 
     public Player(){}
     
-    public Player(Person addPerson, Faction addfaction) {
+    public Player(String firstName, String lastName, Faction addfaction) {
         //When creating a new Player, we don't want to use an existing person if possible
 
-        this.setPerson(addPerson);
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.faction = addfaction;   
     }
 
@@ -109,14 +128,10 @@ public class Player implements Serializable {
     
     public int getLosses() {return 0;}
     
-    public int getStandings(){return 0;
-    }
+    public int getStandings(){return 0;    }
     
-    public Person getPerson() {
-        return person;
-    }
 
-    public final void setPerson(Person person) {
+   /* public final void setPerson(Person person) {
         // add an un-persisted person 
         try {
             
@@ -157,7 +172,8 @@ public class Player implements Serializable {
         }
             
     }
-
+    */
+    
     public Faction getFaction() {
         return faction;
     }
@@ -176,5 +192,62 @@ public class Player implements Serializable {
         this.activeStatus = activeStatus;
     }
   
+     public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getHomeTown() {
+        return homeTown;
+    }
+
+    public void setHomeTown(String homeTown) {
+        this.homeTown = homeTown;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        
+        if ( this == obj)
+            return true;
+        if ( obj == null)
+            return false;
+        if ( obj.getClass() != getClass() )
+            return false;
+        //Player player = (Player)obj;
+        if ( this.hashCode() == obj.hashCode() )
+        {
+            return true;
+        }
+ 
+        return false; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.firstName);
+        hash = 83 * hash + Objects.hashCode(this.lastName);
+        return hash;
+    }
     
 }

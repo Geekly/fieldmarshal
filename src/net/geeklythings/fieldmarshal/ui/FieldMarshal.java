@@ -5,21 +5,9 @@
 package net.geeklythings.fieldmarshal.ui;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import net.geeklythings.fieldmarshal.entity.Tournament;
-import net.geeklythings.fieldmarshal.model.TournamentFactory;
-import java.beans.PropertyChangeSupport;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import javax.swing.ListModel;
-import net.geeklythings.fieldmarshal.entity.Person;
-import net.geeklythings.fieldmarshal.model.Faction;
-import net.geeklythings.fieldmarshal.entity.Player;
-import net.geeklythings.fieldmarshal.managers.TournamentController;
+import net.geeklythings.fieldmarshal.managers.PlayerManager;
+import net.geeklythings.fieldmarshal.managers.TournamentManager;
 import net.geeklythings.fieldmarshal.model.CustomListModel;
 
 /**
@@ -28,15 +16,18 @@ import net.geeklythings.fieldmarshal.model.CustomListModel;
  */
 public class FieldMarshal extends javax.swing.JFrame {
 
-    TournamentController tournamentController; // = new TournamentController(this);
+    TournamentManager tournamentManager; // = new TournamentManager(this);
+    PlayerManager playerManager;
     
     /**
      * Creates new form MainJFrame
      */
     public FieldMarshal() {
         initComponents();
-        tournamentController = new TournamentController(this);
-        loadTournamentView.addPropertyChangeListener(tournamentController);
+        tournamentManager = new TournamentManager(_em);
+        playerManager = new PlayerManager(_em);
+        loadTournamentView.addPropertyChangeListener(tournamentManager);
+        loadTournamentView.setEntityManager(_em);
         
     }
 
@@ -66,7 +57,8 @@ public class FieldMarshal extends javax.swing.JFrame {
 
         _em = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
         dateConverter = new net.geeklythings.fieldmarshal.util.DateConverter();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        loadTournamentView1 = new net.geeklythings.fieldmarshal.ui.LoadTournamentView();
+        jTabbedPane = new javax.swing.JTabbedPane();
         loadTournamentView = new net.geeklythings.fieldmarshal.ui.LoadTournamentView();
         desktopFrame = new javax.swing.JDesktopPane();
         btnNewTournament = new javax.swing.JButton();
@@ -116,7 +108,7 @@ public class FieldMarshal extends javax.swing.JFrame {
             }
         });
 
-        jTabbedPane1.addTab("Load Tournament", loadTournamentView);
+        jTabbedPane.addTab("Load Tournament", loadTournamentView);
 
         desktopFrame.setBackground(new java.awt.Color(0, 153, 153));
 
@@ -428,12 +420,12 @@ public class FieldMarshal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(desktopFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 1223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addComponent(desktopFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -491,7 +483,7 @@ public class FieldMarshal extends javax.swing.JFrame {
     private void EditActiveTournament() {
 
         EditTournamentDialog et = new EditTournamentDialog(this, true);
-        //TournamentController tm = new TournamentController();
+        //TournamentController tm = new TournamentManager();
         //et.setActiveTournament(activeTournament);
         et.showDialog(activeTournament);
         int returnStatus = et.getReturnStatus();
@@ -529,15 +521,16 @@ public class FieldMarshal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnAddPlayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPlayerActionPerformed
+        
+        playerManager.AddPlayer(null, activeTournament);
         // TODO add your handling code here:
         //Tournament oldTournament = activeTournament.copy();
+        /*
         if(activeTournament == null) { return; }
         
         String firstName = txtFirstName.getText();
         String lastName = txtLastName.getText();
         Faction faction = Faction.CIRCLE;
-        
-        Person person = null;
         
         List<Player> oldPlayers = new ArrayList<>(activeTournament.getPlayers());
         
@@ -576,6 +569,7 @@ public class FieldMarshal extends javax.swing.JFrame {
         firePropertyChange("bindingPlayerList", null, null);
         firePropertyChange("activeTournament.players", oldPlayers, activeTournament.getPlayers());
         firePropertyChange("activeTournament.players", null, null);
+        */
     }//GEN-LAST:event_btnAddPlayerActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -643,8 +637,9 @@ public class FieldMarshal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane;
     private net.geeklythings.fieldmarshal.ui.LoadTournamentView loadTournamentView;
+    private net.geeklythings.fieldmarshal.ui.LoadTournamentView loadTournamentView1;
     private javax.swing.JPanel m_panelTournamentInfo;
     private javax.swing.JPanel m_panelTournamentOverview;
     private javax.swing.JMenu mnuFile;

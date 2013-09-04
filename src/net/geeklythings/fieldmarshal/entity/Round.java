@@ -26,7 +26,9 @@ public class Round {
     @Column(name="ROUNDNUMBER")
     private int roundNumber;
     
-    @OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE})
+    //@OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE})
+    // TODO: make this persisted
+    @Transient
     private List<MatchPairing> pairings = new ArrayList<>();
     
     //@Transient

@@ -332,8 +332,10 @@ public class Tournament implements Serializable {
 
     @Override
     public String toString() {
-        return "net.geeklythings.fieldmarshal.data.Tournament[ id=" + id + " ]";
+        return "Tournament{" + "changeSupport=" + changeSupport + ", todaysDate=" + todaysDate + ", store=" + store + ", organizer=" + organizer + ", numRounds=" + numRounds + ", format=" + format + ", players=" + players + ", rounds=" + rounds + ", currentRound=" + currentRound + ", id=" + id + '}';
     }
+
+
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);

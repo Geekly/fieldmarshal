@@ -5,17 +5,12 @@
     <class>net.geeklythings.fieldmarshal.entity.Tournament</class>
     <class>net.geeklythings.fieldmarshal.entity.Round</class>
     <class>net.geeklythings.fieldmarshal.entity.EventFormat</class>
-    <class>net.geeklythings.fieldmarshal.entity.PlayerResult</class>
-    <class>net.geeklythings.fieldmarshal.entity.MatchPairing</class>
-    <class>net.geeklythings.fieldmarshal.entity.MatchResult</class>
     <class>net.geeklythings.fieldmarshal.entity.Player</class>
-    <class>net.geeklythings.fieldmarshal.entity.Person</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/fieldmarshaldb2"/>
       <property name="javax.persistence.jdbc.password" value="fieldmarshal"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
       <property name="javax.persistence.jdbc.user" value="fieldmarshal"/>
-      <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="eclipselink.logging.level" value="FINE"/>
       <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="eclipselink.ddl-generation.output-mode" value="both"/>

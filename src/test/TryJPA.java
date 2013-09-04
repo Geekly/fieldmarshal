@@ -7,7 +7,7 @@ package test;
 import net.geeklythings.fieldmarshal.entity.Player;
 import net.geeklythings.fieldmarshal.model.Faction;
 import net.geeklythings.fieldmarshal.entity.Tournament;
-import net.geeklythings.fieldmarshal.entity.Person;
+
 import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -29,12 +29,12 @@ public class TryJPA {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
         //Tournament activeTournament = TournamentFactory.createTournament(3);
         //EventFormat ef = new EventFormat();
-        Person person1 = new Person();
+        Player person1 = new Player();
         person1.setFirstName("Greygore");
         person1.setLastName("Boomhowler");
         person1.setHomeTown("Thornwood Kriels");
 
-        Person person2 = new Person();
+        Player person2 = new Player();
         person2.setFirstName("Neil deGrasse");
         person2.setLastName("Tyson");
         person2.setHomeTown("Bitches");
@@ -47,10 +47,10 @@ public class TryJPA {
         try {
             
              
-            TypedQuery<Person> query = em.createNamedQuery("Person.findByName", Person.class);
+            TypedQuery<Player> query = em.createNamedQuery("Player.findByName", Player.class);
             query.setParameter("first", person1.getFirstName());
             query.setParameter("last", person1.getLastName());
-            //Person person3 = query.getSingleResult();
+            Player player3 = query.getSingleResult();
             
             Player player1 = new Player();
 
@@ -61,6 +61,7 @@ public class TryJPA {
             //player2.setPerson(person3);
             //player2.setFaction(faction2);
 
+            
             //activeTournament.addPerson(player);
 
             

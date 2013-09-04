@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import net.geeklythings.fieldmarshal.entity.Person;
 import net.geeklythings.fieldmarshal.entity.EventFormat;
 import net.geeklythings.fieldmarshal.model.Faction;
 import net.geeklythings.fieldmarshal.entity.MatchPairing;
@@ -17,6 +16,11 @@ import net.geeklythings.fieldmarshal.entity.PlayerResult;
 import net.geeklythings.fieldmarshal.model.ResultType;
 import net.geeklythings.fieldmarshal.entity.Round;
 import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.managers.PlayerManager;
+import net.geeklythings.fieldmarshal.managers.TournamentManager;
+import net.geeklythings.fieldmarshal.model.PlayerStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -25,69 +29,92 @@ import net.geeklythings.fieldmarshal.entity.Tournament;
  */
 public class TestClasses {
 
+    static final public Logger logger = LogManager.getLogger(TestClasses.class.getName());
+    static EntityManager em;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+                
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
+        em = emf.createEntityManager();        
+               // TODO code application logic here
         TestClasses test = new TestClasses();
         //test.TestPlayer();
-        test.TestPairings();
+        test.TestTournament();
+               
+        //test.TestPairings();
         //Player pl2 = new Player("Steve", "Adore");
         //Player et2 = new Player(pl2, Faction.RETRIBUTION);
         //test.TestRound();
         //test.TestPlayerResult();
         //test.TestRound();
-        //System.out.println(gson.toJson(ef1));
-        //System.out.println(gson.toJson(ef2));
-        //System.out.println(gson.toJson(pl1));
-        //System.out.println(gson.toJson(et1));
-        //System.out.println(gson.toJson(to.getFormat()));   
-        //System.out.println(to.toString());
         
     }
     
     public void TestPlayer()
     {
-        Person pl1 = new Person("Rufus", "McGillicutty");
+        Player pl1 = new Player("Rufus", "McGillicutty", Faction.CIRCLE);
         pl1.setEmail("rufus@warmachine.com");
         pl1.setHomeTown("Dallas");
         //Person et1 = new Person(pl1, Faction.CRYX);
-        Player et2 = new Player();
-        et2.setPerson(pl1);
-        et2.setFaction(Faction.CRYX);
-        persist(et2);
+        Player pl2 = new Player();
+        
+        pl2.setFaction(Faction.CRYX);
+        persist(pl2);
         System.out.println(pl1.toString());
-        System.out.println(et2.toString());
+        System.out.println(pl2.toString());
     }
     
+    public void TestTournament()
+    {
+        Player pl1 = new Player("Rufus", "McGillicutty", Faction.CIRCLE);
+        pl1.setEmail("rufus@warmachine.com");
+        pl1.setHomeTown("Dallas");
+                
+        Player pl2 = new Player("Hank", "Haliburton", Faction.CONVERGENCE);
+        pl2.setEmail("hank@warmachine.com");
+        pl2.setHomeTown("Toledo");
+                  
+        Tournament tournament = Tournament.createTournament(3);
+        //TournamentManager tm = new TournamentManager(em);
+        PlayerManager pm = new PlayerManager(em);
+        
+        pm.AddPlayer(pl1, tournament);
+        pm.AddPlayer(pl2, tournament);
+        
+        logger.debug("Active Players: {}", tournament.getActivePlayers());
+        tournament.dropPlayer(pl1);
+        pl2.setActiveStatus(PlayerStatus.INACTIVE);
+        logger.debug("Active Players: {}", tournament.getActivePlayers());
+        
+        persist(tournament);
+        //logger.debug(tournament.toString());
+    }
     
     public void TestPairings()
     {
-        Person pl1 = new Person("Rufus", "McGillicutty");
-        Player e1 = new Player(pl1, Faction.CIRCLE);
+        Player pl1 = new Player("Rufus", "McGillicutty", Faction.CIRCLE);   
                 
-        Person pl2 = new Person("Hank", "Haliburton");
-        Player e2 = new Player(pl2, Faction.CYGNAR);
+        Player pl2 = new Player("Hank", "Haliburton", Faction.CYGNAR);
         
-        Person pl3 = new Person("Wil", "Wheaton");
-        Player e3 = new Player(pl3, Faction.KHADOR);
+        Player pl3 = new Player("Wil", "Wheaton", Faction.KHADOR);
         
-        Person pl4 = new Person("Stan", "The Man");
-        Player e4 = new Player(pl4, Faction.MERCS);
+        Player pl4 = new Player("Stan", "The Man", Faction.MERCS);
         
-        persist(e1);
-        persist(e2);       
-        persist(e3);
-        persist(e4);
+        
+        persist(pl1);
+        persist(pl2);       
+        persist(pl3);
+        persist(pl4);
         
         MatchPairing pairing1 = new MatchPairing();
-        pairing1.addPlayer(e1);
-        pairing1.addPlayer(e2);
+        pairing1.addPlayer(pl1);
+        pairing1.addPlayer(pl2);
         
         MatchPairing pairing2 = new MatchPairing();
-        pairing2.addPlayer(e3);
-        pairing2.addPlayer(e4);
+        pairing2.addPlayer(pl3);
+        pairing2.addPlayer(pl4);
         //pairing.addPlayer(e3);
         
         persist(pairing1);
@@ -99,32 +126,27 @@ public class TestClasses {
     
     private void TestPlayerResult()
     {
-        Person pl1 = new Person("Rufus", "McGillicutty");
+        Player pl1 = new Player("Rufus", "McGillicutty", Faction.CIRCLE);
         pl1.setEmail("rufus@warmachine.com");
         pl1.setHomeTown("Dallas");
-        Player e1 = new Player(pl1, Faction.CIRCLE);
                 
-        Person pl2 = new Person("Hank", "Haliburton");
+        Player pl2 = new Player("Hank", "Haliburton", Faction.CONVERGENCE);
         pl2.setEmail("hank@warmachine.com");
         pl2.setHomeTown("Toledo");
-        Player e2 = new Player(pl2, Faction.CYGNAR);
         
         PlayerResult pr = new PlayerResult();
         
         
-        persist(e1);
-        persist(e2);
-        pr.setPlayer(e1);
-        pr.setOpponent(e2);
+        persist(pl1);
+        persist(pl2);
+        pr.setPlayer(pl1);
+        pr.setOpponent(pl2);
         pr.setResult(ResultType.WIN);  
         pr.setArmyPointsDestroyed(27);
         pr.setListPlayed(1);
         pr.setControlPoints(4);
         
         
-        System.out.println(e1.toString());
-        System.out.println(e2.toString());
-        System.out.println(pr.toString());
     }
     
     private void TestRound() {
@@ -161,8 +183,8 @@ public class TestClasses {
     }
 
     public void persist(Object object) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
-        EntityManager em = emf.createEntityManager();
+
+        //em.open();
         em.getTransaction().begin();
         try {
             em.persist(object);
@@ -171,7 +193,7 @@ public class TestClasses {
             e.printStackTrace();
             em.getTransaction().rollback();
         } finally {
-            em.close();
+            //em.close();
         }
     }
 

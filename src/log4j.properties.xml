@@ -5,7 +5,7 @@ and open the template in the editor.
 -->
 <configuration status="WARN">
     <appenders>
-        <File name="LogFile" filename="logs/app.log"  filePattern="logs/app-%d{MM-dd-yyyy}.log.gz">
+        <File name="LogFile" filename="logs/app.log">
         </File>
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="%m%n"/>     
@@ -13,7 +13,7 @@ and open the template in the editor.
     </appenders>
     <loggers>       
         <logger name="net.geeklythings.fieldmarshal.ui.LoadTournamentView" level="DEBUG">
-            <appender-ref ref="File"/>
+            <appender-ref ref="LogFile"/>
         </logger>
         <root level="DEBUG">
             <appender-ref ref="STDOUT"/>
