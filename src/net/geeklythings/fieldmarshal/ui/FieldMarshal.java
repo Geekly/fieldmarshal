@@ -28,11 +28,16 @@ import net.geeklythings.fieldmarshal.model.CustomListModel;
  */
 public class FieldMarshal extends javax.swing.JFrame {
 
+    TournamentController tournamentController; // = new TournamentController(this);
+    
     /**
      * Creates new form MainJFrame
      */
     public FieldMarshal() {
         initComponents();
+        tournamentController = new TournamentController(this);
+        loadTournamentView.addPropertyChangeListener(tournamentController);
+        
     }
 
     Tournament activeTournament;// = TournamentFactory.createTournament(5);
@@ -486,7 +491,7 @@ public class FieldMarshal extends javax.swing.JFrame {
     private void EditActiveTournament() {
 
         EditTournamentDialog et = new EditTournamentDialog(this, true);
-        TournamentController tm = new TournamentController();
+        //TournamentController tm = new TournamentController();
         //et.setActiveTournament(activeTournament);
         et.showDialog(activeTournament);
         int returnStatus = et.getReturnStatus();

@@ -23,9 +23,15 @@ import org.apache.logging.log4j.simple.SimpleLogger;
  */
 public class LoadTournamentView extends javax.swing.JPanel implements ListSelectionListener {
 
-    static final private Logger logger = LogManager.getLogger(LoadTournamentView.class.getName());
-    
-    private long selectedTournamentID = 0L;
+    public static final String LOAD_TOURNAMENT_ID = "LoadTournamentId"; 
+             
+    private static final Logger logger = LogManager.getLogger(LoadTournamentView.class.getName());
+   
+    private long selectedTournamentId = 0L;
+
+    public long getSelectedTournamentID() {
+        return selectedTournamentId;
+    }
     
     /**
      * Creates new form LoadTournamentView
@@ -50,7 +56,7 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
             logger.debug("Row {}, Column {} selected", row, column);
             Object o = tableTournament.getValueAt(row, column);          
             Long id = Long.valueOf(o.toString());        
-            selectedTournamentID = id;
+            selectedTournamentId = id;
             
             logger.debug("Tournament selected, ID: {}", o.toString());
          
@@ -135,6 +141,7 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
         // notify the tournament manager that a tournament Id was selected & read
         // and to load the tournament
+        firePropertyChange(LOAD_TOURNAMENT_ID, 0L, selectedTournamentId);
     }//GEN-LAST:event_loadButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
