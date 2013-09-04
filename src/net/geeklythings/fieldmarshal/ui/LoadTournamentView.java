@@ -23,7 +23,7 @@ public class LoadTournamentView extends javax.swing.JPanel implements ActionList
 
     static final private Logger logger = Logger.getLogger(LoadTournamentView.class.getName());
     
-    private ArrayList<Tournament> tournamentList;
+    
     
     /**
      * Creates new form LoadTournamentView
@@ -52,7 +52,13 @@ public class LoadTournamentView extends javax.swing.JPanel implements ActionList
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        fieldmarshaldb2PUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
+        tournamentQuery = java.beans.Beans.isDesignTime() ? null : fieldmarshaldb2PUEntityManager.createQuery("SELECT t FROM Tournament t");
+        tournamentList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(tournamentQuery.getResultList());
+        tournamentQuery1 = java.beans.Beans.isDesignTime() ? null : fieldmarshaldb2PUEntityManager.createQuery("SELECT t FROM Tournament t");
+        tournamentList1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : tournamentQuery1.getResultList();
         loadButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -62,6 +68,25 @@ public class LoadTournamentView extends javax.swing.JPanel implements ActionList
         loadButton.setEnabled(false);
 
         tableTournament.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tournamentList1, tableTournament, "");
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
+        columnBinding.setColumnName("Id");
+        columnBinding.setColumnClass(Long.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${store}"));
+        columnBinding.setColumnName("Store");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${todaysDate}"));
+        columnBinding.setColumnName("Todays Date");
+        columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${organizer}"));
+        columnBinding.setColumnName("Organizer");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${numRounds}"));
+        columnBinding.setColumnName("Num Rounds");
+        columnBinding.setColumnClass(Integer.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
         tableTournament.getSelectionModel().addListSelectionListener(this);
         jScrollPane1.setViewportView(tableTournament);
 
@@ -85,13 +110,21 @@ public class LoadTournamentView extends javax.swing.JPanel implements ActionList
                 .addComponent(loadButton)
                 .addContainerGap())
         );
+
+        bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.persistence.EntityManager fieldmarshaldb2PUEntityManager;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loadButton;
     private javax.swing.JTable tableTournament;
+    private java.util.List<net.geeklythings.fieldmarshal.entity.Tournament> tournamentList;
+    private java.util.List<net.geeklythings.fieldmarshal.entity.Tournament> tournamentList1;
+    private javax.persistence.Query tournamentQuery;
+    private javax.persistence.Query tournamentQuery1;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
 

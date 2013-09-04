@@ -11,7 +11,7 @@
     <class>net.geeklythings.fieldmarshal.entity.Player</class>
     <class>net.geeklythings.fieldmarshal.entity.Person</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/fieldmarshaldb"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/fieldmarshaldb2"/>
       <property name="javax.persistence.jdbc.password" value="fieldmarshal"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
       <property name="javax.persistence.jdbc.user" value="fieldmarshal"/>

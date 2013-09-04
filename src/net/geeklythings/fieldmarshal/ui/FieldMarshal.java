@@ -61,6 +61,8 @@ public class FieldMarshal extends javax.swing.JFrame {
 
         _em = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
         dateConverter = new net.geeklythings.fieldmarshal.util.DateConverter();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        loadTournamentView = new net.geeklythings.fieldmarshal.ui.LoadTournamentView();
         desktopFrame = new javax.swing.JDesktopPane();
         btnNewTournament = new javax.swing.JButton();
         btnLoadTournament = new javax.swing.JButton();
@@ -96,8 +98,6 @@ public class FieldMarshal extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        loadTournamentView1 = new net.geeklythings.fieldmarshal.ui.LoadTournamentView();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuNewTournament = new javax.swing.JMenuItem();
@@ -110,6 +110,8 @@ public class FieldMarshal extends javax.swing.JFrame {
                 formWindowClosing(evt);
             }
         });
+
+        jTabbedPane1.addTab("Load Tournament", loadTournamentView);
 
         desktopFrame.setBackground(new java.awt.Color(0, 153, 153));
 
@@ -388,11 +390,6 @@ public class FieldMarshal extends javax.swing.JFrame {
         panelAddPlayer.setBounds(10, 120, 320, 130);
         desktopFrame.add(panelAddPlayer, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jTabbedPane1.addTab("Load Tournament", loadTournamentView1);
-
-        jTabbedPane1.setBounds(350, 30, 260, 250);
-        desktopFrame.add(jTabbedPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
         mnuFile.setText("File");
 
         mnuNewTournament.setText("New Tournament");
@@ -422,11 +419,19 @@ public class FieldMarshal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 1223, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(desktopFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 1223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addComponent(desktopFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         bindingGroup.bind();
@@ -634,7 +639,7 @@ public class FieldMarshal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private net.geeklythings.fieldmarshal.ui.LoadTournamentView loadTournamentView1;
+    private net.geeklythings.fieldmarshal.ui.LoadTournamentView loadTournamentView;
     private javax.swing.JPanel m_panelTournamentInfo;
     private javax.swing.JPanel m_panelTournamentOverview;
     private javax.swing.JMenu mnuFile;

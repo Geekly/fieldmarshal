@@ -43,7 +43,7 @@ public class Player implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @JoinColumn(name = "ID_PLAYER")
+    @JoinColumn(name = "ID_PERSON")
     @ManyToOne(cascade= { CascadeType.MERGE })
     private Person person;
     
