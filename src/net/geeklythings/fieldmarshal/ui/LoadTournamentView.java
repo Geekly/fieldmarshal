@@ -5,43 +5,58 @@
 package net.geeklythings.fieldmarshal.ui;
 
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.ConsoleHandler;
+//import java.util.logging.Handler;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
+
+
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import net.geeklythings.fieldmarshal.entity.Tournament;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.simple.SimpleLogger;
 
 /**
  *
  * @author khooks
  */
-public class LoadTournamentView extends javax.swing.JPanel implements ActionListener, ListSelectionListener {
+public class LoadTournamentView extends javax.swing.JPanel implements ListSelectionListener {
 
-    static final private Logger logger = Logger.getLogger(LoadTournamentView.class.getName());
+    static final private Logger logger = LogManager.getLogger(LoadTournamentView.class.getName());
     
-    
+    private long selectedTournamentID = 0L;
     
     /**
      * Creates new form LoadTournamentView
      */
     public LoadTournamentView() {
-        this.tournamentList = new ArrayList<>();    
-        logger.setLevel(Level.FINE);      
+        
+        //LogManager.getLogger(). logger.setLevel(Level.DEBUG);
+        //logger.setLevel(FINE); 
+        
         initComponents();
     }
     
-    @Override
-    public void actionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public void valueChanged(ListSelectionEvent lse) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.debug(lse.toString());
+        if(!lse.getValueIsAdjusting())
+        {
+
+            int row = tableTournament.getSelectedRow();          
+            int column = 0;
+            logger.debug("Row {}, Column {} selected", row, column);
+            Object o = tableTournament.getValueAt(row, column);          
+            Long id = Long.valueOf(o.toString());        
+            selectedTournamentID = id;
+            
+            logger.debug("Tournament selected, ID: {}", o.toString());
+         
+            loadButton.setEnabled(true);
+        }
+       
     }
     
     /**
@@ -55,8 +70,6 @@ public class LoadTournamentView extends javax.swing.JPanel implements ActionList
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         fieldmarshaldb2PUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
-        tournamentQuery = java.beans.Beans.isDesignTime() ? null : fieldmarshaldb2PUEntityManager.createQuery("SELECT t FROM Tournament t");
-        tournamentList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(tournamentQuery.getResultList());
         tournamentQuery1 = java.beans.Beans.isDesignTime() ? null : fieldmarshaldb2PUEntityManager.createQuery("SELECT t FROM Tournament t");
         tournamentList1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : tournamentQuery1.getResultList();
         loadButton = new javax.swing.JButton();
@@ -66,6 +79,11 @@ public class LoadTournamentView extends javax.swing.JPanel implements ActionList
 
         loadButton.setText("Load");
         loadButton.setEnabled(false);
+        loadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadButtonActionPerformed(evt);
+            }
+        });
 
         tableTournament.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -114,15 +132,18 @@ public class LoadTournamentView extends javax.swing.JPanel implements ActionList
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+        // notify the tournament manager that a tournament Id was selected & read
+        // and to load the tournament
+    }//GEN-LAST:event_loadButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager fieldmarshaldb2PUEntityManager;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loadButton;
     private javax.swing.JTable tableTournament;
-    private java.util.List<net.geeklythings.fieldmarshal.entity.Tournament> tournamentList;
     private java.util.List<net.geeklythings.fieldmarshal.entity.Tournament> tournamentList1;
-    private javax.persistence.Query tournamentQuery;
     private javax.persistence.Query tournamentQuery1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

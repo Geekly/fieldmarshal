@@ -7,25 +7,6 @@
         <Property name="persistenceUnit" type="java.lang.String" value="FieldMarshalPU2"/>
       </Properties>
     </Component>
-    <Component class="javax.persistence.Query" name="tournamentQuery">
-      <Properties>
-        <Property name="query" type="java.lang.String" value="SELECT t FROM Tournament t"/>
-        <Property name="entityManager" type="java.lang.Object" editor="org.netbeans.modules.form.j2ee.J2EEPropertyModifier$EMProperty$EntityManagerEditor">
-          <ComponentRef name="fieldmarshaldb2PUEntityManager"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="java.util.List" name="tournamentList">
-      <Properties>
-        <Property name="query" type="java.lang.Object" editor="org.netbeans.modules.form.j2ee.J2EEPropertyModifier$QueryBeanProperty$QueryEditor">
-          <ComponentRef name="tournamentQuery"/>
-        </Property>
-        <Property name="observable" type="boolean" value="true"/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;net.geeklythings.fieldmarshal.entity.Tournament&gt;"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.persistence.Query" name="tournamentQuery1">
       <Properties>
         <Property name="query" type="java.lang.String" value="SELECT t FROM Tournament t"/>
@@ -85,6 +66,9 @@
         <Property name="text" type="java.lang.String" value="Load"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loadButtonActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
 

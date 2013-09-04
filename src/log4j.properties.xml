@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<configuration status="WARN">
+    <appenders>
+        <File name="LogFile" filename="logs/app.log"  filePattern="logs/app-%d{MM-dd-yyyy}.log.gz">
+        </File>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>     
+        </Console>   
+    </appenders>
+    <loggers>       
+        <logger name="net.geeklythings.fieldmarshal.ui.LoadTournamentView" level="DEBUG">
+            <appender-ref ref="File"/>
+        </logger>
+        <root level="DEBUG">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </loggers>
+    
+</configuration>
