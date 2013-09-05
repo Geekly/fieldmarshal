@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -29,8 +30,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import net.geeklythings.fieldmarshal.model.PlayerStatus;
-//import org.joda.time.DateTime;
-//import org.joda.time.MutableDateTime;
+
 
 /**
  *
@@ -39,7 +39,7 @@ import net.geeklythings.fieldmarshal.model.PlayerStatus;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name="TOURNAMENT")
-public class Tournament implements Serializable {
+public class Tournament extends Observable implements Serializable {
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 

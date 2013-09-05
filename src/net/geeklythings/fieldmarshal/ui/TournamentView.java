@@ -6,15 +6,22 @@ package net.geeklythings.fieldmarshal.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Observable;
+import java.util.Observer;
 import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.managers.TournamentManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author khooks
  */
-public class TournamentView extends javax.swing.JPanel implements PropertyChangeListener{
-
-    Tournament localTournament;
+public class TournamentView extends javax.swing.JPanel implements PropertyChangeListener, Observer{
+    
+    private static final Logger logger = LogManager.getLogger(TournamentView.class.getName());
+    private TournamentManager manager;
+    private Tournament localTournament;
     
     /**
      * Creates new form TournamentView
@@ -23,6 +30,24 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
         initComponents();
     }
 
+    public void setManager(TournamentManager manager)
+    {
+        this.manager = manager;
+        this.manager.addObserver(this);
+    }
+    
+    public TournamentManager getManager(){ return this.manager; }
+    
+    public void setTournament(Tournament t)  { 
+        this.localTournament = t;
+        updateView();
+    }
+    
+    public void updateView()
+    {
+    
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -202,5 +227,17 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
     @Override
     public void propertyChange(PropertyChangeEvent pce) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void update(Observable manager, Object o) {
+        
+        if( o instanceof Tournament )
+        {
+            logger.debug("TournamentView: update: {}", o);
+            localTournament = (Tournament)o;
+            updateView();
+        }
+        
     }
 }

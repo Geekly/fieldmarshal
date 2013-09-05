@@ -10,16 +10,14 @@ package net.geeklythings.fieldmarshal.ui;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 
-
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.DefaultListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
 import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.managers.TournamentManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +28,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class LoadView extends javax.swing.JPanel implements ListSelectionListener {
 
+   
     public static final String LOAD_TOURNAMENT_ID = "LoadTournamentId"; 
     private EntityManager em;         
     private static final Logger logger = LogManager.getLogger(LoadView.class.getName());
@@ -51,8 +50,8 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
         
         tournamentJList.addListSelectionListener(this);
     }
+          
     
-
     public void updateList()
     {
         // load the contents of the tournaments from the DB and display them in the list
