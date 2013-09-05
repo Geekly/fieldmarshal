@@ -8,6 +8,7 @@ import java.util.Observable;
 import java.util.Observer;
 import net.geeklythings.fieldmarshal.entity.Tournament;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
+import net.geeklythings.fieldmarshal.model.PlayerTableModel;
 
 /**
  *
@@ -15,8 +16,8 @@ import net.geeklythings.fieldmarshal.managers.TournamentManager;
  */
 public class PlayersView extends javax.swing.JPanel implements Observer {
 
-    TournamentManager manager;
-    Tournament localTournament;  //local scope to the activeTournament
+    private TournamentManager manager;
+    private Tournament localTournament;  //local scope to the activeTournament
     
     /**
      * Creates new form PlayersView
@@ -24,12 +25,14 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
     public PlayersView() {
         initComponents();
         // be notified when the upper level tournament changes
+        
     }
 
     public void setManager(TournamentManager manager)
     {
         this.manager = manager;
         this.manager.addObserver(this);
+        ((PlayerTableModel)tablePlayers.getModel()).setPlayers( localTournament.getPlayers() );
     }
     
     public TournamentManager getManager(){ return this.manager; }
@@ -50,23 +53,20 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        tablePlayers = new javax.swing.JTable();
+        addPlayerButton = new javax.swing.JButton();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        tablePlayers.setModel(new PlayerTableModel());
+        tablePlayers.setName(""); // NOI18N
+        tablePlayers.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tablePlayers);
+
+        addPlayerButton.setText("Add New Player");
+        addPlayerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPlayerButtonActionPerformed(evt);
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        jButton1.setText("jButton1");
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -75,24 +75,31 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
+                    .addComponent(addPlayerButton)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 665, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addContainerGap(86, Short.MAX_VALUE)
+                .addComponent(addPlayerButton)
+                .addGap(28, 28, 28)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addPlayerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPlayerButtonActionPerformed
+        // TODO add your handling code here:
+        // insert blank entry into table
+        
+    }//GEN-LAST:event_addPlayerButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton addPlayerButton;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tablePlayers;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -105,6 +112,8 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
     }
 
     public void updateView() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ((PlayerTableModel)tablePlayers.getModel()).fireTableDataChanged();
+        //update the modelView of the table
+        
     }
 }
