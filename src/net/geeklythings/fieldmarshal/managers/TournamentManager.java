@@ -8,7 +8,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.persistence.EntityManager;
 import net.geeklythings.fieldmarshal.entity.Tournament;
-import net.geeklythings.fieldmarshal.ui.LoadTournamentView;
+import net.geeklythings.fieldmarshal.ui.LoadView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -60,7 +60,7 @@ public class TournamentManager implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent pce) {
         logger.debug("PropertyChangeEvent: {}", pce);
         
-        if( pce.getPropertyName().matches(LoadTournamentView.LOAD_TOURNAMENT_ID))
+        if( pce.getPropertyName().matches(LoadView.LOAD_TOURNAMENT_ID))
         {
             long tournamentId = (long)pce.getNewValue();
             LoadTournament(tournamentId);

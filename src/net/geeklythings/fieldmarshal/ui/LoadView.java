@@ -28,12 +28,12 @@ import org.apache.logging.log4j.Logger;
  *
  * @author khooks
  */
-public class LoadTournamentView extends javax.swing.JPanel implements ListSelectionListener {
+public class LoadView extends javax.swing.JPanel implements ListSelectionListener {
 
     public static final String LOAD_TOURNAMENT_ID = "LoadTournamentId"; 
     private EntityManager em;         
-    private static final Logger logger = LogManager.getLogger(LoadTournamentView.class.getName());
-   
+    private static final Logger logger = LogManager.getLogger(LoadView.class.getName());
+    private List<Tournament> tournamentList;
     private long selectedTournamentId = 0L;
     
     public long getSelectedTournamentID() {
@@ -41,28 +41,36 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
     }
     
     /**
-     * Creates new form LoadTournamentView
+     * Creates new form LoadView
      */
-    public LoadTournamentView() {
+    public LoadView() {
         
         initComponents();
         //updateList();
+        //tournamentList = new ArrayList<>();
+        
+        tournamentJList.addListSelectionListener(this);
     }
     
 
-    private void updateList()
+    public void updateList()
     {
         // load the contents of the tournaments from the DB and display them in the list
 
         Query query = em.createQuery("SELECT t FROM Tournament t");
-        List<Tournament> tournamentList = query.getResultList();
+        tournamentList = query.getResultList();
         logger.debug(tournamentList.toString());
         DefaultListModel listModel;
         listModel = new DefaultListModel();
         
+        
+        String listString = null;
+        // Assumption:  index of tournamentList and the JList model are always equal
         if( tournamentList != null){
-            for(Tournament t: tournamentList ){
-                listModel.addElement(t.getId());
+            for(Tournament t: tournamentList ){            
+                listString = String.format("Id: %d, Location: %s, Organizer: %s, Date: %s", 
+                        t.getId(), t.getStore(), t.getOrganizer(), t.getTodaysDate());
+                listModel.addElement(listString);
             }
         }
         
@@ -76,16 +84,16 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
         logger.debug(lse.toString());
         if(!lse.getValueIsAdjusting())
         {
-/*
-            int row = tableTournament.getSelectedRow();          
-            int column = 0;
-            logger.debug("Row {}, Column {} selected", row, column);
-            Object o = tableTournament.getValueAt(row, column);          
-            Long id = Long.valueOf(o.toString());        
+
+            int row = tournamentJList.getSelectedIndex();
+            logger.debug("Selected row {}", row);
+                   
+            String tournamentString = (String)tournamentJList.getModel().getElementAt(row);
+            Long id = tournamentList.get(row).getId();
             selectedTournamentId = id;
             
-            logger.debug("Tournament selected, ID: {}", o.toString());
-         */
+            logger.debug("Tournament selected, ID: {}", id);
+         
             loadButton.setEnabled(true);
         }
        
@@ -103,7 +111,6 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
         loadButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tournamentJList = new javax.swing.JList();
-        jButton1 = new javax.swing.JButton();
 
         loadButton.setText("Load");
         loadButton.setEnabled(false);
@@ -113,6 +120,7 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
             }
         });
 
+        tournamentJList.setBorder(javax.swing.BorderFactory.createTitledBorder("Available Tournaments"));
         tournamentJList.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tournamentJList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -122,22 +130,13 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
         tournamentJList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(tournamentJList);
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -146,9 +145,7 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(loadButton)
-                    .addComponent(jButton1))
+                .addComponent(loadButton)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -159,13 +156,7 @@ public class LoadTournamentView extends javax.swing.JPanel implements ListSelect
         firePropertyChange(LOAD_TOURNAMENT_ID, 0L, selectedTournamentId);
     }//GEN-LAST:event_loadButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        updateList();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loadButton;
     private javax.swing.JList tournamentJList;
