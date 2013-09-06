@@ -6,9 +6,13 @@ package net.geeklythings.fieldmarshal.ui;
 
 import java.util.Observable;
 import java.util.Observer;
+import net.geeklythings.fieldmarshal.entity.Player;
 import net.geeklythings.fieldmarshal.entity.Tournament;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
+import net.geeklythings.fieldmarshal.model.Faction;
 import net.geeklythings.fieldmarshal.model.PlayerTableModel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -16,6 +20,7 @@ import net.geeklythings.fieldmarshal.model.PlayerTableModel;
  */
 public class PlayersView extends javax.swing.JPanel implements Observer {
 
+    static private final Logger logger = LogManager.getLogger("PlayersView");
     private TournamentManager manager;
     private Tournament localTournament;  //local scope to the activeTournament
     
@@ -32,7 +37,12 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
     {
         this.manager = manager;
         this.manager.addObserver(this);
-        ((PlayerTableModel)tablePlayers.getModel()).setPlayers( localTournament.getPlayers() );
+        localTournament = this.manager.getTournament();
+        if( localTournament != null)
+        {
+            PlayerTableModel model = (PlayerTableModel)tablePlayers.getModel();
+            ((PlayerTableModel)tablePlayers.getModel()).setPlayers( localTournament.getPlayers() );
+        }
     }
     
     public TournamentManager getManager(){ return this.manager; }
@@ -56,9 +66,9 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
         tablePlayers = new javax.swing.JTable();
         addPlayerButton = new javax.swing.JButton();
 
-        tablePlayers.setModel(new PlayerTableModel());
         tablePlayers.setName(""); // NOI18N
         tablePlayers.getTableHeader().setReorderingAllowed(false);
+        tablePlayers.setModel( new PlayerTableModel() );
         jScrollPane1.setViewportView(tablePlayers);
 
         addPlayerButton.setText("Add New Player");
@@ -93,7 +103,12 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
     private void addPlayerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPlayerButtonActionPerformed
         // TODO add your handling code here:
         // insert blank entry into table
-        
+        PlayerTableModel model = (PlayerTableModel)tablePlayers.getModel();
+        if( model != null)
+        {
+            logger.debug("Adding player");
+            model.getPlayers().add(new Player("Bibimus", "Cooper", Faction.LEGION));
+        }
     }//GEN-LAST:event_addPlayerButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

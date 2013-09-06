@@ -4,6 +4,7 @@
  */
 package net.geeklythings.fieldmarshal.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import net.geeklythings.fieldmarshal.entity.Player;
@@ -18,7 +19,14 @@ public class PlayerTableModel extends AbstractTableModel {
     
     public void setPlayers( List<Player> players)
     {
-        this.players = players;
+        if( players != null )
+        {
+            this.players = players;
+        }
+        else
+        {
+            this.players = new ArrayList<>();
+        }
     }
     
     public List<Player> getPlayers() { return this.players; }
@@ -26,6 +34,24 @@ public class PlayerTableModel extends AbstractTableModel {
     public PlayerTableModel()
     {
         super();
+    }
+    
+    @Override 
+    public String getColumnName(int index)
+    {
+        String value = "";
+        switch(index)
+        {
+            case 0: value = "First Name";
+                    break;
+            case 1: value = "Last Name";
+                    break;
+            case 2: value = "Faction";
+                    break;
+            default: value = "";
+                    break;
+        }
+        return value;
     }
     
     @Override
