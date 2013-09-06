@@ -2,6 +2,7 @@ package net.geeklythings.fieldmarshal.entity;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Access;
@@ -19,7 +20,7 @@ import javax.persistence.Transient;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name="ROUND")
-public class Round {
+public class Round implements Serializable {
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 

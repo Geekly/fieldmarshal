@@ -8,6 +8,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Observable;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import net.geeklythings.fieldmarshal.controller.TournamentJpaController;
 import net.geeklythings.fieldmarshal.entity.Tournament;
 import net.geeklythings.fieldmarshal.ui.LoadView;
 import net.geeklythings.fieldmarshal.ui.PlayersView;
@@ -23,13 +25,12 @@ public class TournamentManager extends Observable implements PropertyChangeListe
 
     private static final Logger logger = LogManager.getLogger(TournamentManager.class.getName());
     //public static final String LOAD_TOURNAMENT_ID = "LoadTournamentId";
-    private EntityManager em;   
-    //private FieldMarshal app;
+    private TournamentJpaController tournamentJpaController; 
     private Tournament tournament;
     
-    public TournamentManager(EntityManager em)
+    public TournamentManager( EntityManagerFactory emf )
     {
-        this.em = em;
+        tournamentJpaController = new TournamentJpaController( emf );
             
     }
     public Tournament getTournament()
@@ -50,7 +51,7 @@ public class TournamentManager extends Observable implements PropertyChangeListe
             {
                 logger.debug("Trying to load Tournament {}", tournamentId );
                 try {
-                    Tournament tournament = (Tournament) em.find(Tournament.class, tournamentId);
+                    Tournament tournament = (Tournament) tournamentJpaController.findTournament(tournamentId);
                     if (tournament != null)
                     {
                         logger.debug("TournamentManager: NotifyObservers: {}", tournament);
@@ -59,6 +60,7 @@ public class TournamentManager extends Observable implements PropertyChangeListe
                         //setChanged();
                         //notifyObservers(tournament);
                         this.tournament = tournament;
+                        
                         return tournament;
                     } 
                 } 
@@ -80,7 +82,18 @@ public class TournamentManager extends Observable implements PropertyChangeListe
         {
             long tournamentId = (long)pce.getNewValue();
             LoadTournament(tournamentId);
+            setChanged();
+            notifyObservers(tournament);
         }
+        else 
+        if (pce.getPropertyName().matches(LoadView.NEW_TOURNAMENT_ID))
+        {   
+            tournament = new Tournament();
+            tournamentJpaController.create(tournament);
+            setChanged();
+            notifyObservers(tournament);
+        }
+        
         
     }
 

@@ -2,11 +2,6 @@
 
 <Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.persistence.EntityManager" name="_em">
-      <Properties>
-        <Property name="persistenceUnit" type="java.lang.String" value="FieldMarshalPU2"/>
-      </Properties>
-    </Component>
     <Component class="net.geeklythings.fieldmarshal.util.DateConverter" name="dateConverter">
     </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
@@ -83,6 +78,9 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
         <Component class="net.geeklythings.fieldmarshal.ui.LoadView" name="loadTournamentView">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new net.geeklythings.fieldmarshal.ui.LoadView(tournamentJpaController)"/>
+          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Load Tournament">

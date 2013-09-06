@@ -25,6 +25,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,6 +41,8 @@ import net.geeklythings.fieldmarshal.model.PlayerStatus;
 @Access(AccessType.FIELD)
 @Table(name="TOURNAMENT")
 public class Tournament extends Observable implements Serializable {
+    
+    
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 

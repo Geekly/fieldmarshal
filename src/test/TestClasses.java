@@ -8,6 +8,9 @@ import com.google.gson.Gson;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import net.geeklythings.fieldmarshal.controller.PlayerJpaController;
+import net.geeklythings.fieldmarshal.controller.TournamentJpaController;
+import net.geeklythings.fieldmarshal.controller.exceptions.NonexistentEntityException;
 import net.geeklythings.fieldmarshal.entity.EventFormat;
 import net.geeklythings.fieldmarshal.model.Faction;
 import net.geeklythings.fieldmarshal.entity.MatchPairing;
@@ -30,19 +33,20 @@ import org.apache.logging.log4j.Logger;
 public class TestClasses {
 
     static final public Logger logger = LogManager.getLogger(TestClasses.class.getName());
-    static EntityManager em;
+    static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
+   
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
                 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
-        em = emf.createEntityManager();        
+        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
+        try {       
                // TODO code application logic here
         TestClasses test = new TestClasses();
         //test.TestPlayer();
         test.TestTournament();
-               
+        } catch (Exception e) {}  
         //test.TestPairings();
         //Player pl2 = new Player("Steve", "Adore");
         //Player et2 = new Player(pl2, Faction.RETRIBUTION);
@@ -54,46 +58,63 @@ public class TestClasses {
     
     public void TestPlayer()
     {
+        PlayerJpaController jpc = new PlayerJpaController(TestClasses.emf);
+        TournamentJpaController tpc = new TournamentJpaController(TestClasses.emf);
+        
         Player pl1 = new Player("Rufus", "McGillicutty", Faction.CIRCLE);
         pl1.setEmail("rufus@warmachine.com");
         pl1.setHomeTown("Dallas");
+        
+        jpc.create(pl1);
         //Person et1 = new Person(pl1, Faction.CRYX);
         Player pl2 = new Player();
         
         pl2.setFaction(Faction.CRYX);
-        persist(pl2);
+        jpc.create(pl2);
         System.out.println(pl1.toString());
         System.out.println(pl2.toString());
     }
     
-    public void TestTournament()
+    public void TestTournament() throws NonexistentEntityException, Exception
     {
+        PlayerJpaController jpc = new PlayerJpaController(TestClasses.emf);
+        TournamentJpaController tpc = new TournamentJpaController(TestClasses.emf);
+        
         Player pl1 = new Player("Rufus", "McGillicutty", Faction.CIRCLE);
         pl1.setEmail("rufus@warmachine.com");
         pl1.setHomeTown("Dallas");
+        jpc.create(pl1);
                 
         Player pl2 = new Player("Hank", "Haliburton", Faction.CONVERGENCE);
         pl2.setEmail("hank@warmachine.com");
         pl2.setHomeTown("Toledo");
-                  
+        jpc.create(pl2);
+        
         Tournament tournament = Tournament.createTournament(3);
         //TournamentManager tm = new TournamentManager(em);
-        PlayerManager pm = new PlayerManager(em);
+        //PlayerManager pm = new PlayerManager(em);
         
-        pm.AddPlayer(pl1, tournament);
-        pm.AddPlayer(pl2, tournament);
+        tournament.addPlayer(pl2);
+        tournament.addPlayer(pl1);
+       
+        tpc.create(tournament);
         
         logger.debug("Active Players: {}", tournament.getActivePlayers());
         tournament.dropPlayer(pl1);
         pl2.setActiveStatus(PlayerStatus.INACTIVE);
         logger.debug("Active Players: {}", tournament.getActivePlayers());
         
-        persist(tournament);
+        tpc.create(tournament);
+        tpc.edit(tournament);
         //logger.debug(tournament.toString());
     }
     
     public void TestPairings()
     {
+        
+        PlayerJpaController jpc = new PlayerJpaController(TestClasses.emf);
+        TournamentJpaController tpc = new TournamentJpaController(TestClasses.emf);
+        
         Player pl1 = new Player("Rufus", "McGillicutty", Faction.CIRCLE);   
                 
         Player pl2 = new Player("Hank", "Haliburton", Faction.CYGNAR);
@@ -102,11 +123,10 @@ public class TestClasses {
         
         Player pl4 = new Player("Stan", "The Man", Faction.MERCS);
         
-        
-        persist(pl1);
-        persist(pl2);       
-        persist(pl3);
-        persist(pl4);
+        jpc.create(pl1);
+        jpc.create(pl2);
+        jpc.create(pl3);
+        jpc.create(pl4);
         
         MatchPairing pairing1 = new MatchPairing();
         pairing1.addPlayer(pl1);
@@ -117,8 +137,8 @@ public class TestClasses {
         pairing2.addPlayer(pl4);
         //pairing.addPlayer(e3);
         
-        persist(pairing1);
-        persist(pairing2);
+        //persist(pairing1);
+        //persist(pairing2);
         
         System.out.println(pairing1);
         System.out.println(pairing2);
@@ -137,8 +157,8 @@ public class TestClasses {
         PlayerResult pr = new PlayerResult();
         
         
-        persist(pl1);
-        persist(pl2);
+        //persist(pl1);
+        //persist(pl2);
         pr.setPlayer(pl1);
         pr.setOpponent(pl2);
         pr.setResult(ResultType.WIN);  
@@ -180,21 +200,6 @@ public class TestClasses {
         System.out.println(gson.toJson(ef2));
 
 
-    }
-
-    public void persist(Object object) {
-
-        //em.open();
-        em.getTransaction().begin();
-        try {
-            em.persist(object);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        } finally {
-            //em.close();
-        }
     }
 
 

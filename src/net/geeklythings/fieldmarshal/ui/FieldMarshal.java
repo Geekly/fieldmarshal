@@ -5,6 +5,8 @@
 package net.geeklythings.fieldmarshal.ui;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import net.geeklythings.fieldmarshal.controller.TournamentJpaController;
 import net.geeklythings.fieldmarshal.entity.Tournament;
 import net.geeklythings.fieldmarshal.managers.PlayerManager;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
@@ -17,9 +19,8 @@ import net.geeklythings.fieldmarshal.managers.TournamentManager;
 public class FieldMarshal extends javax.swing.JFrame {
     
     static final String TOURNAMENT_PROP = "Active Tournament";
-    
-    //TournamentHolder activeTournament = new TournamentHolder();
-    //Tournament activeTournament = Tournament.createTournament(0);
+    private EntityManagerFactory _emf;
+    TournamentJpaController tournamentJpaController;
     TournamentManager tournamentManager; // = new TournamentManager(this);
     PlayerManager playerManager;
     
@@ -27,11 +28,15 @@ public class FieldMarshal extends javax.swing.JFrame {
      * Creates new form MainJFrame
      */
     public FieldMarshal() {
-        initComponents();
-        tournamentManager = new TournamentManager(_em);
-        playerManager = new PlayerManager(_em);
         
-        loadTournamentView.setEntityManager(_em);
+        _emf = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2");
+        tournamentJpaController = new TournamentJpaController(_emf);
+        
+        initComponents();
+        tournamentManager = new TournamentManager( _emf );
+        playerManager = new PlayerManager( _emf );
+        
+        //loadTournamentView.setEntityManager(_em);
         loadTournamentView.addPropertyChangeListener(tournamentManager);
         loadTournamentView.updateList();
         
@@ -46,9 +51,6 @@ public class FieldMarshal extends javax.swing.JFrame {
         //playersView.setEntityManager(_em);
     }
 
-    public EntityManager getEntityManager() {
-        return _em;
-    }
     
     public Tournament getActiveTournament()
     {
@@ -71,10 +73,9 @@ public class FieldMarshal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        _em = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2").createEntityManager();
         dateConverter = new net.geeklythings.fieldmarshal.util.DateConverter();
         jTabbedPane = new javax.swing.JTabbedPane();
-        loadTournamentView = new net.geeklythings.fieldmarshal.ui.LoadView();
+        loadTournamentView = new net.geeklythings.fieldmarshal.ui.LoadView(tournamentJpaController);
         tournamentView = new net.geeklythings.fieldmarshal.ui.TournamentView();
         playersView = new net.geeklythings.fieldmarshal.ui.PlayersView();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -136,8 +137,8 @@ public class FieldMarshal extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-        if (this._em != null) {
-            _em.close();
+        if (this._emf != null) {
+            _emf.close();
         }
 
     }//GEN-LAST:event_formWindowClosing
@@ -180,6 +181,7 @@ public class FieldMarshal extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new FieldMarshal().setVisible(true);
             }
@@ -188,7 +190,6 @@ public class FieldMarshal extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.persistence.EntityManager _em;
     private net.geeklythings.fieldmarshal.util.DateConverter dateConverter;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
