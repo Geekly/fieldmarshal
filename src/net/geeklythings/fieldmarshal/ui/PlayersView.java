@@ -4,13 +4,15 @@
  */
 package net.geeklythings.fieldmarshal.ui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.table.AbstractTableModel;
 import net.geeklythings.fieldmarshal.entity.Player;
 import net.geeklythings.fieldmarshal.entity.Tournament;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
 import net.geeklythings.fieldmarshal.model.Faction;
-import net.geeklythings.fieldmarshal.model.PlayerTableModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,6 +24,7 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
 
     static private final Logger logger = LogManager.getLogger("PlayersView");
     private TournamentManager manager;
+    private ArrayList<Player> players;
     private Tournament localTournament;  //local scope to the activeTournament
     
     /**
@@ -41,7 +44,7 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
         if( localTournament != null)
         {
             PlayerTableModel model = (PlayerTableModel)tablePlayers.getModel();
-            ((PlayerTableModel)tablePlayers.getModel()).setPlayers( localTournament.getPlayers() );
+            //((PlayerTableModel)tablePlayers.getModel()).setPlayers( localTournament.getPlayers() );
         }
     }
     
@@ -107,7 +110,7 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
         if( model != null)
         {
             logger.debug("Adding player");
-            model.getPlayers().add(new Player("Bibimus", "Cooper", Faction.LEGION));
+            players.add(new Player("Bibimus", "Cooper", Faction.LEGION));
         }
     }//GEN-LAST:event_addPlayerButtonActionPerformed
 
@@ -116,6 +119,7 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablePlayers;
     // End of variables declaration//GEN-END:variables
+
 
     @Override
     public void update(Observable manager, Object o) {
@@ -131,4 +135,68 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
         //update the modelView of the table
         
     }
+    
+    
+    private class PlayerTableModel extends AbstractTableModel 
+    {
+
+        public PlayerTableModel()
+        {
+            super();
+        }
+
+        @Override 
+        public String getColumnName(int index)
+        {
+            String value = "";
+            switch(index)
+            {
+                case 0: value = "First Name";
+                        break;
+                case 1: value = "Last Name";
+                        break;
+                case 2: value = "Faction";
+                        break;
+                default: value = "";
+                        break;
+            }
+            return value;
+        }
+
+        @Override
+        public int getRowCount() {
+            if( players != null)
+            {
+                return players.size();
+            }
+            return 0;
+        }
+
+        @Override
+        public int getColumnCount() {
+            return 3;
+        }
+
+        @Override
+        public Object getValueAt(int i, int j) {
+
+            Player player = players.get(i);
+            String value = "";
+            switch(j)
+            {
+                case 0: value = player.getFirstName();
+                        break;
+                case 1: value = player.getLastName();
+                        break;
+                case 2: value = player.getFaction().getName();
+                        break;
+                default: value = "";
+                        break;
+            }
+            return value;
+        }
+
+    }
+
+    
 }
