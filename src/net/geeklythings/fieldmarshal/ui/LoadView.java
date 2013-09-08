@@ -11,16 +11,13 @@ package net.geeklythings.fieldmarshal.ui;
 //import java.util.logging.Logger;
 
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import net.geeklythings.fieldmarshal.controller.TournamentJpaController;
 import net.geeklythings.fieldmarshal.entity.Tournament;
-import net.geeklythings.fieldmarshal.managers.TournamentManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -144,6 +141,11 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
             public Object getElementAt(int i) { return strings[i]; }
         });
         tournamentJList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tournamentJList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tournamentJListMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tournamentJList);
 
         newTournamentButton.setText("New Tournament");
@@ -189,6 +191,22 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
         firePropertyChange(NEW_TOURNAMENT_ID, 0L, 1L);
         nextPane();
     }//GEN-LAST:event_newTournamentButtonActionPerformed
+
+    private void tournamentJListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tournamentJListMouseClicked
+        // TODO add your handling code here:
+
+      if (evt.getClickCount() == 2) {
+         JList target = (JList)evt.getSource();
+         int row = target.getSelectedIndex();
+         Long id = tournamentList.get(row).getId();
+         selectedTournamentId = id;
+         firePropertyChange(LOAD_TOURNAMENT_ID, 0L, selectedTournamentId);
+         nextPane();
+         // do some action
+       }
+   
+    
+    }//GEN-LAST:event_tournamentJListMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane2;

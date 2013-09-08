@@ -4,7 +4,6 @@
  */
 package net.geeklythings.fieldmarshal.ui;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import net.geeklythings.fieldmarshal.controller.TournamentJpaController;
 import net.geeklythings.fieldmarshal.entity.Tournament;
@@ -45,6 +44,10 @@ public class FieldMarshal extends javax.swing.JFrame {
         
         tournamentView.setManager(tournamentManager);
         playersView.setManager(tournamentManager);
+        
+        tournamentManager.addObserver(playersView);
+        tournamentManager.addObserver(tournamentView);
+        
         
         tournamentView.updateView();
         playersView.updateView();

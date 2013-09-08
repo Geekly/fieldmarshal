@@ -31,6 +31,7 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
      */
     public PlayersView() {
         initComponents();
+        players = new ArrayList<>();
         // be notified when the upper level tournament changes
         
     }
@@ -110,6 +111,7 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
         {
             logger.debug("Adding player");
             players.add(new Player("Bibimus", "Cooper", Faction.LEGION));
+            model.fireTableDataChanged();
         }
     }//GEN-LAST:event_addPlayerButtonActionPerformed
 

@@ -45,7 +45,11 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
     
     public void updateView()
     {
-    
+        if( localTournament != null)
+        { 
+            txtLocation.setText(localTournament.getStore());
+            txtOrganizer.setText(localTournament.getOrganizer());
+       }
     }
     
     /**

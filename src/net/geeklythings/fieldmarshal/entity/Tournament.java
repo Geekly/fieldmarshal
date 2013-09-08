@@ -76,6 +76,7 @@ public class Tournament extends Observable implements Serializable {
     //private List<Player> activePlayers = new ArrayList<>();  //for tracking dropped players
     
     public Tournament() {
+        
         //todaysDate = new Date();    
         //startTime = todaysDate;
         //format = new EventFormat();
