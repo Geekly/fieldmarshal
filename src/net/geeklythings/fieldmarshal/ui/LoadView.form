@@ -19,9 +19,11 @@
           <Component id="jScrollPane2" alignment="1" pref="743" max="32767" attributes="0"/>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="loadButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="newTournamentButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="loadButton" min="-2" max="-2" attributes="0"/>
+              <Component id="updateTournamentListButton" min="-2" pref="104" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -34,6 +36,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="loadButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="newTournamentButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="updateTournamentListButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -87,6 +90,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newTournamentButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="updateTournamentListButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Update List"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateTournamentListButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

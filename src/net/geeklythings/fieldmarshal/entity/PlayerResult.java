@@ -15,7 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import net.geeklythings.fieldmarshal.model.ResultType;
+import net.geeklythings.fieldmarshal.type.ResultType;
 
 @Entity
 @Access(AccessType.FIELD)
@@ -155,7 +155,7 @@ public class PlayerResult {
      */
     public void setResult(ResultType resultType) {
         //TODO: would be nice to check against the opponent's result as well
-        net.geeklythings.fieldmarshal.model.ResultType oldResult = this.resultType;
+        net.geeklythings.fieldmarshal.type.ResultType oldResult = this.resultType;
         this.resultType = resultType;
         propertyChangeSupport.firePropertyChange(PROP_RESULT, oldResult, resultType);
     }

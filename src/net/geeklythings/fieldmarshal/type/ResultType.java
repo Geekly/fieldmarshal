@@ -1,4 +1,4 @@
-package net.geeklythings.fieldmarshal.model;
+package net.geeklythings.fieldmarshal.type;
 
 public enum ResultType {
 	WIN,

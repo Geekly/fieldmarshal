@@ -53,19 +53,6 @@ public class FieldMarshal extends javax.swing.JFrame {
         playersView.updateView();
         //playersView.setEntityManager(_em);
     }
-
-    
-    public Tournament getActiveTournament()
-    {
-        return tournamentManager.getTournament();
-    }
-    
-    public void setActiveTournament(Tournament tournament)
-    {
-        Tournament oldTournament = tournamentManager.getTournament();
-        tournamentManager.setTournament(tournament);
-        firePropertyChange(FieldMarshal.TOURNAMENT_PROP, oldTournament, tournament);
-    }
     
     /**
      * This method is called from within the constructor to initialize the form.

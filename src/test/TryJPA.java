@@ -5,7 +5,7 @@
 package test;
 
 import net.geeklythings.fieldmarshal.entity.Player;
-import net.geeklythings.fieldmarshal.model.Faction;
+import net.geeklythings.fieldmarshal.type.Faction;
 import net.geeklythings.fieldmarshal.entity.Tournament;
 
 import java.util.Date;

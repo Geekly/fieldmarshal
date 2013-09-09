@@ -124,6 +124,7 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
         jScrollPane2 = new javax.swing.JScrollPane();
         tournamentJList = new javax.swing.JList();
         newTournamentButton = new javax.swing.JButton();
+        updateTournamentListButton = new javax.swing.JButton();
 
         loadButton.setText("Load Existing");
         loadButton.setEnabled(false);
@@ -155,6 +156,13 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
             }
         });
 
+        updateTournamentListButton.setText("Update List");
+        updateTournamentListButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateTournamentListButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -162,9 +170,11 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(loadButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newTournamentButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(loadButton)
+                .addComponent(updateTournamentListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -174,7 +184,8 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loadButton)
-                    .addComponent(newTournamentButton))
+                    .addComponent(newTournamentButton)
+                    .addComponent(updateTournamentListButton))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -208,11 +219,17 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
     
     }//GEN-LAST:event_tournamentJListMouseClicked
 
+    private void updateTournamentListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateTournamentListButtonActionPerformed
+        // TODO add your handling code here:
+        updateList();
+    }//GEN-LAST:event_updateTournamentListButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loadButton;
     private javax.swing.JButton newTournamentButton;
     private javax.swing.JList tournamentJList;
+    private javax.swing.JButton updateTournamentListButton;
     // End of variables declaration//GEN-END:variables
 
 

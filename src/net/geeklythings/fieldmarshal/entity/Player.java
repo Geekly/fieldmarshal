@@ -18,7 +18,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import net.geeklythings.fieldmarshal.model.PlayerStatus;
-import net.geeklythings.fieldmarshal.model.Faction;
+import net.geeklythings.fieldmarshal.type.Faction;
 
 @Entity
 @Access(AccessType.FIELD)

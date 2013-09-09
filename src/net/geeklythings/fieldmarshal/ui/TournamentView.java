@@ -8,8 +8,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.DefaultComboBoxModel;
 import net.geeklythings.fieldmarshal.entity.Tournament;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
+import net.geeklythings.fieldmarshal.type.FormatType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,6 +30,7 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
      */
     public TournamentView() {
         initComponents();
+        cbFormat.setModel( new DefaultComboBoxModel( FormatType.enumsToStringArray() ));
     }
 
     public void setManager(TournamentManager manager)
@@ -100,10 +103,19 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
 
         cbClock.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cbClock.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Death Clock", "Timed Turns" }));
+        cbClock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbClockActionPerformed(evt);
+            }
+        });
 
         cbFormat.setEditable(true);
         cbFormat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cbFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Steamroller", "Mangled Metal", "Hardcore", "Iron Gauntlet", "Release Event", " " }));
+        cbFormat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbFormatActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Location:");
@@ -209,6 +221,15 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
         //this can be complicated... need to check how many rounds exist, then possibly prune or add to them.  Editing should
         //probably be disabled once the tournament has Started
     }//GEN-LAST:event_cbRoundsActionPerformed
+
+    private void cbFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFormatActionPerformed
+        // TODO add your handling code here:
+        String format = cbFormat.getSelectedItem().toString();
+    }//GEN-LAST:event_cbFormatActionPerformed
+
+    private void cbClockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbClockActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbClockActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbClock;

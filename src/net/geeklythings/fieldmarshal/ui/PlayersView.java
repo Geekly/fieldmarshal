@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
 import net.geeklythings.fieldmarshal.entity.Player;
 import net.geeklythings.fieldmarshal.entity.Tournament;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
-import net.geeklythings.fieldmarshal.model.Faction;
+import net.geeklythings.fieldmarshal.type.Faction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -68,6 +68,8 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablePlayers = new javax.swing.JTable();
         addPlayerButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        tournamentIdLabel = new javax.swing.JLabel();
 
         tablePlayers.setName(""); // NOI18N
         tablePlayers.getTableHeader().setReorderingAllowed(false);
@@ -81,6 +83,10 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
             }
         });
 
+        jLabel1.setText("Tournament ID:");
+
+        tournamentIdLabel.setText("ID#");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,12 +96,22 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(addPlayerButton)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 665, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tournamentIdLabel)
+                .addGap(105, 105, 105))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(86, Short.MAX_VALUE)
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(tournamentIdLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(addPlayerButton)
                 .addGap(28, 28, 28)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -117,8 +133,10 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addPlayerButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablePlayers;
+    private javax.swing.JLabel tournamentIdLabel;
     // End of variables declaration//GEN-END:variables
 
 
@@ -127,6 +145,7 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
         if( (manager instanceof TournamentManager) && (o instanceof Tournament) )
         {
             localTournament = ((TournamentManager)manager).getTournament();
+            tournamentIdLabel.setText( String.valueOf( localTournament.getId() ));
             updateView();
         }
     }
