@@ -30,7 +30,7 @@ import org.apache.logging.log4j.Logger;
 public class TestClasses {
 
     static final public Logger logger = LogManager.getLogger(TestClasses.class.getName());
-    static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
+    static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalMySqlPU");
    
     /**
      * @param args the command line arguments

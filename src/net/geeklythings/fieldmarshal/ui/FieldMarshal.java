@@ -28,7 +28,7 @@ public class FieldMarshal extends javax.swing.JFrame {
      */
     public FieldMarshal() {
         
-        _emf = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalPU2");
+        _emf = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalMySqlPU");
         tournamentJpaController = new TournamentJpaController(_emf);
         
         initComponents();
