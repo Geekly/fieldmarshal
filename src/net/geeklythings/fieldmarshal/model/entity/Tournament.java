@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.geeklythings.fieldmarshal.entity;
+package net.geeklythings.fieldmarshal.model.entity;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
@@ -30,6 +31,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
 import net.geeklythings.fieldmarshal.model.PlayerStatus;
 
 
@@ -40,12 +42,15 @@ import net.geeklythings.fieldmarshal.model.PlayerStatus;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name="TOURNAMENT")
-public class Tournament extends Observable implements Serializable {
+public class Tournament extends Observable implements Serializable, PropertyChangeListener {
     
     
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
+    @Transient
+    private TournamentJpaController jpaController;
+    
     private static final long serialVersionUID = 1L;
        
     @Temporal(TemporalType.TIMESTAMP)
@@ -60,7 +65,7 @@ public class Tournament extends Observable implements Serializable {
     
     @JoinColumn(name="ID_EVENTFORMAT")
     @OneToOne(cascade={CascadeType.PERSIST})
-    private EventFormat format = new EventFormat();
+    private EventFormat format;// = new EventFormat();
       
     @OneToMany(cascade={CascadeType.MERGE})
     private List<Player> players = new ArrayList<>();
@@ -77,6 +82,8 @@ public class Tournament extends Observable implements Serializable {
     
     public Tournament() {
         
+        format = new EventFormat();
+        format.addPropertyChangeListener(this);
         //todaysDate = new Date();    
         //startTime = todaysDate;
         //format = new EventFormat();
@@ -243,7 +250,7 @@ public class Tournament extends Observable implements Serializable {
     public void addPlayer(Player player) {
         //List<Player> oldPlayers = new ArrayList<>( this.getPlayers() );
         players.add(player);
-        
+        player.addPropertyChangeListener(this);        
         changeSupport.firePropertyChange("players", null, this.getPlayers());
     }
 
@@ -257,6 +264,7 @@ public class Tournament extends Observable implements Serializable {
         List<Round> oldRounds = this.rounds;
         this.rounds = new ArrayList<>(this.rounds);
         Round newRound = new Round();
+        jpaController.create(this);
         persist(newRound);
         rounds.add( newRound );
         changeSupport.firePropertyChange("rounds", oldRounds, rounds);
@@ -296,23 +304,12 @@ public class Tournament extends Observable implements Serializable {
         getFormat().setFormatType(master.getFormat().getFormatType());
 
     }
-    
-    
+       
     public void dropPlayer(Player dropped)
     {
         //keep the player in the tournament, but eliminate from pairings
         dropped.setActiveStatus(PlayerStatus.INACTIVE);
     }
-    
-   /* @Override
-    public Tournament clone()
-    // Returns a copy of itself
-    {
-        Tournament clone = new Tournament(this);
-        EventFormat newFormat = new EventFormat(this.format);
-        clone.setFormat(newFormat);
-        return clone;
-    }*/
     
     @Override
     public int hashCode() {
@@ -339,7 +336,10 @@ public class Tournament extends Observable implements Serializable {
         return "Tournament{" + "changeSupport=" + changeSupport + ", todaysDate=" + todaysDate + ", store=" + store + ", organizer=" + organizer + ", numRounds=" + numRounds + ", format=" + format + ", players=" + players + ", rounds=" + rounds + ", currentRound=" + currentRound + ", id=" + id + '}';
     }
 
-
+    @Override
+    public void propertyChange(PropertyChangeEvent pce) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
@@ -349,18 +349,7 @@ public class Tournament extends Observable implements Serializable {
         changeSupport.removePropertyChangeListener(listener);
     }
 
-    public void persist(Object object) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        try {
-            em.persist(object);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        } finally {
-            em.close();
-        }
+    public void setJpaController(TournamentJpaController tournamentJpaController) {       
+        jpaController = tournamentJpaController;
     }
 }

@@ -4,9 +4,9 @@
  */
 package test;
 
-import net.geeklythings.fieldmarshal.entity.Player;
+import net.geeklythings.fieldmarshal.model.entity.Player;
 import net.geeklythings.fieldmarshal.type.Faction;
-import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.model.entity.Tournament;
 
 import java.util.Date;
 import javax.persistence.EntityManager;

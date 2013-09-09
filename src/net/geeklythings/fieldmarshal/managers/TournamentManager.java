@@ -6,11 +6,12 @@ package net.geeklythings.fieldmarshal.managers;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Observable;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import net.geeklythings.fieldmarshal.controller.TournamentJpaController;
-import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
+import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import net.geeklythings.fieldmarshal.ui.LoadView;
 import net.geeklythings.fieldmarshal.ui.PlayersView;
 import org.apache.logging.log4j.LogManager;
@@ -21,9 +22,11 @@ import org.apache.logging.log4j.Logger;
  * also notifies observers to changes.
  * @author khooks
  */
-public class TournamentManager extends Observable implements PropertyChangeListener {
+public class TournamentManager implements PropertyChangeListener {
 
     private static final Logger logger = LogManager.getLogger(TournamentManager.class.getName());
+    private final PropertyChangeSupport propertyChangeSupport = new java.beans.PropertyChangeSupport(this);
+    
     //public static final String LOAD_TOURNAMENT_ID = "LoadTournamentId";
     private TournamentJpaController tournamentJpaController; 
     private Tournament tournament;
@@ -40,9 +43,17 @@ public class TournamentManager extends Observable implements PropertyChangeListe
     
     public void setTournament(Tournament t)
     {
+        
+        if( this.tournament != null )
+        {
+            this.tournament.removePropertyChangeListener(this);
+        }
+        
         this.tournament = t;
-        setChanged();
-        notifyObservers(tournament);     
+        this.tournament.setJpaController( tournamentJpaController );
+        this.tournament.addPropertyChangeListener(this);
+        propertyChangeSupport.firePropertyChange("setTournament", null, this.tournament);
+        
     }
     
     public Tournament LoadTournament(long tournamentId)
@@ -56,7 +67,7 @@ public class TournamentManager extends Observable implements PropertyChangeListe
                     {
                         logger.debug("TournamentManager: NotifyObservers: {}", tournament);
                         //app.setActiveTournament(tournament);
-                        //firePropertyChange("activeTournament", null, tournament);
+                        propertyChangeSupport.firePropertyChange("activeTournament", null, tournament);
                         //setChanged();
                         //notifyObservers(tournament);
                         this.tournament = tournament;
@@ -82,21 +93,26 @@ public class TournamentManager extends Observable implements PropertyChangeListe
         {
             long tournamentId = (long)pce.getNewValue();
             LoadTournament(tournamentId);
-            setChanged();
-            notifyObservers(tournament);
+            propertyChangeSupport.firePropertyChange( "loadTournament", null, tournament);
         }
         else 
         if (pce.getPropertyName().matches(LoadView.NEW_TOURNAMENT_ID))
         {   
             tournament = new Tournament();
             tournamentJpaController.create(tournament);
-            setChanged();
-            notifyObservers(tournament);
-        }
-        
+            propertyChangeSupport.firePropertyChange( "newTournament", null, tournament);
+
+        }        
         
     }
 
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
+    }
 
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(listener);
+    }
+    
     
 }

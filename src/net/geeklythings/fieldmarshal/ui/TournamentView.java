@@ -4,14 +4,20 @@
  */
 package net.geeklythings.fieldmarshal.ui;
 
+import java.awt.Component;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.DefaultComboBoxModel;
-import net.geeklythings.fieldmarshal.entity.Tournament;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
-import net.geeklythings.fieldmarshal.type.FormatType;
+import net.geeklythings.fieldmarshal.type.EventFormatType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,19 +30,26 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
     private static final Logger logger = LogManager.getLogger(TournamentView.class.getName());
     private TournamentManager manager;
     private Tournament localTournament;
+    //private final Object[] EventFormatType;
     
     /**
      * Creates new form TournamentView
      */
     public TournamentView() {
         initComponents();
-        cbFormat.setModel( new DefaultComboBoxModel( FormatType.enumsToStringArray() ));
+
+        this.setEnabled(false);
+ 
+        cbFormat.setModel( new DefaultComboBoxModel( EventFormatType.values() ));
+        cbFormat.setRenderer( new FormatListRenderer() );
     }
 
     public void setManager(TournamentManager manager)
     {
         this.manager = manager;
+        this.localTournament = manager.getTournament();
         this.manager.addObserver(this);
+        
     }
     
     public TournamentManager getManager(){ return this.manager; }
@@ -94,6 +107,11 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
         jLabel1.setText("Number of Rounds:");
 
         txtOrganizer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtOrganizer.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtOrganizerKeyPressed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Organizer:");
@@ -224,12 +242,32 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
 
     private void cbFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFormatActionPerformed
         // TODO add your handling code here:
-        String format = cbFormat.getSelectedItem().toString();
+        Tournament t = manager.getTournament();
+        if( localTournament != null )
+        {
+            String format = cbFormat.getSelectedItem().toString();
+            logger.debug("TournamentView: FormatComboBox selected: {}", format);
+            logger.debug("Selected Item {}", cbFormat.getSelectedItem());
+            t.getFormat().setFormatType(format);
+            manager.notifyObservers();
+        }
     }//GEN-LAST:event_cbFormatActionPerformed
 
     private void cbClockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbClockActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_cbClockActionPerformed
+
+    private void txtOrganizerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtOrganizerKeyPressed
+        // TODO add your handling code here:
+        if( evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            Tournament t = manager.getTournament();
+            t.setOrganizer( txtOrganizer.getText());
+            
+            manager.notifyObservers();
+        }
+    }//GEN-LAST:event_txtOrganizerKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbClock;
@@ -262,6 +300,24 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
             logger.debug("TournamentView: update: {}", o);
             localTournament = (Tournament)o;
             updateView();
+        }
+        
+    }
+    
+    class FormatListRenderer extends DefaultListCellRenderer
+    {
+
+        @Override
+        public Component getListCellRendererComponent(JList<?> jlist, Object o, int i, boolean bln, boolean bln1) {
+            //return super.getListCellRendererComponent(jlist, o, i, bln, bln1); //To change body of generated methods, choose Tools | Templates.
+        
+            logger.debug("getListCellRendererComponent: {}", o);
+            if( o instanceof EventFormatType )
+            {
+                setText( ((EventFormatType)o).getName() );
+            }
+            
+            return this;
         }
         
     }

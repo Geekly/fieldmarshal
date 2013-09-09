@@ -1,4 +1,4 @@
-package net.geeklythings.fieldmarshal.entity;
+package net.geeklythings.fieldmarshal.model.entity;
 
 import java.beans.PropertyChangeSupport;
 import javax.persistence.Access;
@@ -118,7 +118,7 @@ public class PlayerResult {
             }
             else
             {
-                net.geeklythings.fieldmarshal.entity.Player oldOpponent = this.opponent;
+                net.geeklythings.fieldmarshal.model.entity.Player oldOpponent = this.opponent;
                 this.opponent = player;
                 propertyChangeSupport.firePropertyChange(PROP_OPPONENT, oldOpponent, player);
             }

@@ -2,8 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.geeklythings.fieldmarshal.entity;
+package net.geeklythings.fieldmarshal.model.entity;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -14,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -40,6 +44,9 @@ public class EventFormat implements Serializable {
 @GeneratedValue(strategy = GenerationType.AUTO)
 @Column(name="ID")
     private Long id;
+
+    @Transient
+    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     public EventFormat()
     {
@@ -71,7 +78,9 @@ public class EventFormat implements Serializable {
     }
 
     public void setId(Long id) {
+        Long oldId = this.id;
         this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
     }
     
 
@@ -82,21 +91,15 @@ public class EventFormat implements Serializable {
         return this.formatDescription;
     }
  
-    /*public int getNumRounds() {
-        return numRounds;
-    }
-
-    public void setNumRounds(int numRounds) {
-        this.numRounds = numRounds;
-    }
-    */
      
     public String getFormatType() {
         return this.formatType;
     }
 
     public void setFormatType(String formatType) {
-        this.formatType = formatType;
+        String oldValue = this.formatType;
+        this.formatType = formatType;      
+        changeSupport.firePropertyChange("formatType", oldValue, formatType);
     }
 
     public String getClockType() {
@@ -104,7 +107,9 @@ public class EventFormat implements Serializable {
     }
 
     public void setClockType(String clockType) {
+        String oldValue = this.clockType;
         this.clockType = clockType;
+        changeSupport.firePropertyChange("clockType", oldValue, clockType);
     }
 
     public int getClockTime() {
@@ -112,7 +117,9 @@ public class EventFormat implements Serializable {
     }
 
     public void setClockTime(int turnLength) {
+        int oldValue = this.clockTime;
         this.clockTime = turnLength;
+        changeSupport.firePropertyChange("clockTime", oldValue, clockTime);
     }
 
     public int getDeathClockTime() {
@@ -120,7 +127,9 @@ public class EventFormat implements Serializable {
     }
 
     public void setDeathClockTime(int deathClockTime) {
+        int oldValue = this.clockTime;
         this.clockTime = deathClockTime;
+        changeSupport.firePropertyChange("clockTime", oldValue, clockTime);
     }
     
     @Override
@@ -146,6 +155,14 @@ public class EventFormat implements Serializable {
     @Override
     public String toString() {
         return "net.geeklythings.fieldmarshal.data.EventFormat[ id=" + id + " ]";
+    }
+    
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
     
 }

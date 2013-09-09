@@ -8,9 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JComboBox;
-import net.geeklythings.fieldmarshal.entity.EventFormat;
-import net.geeklythings.fieldmarshal.entity.Player;
-import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.model.entity.EventFormat;
+import net.geeklythings.fieldmarshal.model.entity.Player;
+import net.geeklythings.fieldmarshal.model.entity.Tournament;
 
 /**
  *

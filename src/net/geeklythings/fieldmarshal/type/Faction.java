@@ -26,13 +26,21 @@ public enum Faction {
             return name;    
         }
         
+        @Override 
+        public String toString()
+        {
+            return name;
+        }
+        
+        // use Faction.values() instead
+        
 	public static String[] enumsToStringArray() {
 		
 		String result[] = new String[Faction.values().length];
 	
 		int count = 0;
 		for ( Faction each : Faction.values()) {
-			result[count] = each.toString();
+			result[count] = each.getName();
 			count++;
 		}
 	

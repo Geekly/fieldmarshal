@@ -5,7 +5,7 @@
 package net.geeklythings.fieldmarshal.model;
 
 import java.util.Observable;
-import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.model.entity.Tournament;
 
 /**
  *

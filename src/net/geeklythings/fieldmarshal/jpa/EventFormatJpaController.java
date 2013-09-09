@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.geeklythings.fieldmarshal.controller;
+package net.geeklythings.fieldmarshal.jpa;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,15 +13,15 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import net.geeklythings.fieldmarshal.controller.exceptions.NonexistentEntityException;
-import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.model.entity.EventFormat;
 
 /**
  *
  * @author khooks
  */
-public class TournamentJpaController implements Serializable {
+public class EventFormatJpaController implements Serializable {
 
-    public TournamentJpaController(EntityManagerFactory emf) {
+    public EventFormatJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -30,12 +30,12 @@ public class TournamentJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Tournament tournament) {
+    public void create(EventFormat eventFormat) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(tournament);
+            em.persist(eventFormat);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -44,19 +44,19 @@ public class TournamentJpaController implements Serializable {
         }
     }
 
-    public void edit(Tournament tournament) throws NonexistentEntityException, Exception {
+    public void edit(EventFormat eventFormat) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            tournament = em.merge(tournament);
+            eventFormat = em.merge(eventFormat);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = tournament.getId();
-                if (findTournament(id) == null) {
-                    throw new NonexistentEntityException("The tournament with id " + id + " no longer exists.");
+                Long id = eventFormat.getId();
+                if (findEventFormat(id) == null) {
+                    throw new NonexistentEntityException("The eventFormat with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -72,14 +72,14 @@ public class TournamentJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Tournament tournament;
+            EventFormat eventFormat;
             try {
-                tournament = em.getReference(Tournament.class, id);
-                tournament.getId();
+                eventFormat = em.getReference(EventFormat.class, id);
+                eventFormat.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The tournament with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The eventFormat with id " + id + " no longer exists.", enfe);
             }
-            em.remove(tournament);
+            em.remove(eventFormat);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -88,19 +88,19 @@ public class TournamentJpaController implements Serializable {
         }
     }
 
-    public List<Tournament> findTournamentEntities() {
-        return findTournamentEntities(true, -1, -1);
+    public List<EventFormat> findEventFormatEntities() {
+        return findEventFormatEntities(true, -1, -1);
     }
 
-    public List<Tournament> findTournamentEntities(int maxResults, int firstResult) {
-        return findTournamentEntities(false, maxResults, firstResult);
+    public List<EventFormat> findEventFormatEntities(int maxResults, int firstResult) {
+        return findEventFormatEntities(false, maxResults, firstResult);
     }
 
-    private List<Tournament> findTournamentEntities(boolean all, int maxResults, int firstResult) {
+    private List<EventFormat> findEventFormatEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Tournament.class));
+            cq.select(cq.from(EventFormat.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -112,20 +112,20 @@ public class TournamentJpaController implements Serializable {
         }
     }
 
-    public Tournament findTournament(Long id) {
+    public EventFormat findEventFormat(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Tournament.class, id);
+            return em.find(EventFormat.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getTournamentCount() {
+    public int getEventFormatCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Tournament> rt = cq.from(Tournament.class);
+            Root<EventFormat> rt = cq.from(EventFormat.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

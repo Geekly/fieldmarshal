@@ -10,9 +10,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import net.geeklythings.fieldmarshal.controller.PlayerJpaController;
-import net.geeklythings.fieldmarshal.entity.Player;
-import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.jpa.PlayerJpaController;
+import net.geeklythings.fieldmarshal.model.entity.Player;
+import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

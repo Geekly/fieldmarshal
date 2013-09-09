@@ -8,7 +8,7 @@ package net.geeklythings.fieldmarshal.type;
  *
  * @author khooks
  */
-public enum FormatType {
+public enum EventFormatType {
 	
 	SR2013 ("Steam Roller 2013"),
 	MANGLEDMETAL ("Mangled Metal"),
@@ -19,7 +19,7 @@ public enum FormatType {
 	 
 	private final String name;
 	
-	private FormatType(String s) {
+	private EventFormatType(String s) {
 		name = s;
 	}
 	
@@ -28,12 +28,14 @@ public enum FormatType {
             return name;    
         }
         
+
+        
 	public static String[] enumsToStringArray() {
 		
-		String result[] = new String[FormatType.values().length];
+		String result[] = new String[EventFormatType.values().length];
 	
 		int count = 0;
-		for ( FormatType each : FormatType.values()) {
+		for ( EventFormatType each : EventFormatType.values()) {
 			result[count] = each.toString();
 			count++;
 		}

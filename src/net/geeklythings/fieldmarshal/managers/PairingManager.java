@@ -6,9 +6,9 @@ package net.geeklythings.fieldmarshal.managers;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.geeklythings.fieldmarshal.entity.MatchPairing;
-import net.geeklythings.fieldmarshal.entity.Round;
-import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.model.entity.MatchPairing;
+import net.geeklythings.fieldmarshal.model.entity.Round;
+import net.geeklythings.fieldmarshal.model.entity.Tournament;
 
 /**
  * This is used to manage Pairing Lists for a tournament

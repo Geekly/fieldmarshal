@@ -16,8 +16,8 @@ import javax.swing.JList;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import net.geeklythings.fieldmarshal.controller.TournamentJpaController;
-import net.geeklythings.fieldmarshal.entity.Tournament;
+import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
+import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
