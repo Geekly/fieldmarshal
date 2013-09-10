@@ -19,21 +19,23 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * ToournamentManager keeps the active Tournament and manages interaction with it.  It 
- * also notifies observers to changes.
+ * also notifies observers to changes and is notified by the Tournament object when it changes.
  * @author khooks
  */
 public class TournamentManager implements PropertyChangeListener {
 
+    // tournament notifies the manager of a change, and the manager persists it
+    
     private static final Logger logger = LogManager.getLogger(TournamentManager.class.getName());
-    private final PropertyChangeSupport propertyChangeSupport = new java.beans.PropertyChangeSupport(this);
+    private final PropertyChangeSupport changeSupport = new java.beans.PropertyChangeSupport(this);
     
     //public static final String LOAD_TOURNAMENT_ID = "LoadTournamentId";
-    private TournamentJpaController tournamentJpaController; 
+    private TournamentJpaController jpaController; 
     private Tournament tournament;
     
     public TournamentManager( EntityManagerFactory emf )
     {
-        tournamentJpaController = new TournamentJpaController( emf );
+        jpaController = new TournamentJpaController( emf );
             
     }
     public Tournament getTournament()
@@ -41,33 +43,37 @@ public class TournamentManager implements PropertyChangeListener {
         return tournament;
     }
     
+
     public void setTournament(Tournament t)
-    {
-        
+    /* Assumes that t does not exist in the database yet
+     */
+    {      
         if( this.tournament != null )
         {
             this.tournament.removePropertyChangeListener(this);
         }
         
         this.tournament = t;
-        this.tournament.setJpaController( tournamentJpaController );
         this.tournament.addPropertyChangeListener(this);
-        propertyChangeSupport.firePropertyChange("setTournament", null, this.tournament);
-        
+        changeSupport.firePropertyChange("setTournament", null, this.tournament);
+        jpaController.create(this.tournament);
     }
     
     public Tournament LoadTournament(long tournamentId)
+    /* loaded tournament will be persisted by default 
+     * 
+     */
     {
             if (tournamentId != 0L)
             {
                 logger.debug("Trying to load Tournament {}", tournamentId );
                 try {
-                    Tournament tournament = (Tournament) tournamentJpaController.findTournament(tournamentId);
+                    Tournament tournament = (Tournament) jpaController.findTournament(tournamentId);
                     if (tournament != null)
                     {
                         logger.debug("TournamentManager: NotifyObservers: {}", tournament);
                         //app.setActiveTournament(tournament);
-                        propertyChangeSupport.firePropertyChange("activeTournament", null, tournament);
+                        changeSupport.firePropertyChange("activeTournament", null, tournament);
                         //setChanged();
                         //notifyObservers(tournament);
                         this.tournament = tournament;
@@ -93,25 +99,25 @@ public class TournamentManager implements PropertyChangeListener {
         {
             long tournamentId = (long)pce.getNewValue();
             LoadTournament(tournamentId);
-            propertyChangeSupport.firePropertyChange( "loadTournament", null, tournament);
+            changeSupport.firePropertyChange( "loadTournament", null, tournament);
         }
         else 
         if (pce.getPropertyName().matches(LoadView.NEW_TOURNAMENT_ID))
         {   
             tournament = new Tournament();
-            tournamentJpaController.create(tournament);
-            propertyChangeSupport.firePropertyChange( "newTournament", null, tournament);
+            jpaController.create(tournament);
+            changeSupport.firePropertyChange( "newTournament", null, tournament);
 
         }        
         
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(listener);
+        changeSupport.addPropertyChangeListener(listener);
     }
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.removePropertyChangeListener(listener);
+        changeSupport.removePropertyChangeListener(listener);
     }
     
     

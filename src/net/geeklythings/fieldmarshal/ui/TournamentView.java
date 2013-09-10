@@ -48,7 +48,7 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
     {
         this.manager = manager;
         this.localTournament = manager.getTournament();
-        this.manager.addObserver(this);
+        //this.manager.addObserver(this);
         
     }
     
@@ -249,7 +249,7 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
             logger.debug("TournamentView: FormatComboBox selected: {}", format);
             logger.debug("Selected Item {}", cbFormat.getSelectedItem());
             t.getFormat().setFormatType(format);
-            manager.notifyObservers();
+            //manager.notifyObservers();
         }
     }//GEN-LAST:event_cbFormatActionPerformed
 
@@ -265,7 +265,7 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
             Tournament t = manager.getTournament();
             t.setOrganizer( txtOrganizer.getText());
             
-            manager.notifyObservers();
+            //manager.notifyObservers();
         }
     }//GEN-LAST:event_txtOrganizerKeyPressed
 

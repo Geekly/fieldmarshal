@@ -33,6 +33,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
 import net.geeklythings.fieldmarshal.model.PlayerStatus;
+import net.geeklythings.fieldmarshal.model.Players;
+import org.jdesktop.observablecollections.ObservableList;
 
 
 /**
@@ -42,17 +44,20 @@ import net.geeklythings.fieldmarshal.model.PlayerStatus;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name="TOURNAMENT")
-public class Tournament extends Observable implements Serializable, PropertyChangeListener {
-    
+public class Tournament implements Serializable, PropertyChangeListener {
     
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-
-    @Transient
-    private TournamentJpaController jpaController;
     
     private static final long serialVersionUID = 1L;
-       
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;   
+    
+    public Long getId() {
+        return id;
+    }
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="TODAYSDATE")
     private Date todaysDate = new Date();
@@ -64,15 +69,27 @@ public class Tournament extends Observable implements Serializable, PropertyChan
     private int numRounds = 3;
     
     @JoinColumn(name="ID_EVENTFORMAT")
-    @OneToOne(cascade={CascadeType.PERSIST})
+    @OneToOne(cascade={CascadeType.ALL})
     private EventFormat format;// = new EventFormat();
-      
-    @OneToMany(cascade={CascadeType.MERGE})
-    private List<Player> players = new ArrayList<>();
+        
+    @Transient
+    private Players players;
+    
+    @OneToMany(cascade={CascadeType.ALL})
+    @MapBy()
+    @Access(AccessType.PROPERTY)
+    public ArrayList<Player> getPlayers()
+    {
+        return players.getPlayers();
+    }
+    public void setPlayers( ArrayList<Player> players)
+    {
+        this.players.setPlayers(players);
+    }
     
     /// The rounds need to be managed better.  orphanremoval has been removed temporarily
-    @OneToMany(cascade={CascadeType.MERGE}) 
-    private List<Round> rounds = new ArrayList<>();
+    @OneToMany(cascade={CascadeType.ALL}) 
+    private List<Round> rounds; 
     
     @Transient
     private int currentRound = 1;
@@ -114,12 +131,19 @@ public class Tournament extends Observable implements Serializable, PropertyChan
     public static Tournament createTournament(int numRounds) 
     {
 
-        Tournament tournament = new Tournament();
+        Tournament tournament = new Tournament();      
+        //tournament.addPropertyChangeListener(this);  //the manager that creates it will listen to it
         
         EventFormat ef = new EventFormat();       
         //ef.setNumRounds(numRounds);
         
+        //tournament.players = new ArrayList<>();
+        tournament.players = new Players();
+        
         tournament.setFormat( ef );
+        
+        tournament.rounds = new ArrayList<>();
+        
         for( int i=1; i<=numRounds; i++)
         {
             tournament.addRound(new Round(i));
@@ -135,13 +159,9 @@ public class Tournament extends Observable implements Serializable, PropertyChan
         return tournament;
     }
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
-    public Long getId() {
-        return id;
-    }
+
+
     
     public void setId(Long id) {
         Long oldId = this.id;
@@ -168,7 +188,7 @@ public class Tournament extends Observable implements Serializable, PropertyChan
     {
         List<Player> activePlayers = new ArrayList<>();
         
-        for( Player e : players )
+        for( Player e : players.getPlayers() )
         {
             if( e.getActiveStatus() == PlayerStatus.ACTIVE)
             {
@@ -240,16 +260,10 @@ public class Tournament extends Observable implements Serializable, PropertyChan
         return numRounds;
     }
 
-        /**
-     * @return the players
-     */
-    public List<Player> getPlayers() {
-        return players;
-    }
 
     public void addPlayer(Player player) {
         //List<Player> oldPlayers = new ArrayList<>( this.getPlayers() );
-        players.add(player);
+        players.addPlayer(player);
         player.addPropertyChangeListener(this);        
         changeSupport.firePropertyChange("players", null, this.getPlayers());
     }
@@ -264,16 +278,14 @@ public class Tournament extends Observable implements Serializable, PropertyChan
         List<Round> oldRounds = this.rounds;
         this.rounds = new ArrayList<>(this.rounds);
         Round newRound = new Round();
-        jpaController.create(this);
-        persist(newRound);
         rounds.add( newRound );
         changeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
         
-    public void addRound(Round round) {
+    public void addRound(Round round) 
+    {
         List<Round> oldRounds = this.rounds;
         this.rounds = new ArrayList<>(this.rounds);      
-        if( round.getId() == null ) { persist(round); }
         this.rounds.add(round);
         this.numRounds = rounds.size();
         changeSupport.firePropertyChange("rounds", oldRounds, rounds);
@@ -349,7 +361,4 @@ public class Tournament extends Observable implements Serializable, PropertyChan
         changeSupport.removePropertyChangeListener(listener);
     }
 
-    public void setJpaController(TournamentJpaController tournamentJpaController) {       
-        jpaController = tournamentJpaController;
-    }
 }

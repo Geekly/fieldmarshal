@@ -10,7 +10,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import net.geeklythings.fieldmarshal.jpa.PlayerJpaController;
 import net.geeklythings.fieldmarshal.model.entity.Player;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import org.apache.logging.log4j.LogManager;
@@ -21,11 +20,11 @@ import org.apache.logging.log4j.Logger;
  * @author khooks
  */
 public class PlayerManager {
-    private PlayerJpaController pjc;
+    //private PlayerJpaController pjc;
     static final private Logger logger = LogManager.getLogger(PlayerManager.class.getName());
     public PlayerManager(EntityManagerFactory emf)
     {
-        pjc = new PlayerJpaController( emf );
+        //pjc = new PlayerJpaController( emf );
     }
     
     public boolean AddPlayer(Player player, Tournament tournament)
@@ -45,7 +44,7 @@ public class PlayerManager {
             return false;
         }       
         
-        pjc.create(player);
+        //pjc.create(player);
         tournament.addPlayer(player);
         //propertyChangeSupport.firePropertyChange("person", oldPerson, this.getPerson());
         return true;

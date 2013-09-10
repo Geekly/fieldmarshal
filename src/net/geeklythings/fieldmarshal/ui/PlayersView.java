@@ -4,6 +4,9 @@
  */
 package net.geeklythings.fieldmarshal.ui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -19,9 +22,10 @@ import org.apache.logging.log4j.Logger;
  *
  * @author khooks
  */
-public class PlayersView extends javax.swing.JPanel implements Observer {
+public class PlayersView extends javax.swing.JPanel implements PropertyChangeListener {
 
     static private final Logger logger = LogManager.getLogger("PlayersView");
+    //private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private TournamentManager manager;
     private ArrayList<Player> players;
     private Tournament localTournament;  //local scope to the activeTournament
@@ -39,7 +43,7 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
     public void setManager(TournamentManager manager)
     {
         this.manager = manager;
-        this.manager.addObserver(this);
+        
         localTournament = this.manager.getTournament();
         if( localTournament != null)
         {
@@ -140,20 +144,16 @@ public class PlayersView extends javax.swing.JPanel implements Observer {
     // End of variables declaration//GEN-END:variables
 
 
-    @Override
-    public void update(Observable manager, Object o) {
-        if( (manager instanceof TournamentManager) && (o instanceof Tournament) )
-        {
-            localTournament = ((TournamentManager)manager).getTournament();
-            tournamentIdLabel.setText( String.valueOf( localTournament.getId() ));
-            updateView();
-        }
-    }
 
     public void updateView() {
         ((PlayerTableModel)tablePlayers.getModel()).fireTableDataChanged();
         //update the modelView of the table
         
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent pce) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     
