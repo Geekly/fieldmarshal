@@ -37,6 +37,7 @@ public class Round implements Serializable {
    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="ROUND_ID")
     private Long id;
 
     @Override

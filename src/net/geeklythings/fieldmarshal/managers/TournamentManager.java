@@ -108,7 +108,12 @@ public class TournamentManager implements PropertyChangeListener {
             jpaController.create(tournament);
             changeSupport.firePropertyChange( "newTournament", null, tournament);
 
-        }        
+        }
+        if( pce.getPropertyName().matches(Tournament.PLAYER_CHANGE))
+        {
+        
+            
+        }
         
     }
 

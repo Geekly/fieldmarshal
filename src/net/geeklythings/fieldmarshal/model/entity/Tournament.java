@@ -11,30 +11,27 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
 import net.geeklythings.fieldmarshal.model.PlayerStatus;
-import net.geeklythings.fieldmarshal.model.Players;
-import org.jdesktop.observablecollections.ObservableList;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 
 
 /**
@@ -45,17 +42,24 @@ import org.jdesktop.observablecollections.ObservableList;
 @Access(AccessType.FIELD)
 @Table(name="TOURNAMENT")
 public class Tournament implements Serializable, PropertyChangeListener {
+    public static final String PLAYER_CHANGE = "playerChange";
     
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id  @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="TOURNAMENT_ID")
     private Long id;   
     
     public Long getId() {
         return id;
+    }
+    
+    public void setId(Long id) {
+        Long oldId = this.id;
+        this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
     }
     
     @Temporal(TemporalType.TIMESTAMP)
@@ -68,35 +72,29 @@ public class Tournament implements Serializable, PropertyChangeListener {
     @Column(name="NUMROUNDS")
     private int numRounds = 3;
     
-    @JoinColumn(name="ID_EVENTFORMAT")
-    @OneToOne(cascade={CascadeType.ALL})
+    @Embedded
     private EventFormat format;// = new EventFormat();
         
-    @Transient
-    private Players players;
-    
     @OneToMany(cascade={CascadeType.ALL})
-    @MapBy()
-    @Access(AccessType.PROPERTY)
-    public ArrayList<Player> getPlayers()
-    {
-        return players.getPlayers();
-    }
-    public void setPlayers( ArrayList<Player> players)
-    {
-        this.players.setPlayers(players);
-    }
+    @JoinColumn(name="TOURNAMENT_ID")
+    private List<Player> players;
     
-    /// The rounds need to be managed better.  orphanremoval has been removed temporarily
-    @OneToMany(cascade={CascadeType.ALL}) 
-    private List<Round> rounds; 
+    @OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
+    @JoinColumn(name="TOURNAMENT_ID")
+    private List<Round> rounds;   
+        
+    public List<Player> getPlayers()
+    {
+        return players;
+    }
+    public void setPlayers( List<Player> players)
+    {
+        this.players = (ObservableList<Player>) FXCollections.observableList(players);
+    }
     
     @Transient
     private int currentRound = 1;
-    
-    //@Transient
-    //private List<Player> activePlayers = new ArrayList<>();  //for tracking dropped players
-    
+     
     public Tournament() {
         
         format = new EventFormat();
@@ -108,26 +106,6 @@ public class Tournament implements Serializable, PropertyChangeListener {
         //rounds = new ArrayList<>(numRounds);
     }
     
-    public Tournament copy()
-    {
-        //id = master.id;
-        
-        Tournament copy = new Tournament();
-        
-        copy.format = new EventFormat(format);  //assign to a copy
-        
-        copy.todaysDate = todaysDate;
-        copy.numRounds = numRounds;
-        copy.store = store;
-        copy.organizer = organizer;
-        
-        copy.players = players;  //don't change this anywhere
-        copy.rounds = rounds;    //don't change this anywhere
-        
-        return copy;
-        // persist(format);
-    }
-    
     public static Tournament createTournament(int numRounds) 
     {
 
@@ -136,13 +114,14 @@ public class Tournament implements Serializable, PropertyChangeListener {
         
         EventFormat ef = new EventFormat();       
         //ef.setNumRounds(numRounds);
-        
-        //tournament.players = new ArrayList<>();
-        tournament.players = new Players();
+        List<Player> players = new ArrayList<>();
+        tournament.players = FXCollections.observableList(players);
+        //tournament.players = new Players();
         
         tournament.setFormat( ef );
         
-        tournament.rounds = new ArrayList<>();
+        List<Round> rounds = new ArrayList<>();
+        tournament.rounds = FXCollections.observableList(rounds);
         
         for( int i=1; i<=numRounds; i++)
         {
@@ -158,17 +137,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
 
         return tournament;
     }
-    
-
-
-
-    
-    public void setId(Long id) {
-        Long oldId = this.id;
-        this.id = id;
-        changeSupport.firePropertyChange("id", oldId, id);
-    }
-    
+         
     public int getCurrentRound() {
         return currentRound;
     }
@@ -188,7 +157,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
     {
         List<Player> activePlayers = new ArrayList<>();
         
-        for( Player e : players.getPlayers() )
+        for( Player e : players )
         {
             if( e.getActiveStatus() == PlayerStatus.ACTIVE)
             {
@@ -263,9 +232,9 @@ public class Tournament implements Serializable, PropertyChangeListener {
 
     public void addPlayer(Player player) {
         //List<Player> oldPlayers = new ArrayList<>( this.getPlayers() );
-        players.addPlayer(player);
+        players.add(player);
         player.addPropertyChangeListener(this);        
-        changeSupport.firePropertyChange("players", null, this.getPlayers());
+        changeSupport.firePropertyChange(PLAYER_CHANGE, null, this.getPlayers());
     }
 
     public List<Round> getRounds()
@@ -276,7 +245,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
     public void addNewRound()
     {
         List<Round> oldRounds = this.rounds;
-        this.rounds = new ArrayList<>(this.rounds);
+        this.rounds = FXCollections.observableList( new ArrayList<>(this.rounds) );
         Round newRound = new Round();
         rounds.add( newRound );
         changeSupport.firePropertyChange("rounds", oldRounds, rounds);
@@ -285,7 +254,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
     public void addRound(Round round) 
     {
         List<Round> oldRounds = this.rounds;
-        this.rounds = new ArrayList<>(this.rounds);      
+        this.rounds = FXCollections.observableList( new ArrayList<>(this.rounds) );      
         this.rounds.add(round);
         this.numRounds = rounds.size();
         changeSupport.firePropertyChange("rounds", oldRounds, rounds);
@@ -293,8 +262,9 @@ public class Tournament implements Serializable, PropertyChangeListener {
 
     public void removeLastRound()
     {
+        // TODO: change this to utilize the observable list properties
         List<Round> oldRounds = this.rounds;
-        this.rounds = new ArrayList<>(this.rounds);
+        this.rounds = FXCollections.observableList( new ArrayList<>(this.rounds) );
         this.rounds.remove( rounds.size()-1 );
         this.numRounds = rounds.size();
         System.out.println("");
@@ -361,4 +331,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
         changeSupport.removePropertyChangeListener(listener);
     }
 
+
+    
+    
 }

@@ -43,7 +43,7 @@ public class TestClasses {
         try {       
                // TODO code application logic here
         TestClasses test = new TestClasses();
-        //test.TestPlayer();
+        test.TestPlayer();
         test.TestTournament();
         } catch (Exception e) {}  
         //test.TestPairings();
@@ -181,7 +181,7 @@ public class TestClasses {
         
         EventFormat ef1 = new EventFormat();
         
-        ef1.setId(1245151265L);
+        //ef1.setId(1245151265L);
         ef1.setClockTime(10);
         ef1.setClockType("Timed Turns");
         ef1.setFormatType("Streamroller 2013");

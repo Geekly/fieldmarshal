@@ -31,11 +31,11 @@ public class PlayerResult {
     public static final String PROP_ARMYPOINTSDESTROYED = "PROP_ARMYPOINTSDESTROYED";
     
     @JoinColumn(name="ID_PLAYER")
-    @ManyToOne(cascade= { CascadeType.MERGE })
+    @ManyToOne(cascade= { CascadeType.ALL })
     private Player player;
     
     @JoinColumn(name="ID_OPPONENT")
-    @ManyToOne(cascade= { CascadeType.MERGE })
+    @ManyToOne(cascade= { CascadeType.ALL })
     private Player opponent;
     
     @Column(name="LISTPLAYED")

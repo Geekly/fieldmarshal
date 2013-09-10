@@ -39,7 +39,7 @@ public class Player implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ID")
+    @Column(name="PLAYER_ID")
     private Long id;
     
     @Column(name="FIRSTNAME")

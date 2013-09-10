@@ -4,28 +4,20 @@
  */
 package net.geeklythings.fieldmarshal.model.entity;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
 import javax.persistence.PrePersist;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
  *
  * @author khooks
  */
-@Entity
-@Access(AccessType.FIELD)
-@Table(name="EVENTFORMAT")
+//@Entity
+@Embeddable
 public class EventFormat implements Serializable {
     private static final long serialVersionUID = 1L;
   
@@ -40,10 +32,10 @@ public class EventFormat implements Serializable {
     //@Column(name="NUMROUNDS")
     //protected int numRounds = 6;
     
-@Id
-@GeneratedValue(strategy = GenerationType.AUTO)
-@Column(name="ID")
-    private Long id;
+    //@Id
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    //@Column(name="EVENTFORMAT_ID")
+    //private Long id;
 
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
@@ -73,7 +65,7 @@ public class EventFormat implements Serializable {
         this.formatDescription = this.getDescription();
     }
     
-    public Long getId() {
+    /*public Long getId() {
         return id;
     }
 
@@ -81,7 +73,7 @@ public class EventFormat implements Serializable {
         Long oldId = this.id;
         this.id = id;
         changeSupport.firePropertyChange("id", oldId, id);
-    }
+    }*/
     
 
     
@@ -131,7 +123,7 @@ public class EventFormat implements Serializable {
         this.clockTime = deathClockTime;
         changeSupport.firePropertyChange("clockTime", oldValue, clockTime);
     }
-    
+    /*
     @Override
     public int hashCode() {
         int hash = 0;
@@ -150,11 +142,11 @@ public class EventFormat implements Serializable {
             return false;
         }
         return true;
-    }
+    }*/
 
     @Override
     public String toString() {
-        return "net.geeklythings.fieldmarshal.data.EventFormat[ id=" + id + " ]";
+        return "net.geeklythings.fieldmarshal.data.EventFormat[ description=" + formatDescription + " ]";
     }
     
     public void addPropertyChangeListener(PropertyChangeListener listener) {
