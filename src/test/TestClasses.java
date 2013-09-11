@@ -89,8 +89,6 @@ public class TestClasses {
         manager.setTournament(tournament);
         tournament.addPropertyChangeListener(eventLogger);
         
-        
-        
         Player pl1 = new Player("Rufus", "McGillicutty", Faction.CIRCLE);
         pl1.addPropertyChangeListener(eventLogger);
         pl1.setEmail("rufus@warmachine.com");
@@ -108,7 +106,11 @@ public class TestClasses {
         
         manager.jpaController.edit(tournament);
         
+        Player pl3 = new Player("Bill", "Williamson", Faction.LEGION);
         
+        tournament.addPlayer(pl3);
+        
+        manager.jpaController.edit(tournament);
         
         //tournament.addPlayer(pl2);
         //tournament.addPlayer(pl1);

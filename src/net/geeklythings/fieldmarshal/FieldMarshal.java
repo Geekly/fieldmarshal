@@ -40,18 +40,19 @@ public class FieldMarshal extends javax.swing.JFrame {
         //playerManager = new PlayerManager( _emf );
         
         //loadTournamentView.setEntityManager(_em);
-        loadTournamentView.addPropertyChangeListener(tournamentManager);
-        loadTournamentView.updateList();
+        loadView.setManager(tournamentManager);
+        //loadView.addPropertyChangeListener(tournamentManager);
+        loadView.updateList();
         
         ///tournamentManager.addObserver(tournamentView);
         ///tournamentManager.addObserver(playersView);      
         
-        tournamentView.setManager(tournamentManager);
-        playersView.setManager(tournamentManager);
+        //tournamentView.setManager(tournamentManager);
+        //playersView.setManager(tournamentManager);
         
                
-        tournamentView.updateView();
-        playersView.updateView();
+        //tournamentView.updateView();
+        //playersView.updateView();
         //playersView.setEntityManager(_em);
     }
     
@@ -64,16 +65,8 @@ public class FieldMarshal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dateConverter = new net.geeklythings.fieldmarshal.util.DateConverter();
-        jTabbedPane = new javax.swing.JTabbedPane();
-        loadTournamentView = new net.geeklythings.fieldmarshal.ui.LoadView(tournamentJpaController);
-        tournamentView = new net.geeklythings.fieldmarshal.ui.TournamentView();
-        playersView = new net.geeklythings.fieldmarshal.ui.PlayersView();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        mnuFile = new javax.swing.JMenu();
-        mnuNewTournament = new javax.swing.JMenuItem();
-        mnuLoadTournament = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        loadView = new net.geeklythings.fieldmarshal.ui.LoadView();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -82,44 +75,17 @@ public class FieldMarshal extends javax.swing.JFrame {
             }
         });
 
-        jTabbedPane.addTab("Load Tournament", loadTournamentView);
-        jTabbedPane.addTab("Tournament", tournamentView);
-        jTabbedPane.addTab("Players", playersView);
-
-        mnuFile.setText("File");
-
-        mnuNewTournament.setText("New Tournament");
-        mnuNewTournament.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuNewTournamentActionPerformed(evt);
-            }
-        });
-        mnuFile.add(mnuNewTournament);
-
-        mnuLoadTournament.setText("Load Tournament");
-        mnuLoadTournament.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuLoadTournamentActionPerformed(evt);
-            }
-        });
-        mnuFile.add(mnuLoadTournament);
-
-        jMenuBar1.add(mnuFile);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
+        jTabbedPane1.addTab("Load Tournament", loadView);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 994, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 994, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
         );
 
         pack();
@@ -133,15 +99,6 @@ public class FieldMarshal extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_formWindowClosing
-
-    private void mnuNewTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNewTournamentActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mnuNewTournamentActionPerformed
-
-    private void mnuLoadTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLoadTournamentActionPerformed
-        // TODO add your handling code here:
-        // load the Load Tournament dialog
-    }//GEN-LAST:event_mnuLoadTournamentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,16 +138,8 @@ public class FieldMarshal extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private net.geeklythings.fieldmarshal.util.DateConverter dateConverter;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JTabbedPane jTabbedPane;
-    private net.geeklythings.fieldmarshal.ui.LoadView loadTournamentView;
-    private javax.swing.JMenu mnuFile;
-    private javax.swing.JMenuItem mnuLoadTournament;
-    private javax.swing.JMenuItem mnuNewTournament;
-    private net.geeklythings.fieldmarshal.ui.PlayersView playersView;
-    private net.geeklythings.fieldmarshal.ui.TournamentView tournamentView;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private net.geeklythings.fieldmarshal.ui.LoadView loadView;
     // End of variables declaration//GEN-END:variables
 
     

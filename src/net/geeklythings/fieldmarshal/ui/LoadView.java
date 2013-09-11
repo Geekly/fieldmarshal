@@ -10,6 +10,8 @@ package net.geeklythings.fieldmarshal.ui;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -17,6 +19,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
+import net.geeklythings.fieldmarshal.managers.TournamentManager;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,13 +29,15 @@ import org.apache.logging.log4j.Logger;
  *
  * @author khooks
  */
-public class LoadView extends javax.swing.JPanel implements ListSelectionListener {
+public class LoadView extends javax.swing.JPanel implements PropertyChangeListener, ListSelectionListener {
 
-    private TournamentJpaController jpaController;
+    
     public static final String LOAD_TOURNAMENT_ID = "LoadTournamentId";
     public static final String NEW_TOURNAMENT_ID = "NewTournamentId";
     private static final Logger logger = LogManager.getLogger(LoadView.class.getName());
     private List<Tournament> tournamentList;
+    private TournamentManager manager;
+    
     private long selectedTournamentId = 0L;
     
     public long getSelectedTournamentID() {
@@ -42,21 +47,20 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
     /**
      * Creates new form LoadView
      */
-    /*public LoadView() {
+    public LoadView() {
         
         initComponents();
         //updateList();
         //tournamentList = new ArrayList<>();
         
-        tournamentJList.addListSelectionListener(this);
-    }*/
-          
-    public LoadView( TournamentJpaController tjc ) {
-        
-        this.jpaController = tjc;
-        initComponents();
-       
-        tournamentJList.addListSelectionListener(this);
+        //tournamentJList.addListSelectionListener(this);
+    }
+    
+    public void setManager( TournamentManager mgr )
+    {
+        manager = mgr;
+        manager.addPropertyChangeListener(this);  // manager notifies this view
+        addPropertyChangeListener(manager);  // the view notifies the manager
     }
     
     public void updateList()
@@ -68,7 +72,7 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
         
         DefaultListModel listModel;
         listModel = new DefaultListModel();      
-        tournamentList = jpaController.findTournamentEntities();
+        tournamentList = manager.getAllTournaments();
         logger.debug(tournamentList.toString());
         String listString = null;
         // Assumption:  index of tournamentList and the JList model are always equal
@@ -194,13 +198,13 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
         // notify the tournament manager that a tournament Id was selected & read
         // and to load the tournament
         firePropertyChange(LOAD_TOURNAMENT_ID, 0L, selectedTournamentId);
-        nextPane();
+        //nextPane();
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void newTournamentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newTournamentButtonActionPerformed
         // TODO add your handling code here:
         firePropertyChange(NEW_TOURNAMENT_ID, 0L, 1L);
-        nextPane();
+        //nextPane();
     }//GEN-LAST:event_newTournamentButtonActionPerformed
 
     private void tournamentJListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tournamentJListMouseClicked
@@ -231,6 +235,13 @@ public class LoadView extends javax.swing.JPanel implements ListSelectionListene
     private javax.swing.JList tournamentJList;
     private javax.swing.JButton updateTournamentListButton;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void propertyChange(PropertyChangeEvent pce) {
+        logger.debug("LoadView: propertyChange: {}, {}", pce.getPropertyName(), pce.getSource().getClass().getName() );
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        updateList();
+    }
 
 
 

@@ -7,6 +7,7 @@ package net.geeklythings.fieldmarshal.managers;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 import java.util.Observable;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,7 +44,11 @@ public class TournamentManager implements PropertyChangeListener {
         return tournament;
     }
     
-
+    public List<Tournament> getAllTournaments()
+    {
+        return jpaController.findTournamentEntities();
+    }
+    
     public void setTournament(Tournament t)
     /* Assumes that t does not exist in the database yet
      */

@@ -16,8 +16,11 @@ import org.apache.logging.log4j.Logger;
 public class EventListenerLogger implements PropertyChangeListener{
 
     private static final Logger logger = LogManager.getLogger(EventListenerLogger.class); 
+    /**
+     *
+     * @param pce
+     */
     @Override
-    
     public void propertyChange(PropertyChangeEvent pce) {
         logger.debug("EventListLoggere: propertyChange: {} from class: {}", pce.getPropertyName(), pce.getSource().getClass().getName() );
     }
