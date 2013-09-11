@@ -1,9 +1,6 @@
 package net.geeklythings.fieldmarshal.model;
 
-import net.geeklythings.fieldmarshal.model.entity.EventFormat;
-import net.geeklythings.fieldmarshal.model.entity.Round;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
-import java.util.Date;
 //import java.sql.SQLException;
 //import org.joda.time.*;
 

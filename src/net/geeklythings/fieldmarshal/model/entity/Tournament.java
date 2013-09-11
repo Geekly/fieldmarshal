@@ -6,7 +6,6 @@ package net.geeklythings.fieldmarshal.model.entity;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.ArrayList;
@@ -14,9 +13,7 @@ import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,14 +21,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import net.geeklythings.fieldmarshal.model.PlayerStatus;
-import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 
 
 /**
@@ -41,13 +37,12 @@ import javafx.collections.FXCollections;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name="TOURNAMENT")
-public class Tournament implements Serializable, PropertyChangeListener {
+public class Tournament extends AbstractEntityModel implements Serializable, PropertyChangeListener, ListChangeListener {
+    
     public static final String PLAYER_CHANGE = "playerChange";
-    
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-    
+    public static final String ROUND_CHANGE = "roundChange";
     private static final long serialVersionUID = 1L;
+    
     @Id  @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="TOURNAMENT_ID")
     private Long id;   
@@ -59,7 +54,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
     public void setId(Long id) {
         Long oldId = this.id;
         this.id = id;
-        changeSupport.firePropertyChange("id", oldId, id);
+        propertyChangeSupport.firePropertyChange("id", oldId, id);
     }
     
     @Temporal(TemporalType.TIMESTAMP)
@@ -72,15 +67,15 @@ public class Tournament implements Serializable, PropertyChangeListener {
     @Column(name="NUMROUNDS")
     private int numRounds = 3;
     
-    @Embedded
+    @Embedded  // don't create a seperate table for it
     private EventFormat format;// = new EventFormat();
         
     @OneToMany(cascade={CascadeType.ALL})
-    @JoinColumn(name="TOURNAMENT_ID")
+    @JoinColumn(name="OWNER_ID", referencedColumnName="TOURNAMENT_ID")
     private List<Player> players;
     
     @OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
-    @JoinColumn(name="TOURNAMENT_ID")
+    @JoinColumn(name="OWNER_ID", referencedColumnName="TOURNAMENT_ID")
     private List<Round> rounds;   
         
     public List<Player> getPlayers()
@@ -89,7 +84,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
     }
     public void setPlayers( List<Player> players)
     {
-        this.players = (ObservableList<Player>) FXCollections.observableList(players);
+        //this.players = (ObservableList<Player>) FXCollections.observableList(players);
     }
     
     @Transient
@@ -116,6 +111,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
         //ef.setNumRounds(numRounds);
         List<Player> players = new ArrayList<>();
         tournament.players = FXCollections.observableList(players);
+        
         //tournament.players = new Players();
         
         tournament.setFormat( ef );
@@ -149,7 +145,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
     public void setFormat(EventFormat format) {
         EventFormat oldformat = this.format;
         this.format = format;
-        changeSupport.firePropertyChange("format", oldformat, format);
+        propertyChangeSupport.firePropertyChange("format", oldformat, format);
         
     }
 
@@ -174,7 +170,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
     public void setTodaysDate(Date todaysDate) {
         Date oldTodaysDate = this.todaysDate;
         this.todaysDate = todaysDate;
-        changeSupport.firePropertyChange("todaysDate", oldTodaysDate, todaysDate);
+        propertyChangeSupport.firePropertyChange("todaysDate", oldTodaysDate, todaysDate);
     }
     
     /*public Date getStartTime() {
@@ -184,7 +180,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
     public void setStartTime(Date startTime) {
         Date oldStartTime = this.startTime;
         this.startTime = startTime;
-        changeSupport.firePropertyChange("startTime", oldStartTime, startTime);
+        propertyChangeSupport.firePropertyChange("startTime", oldStartTime, startTime);
     }*/
 
     public String getStore() {
@@ -194,7 +190,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
     public void setStore(String store) {
         String oldLocation = this.store;
         this.store = store;
-        changeSupport.firePropertyChange("store", oldLocation, store);
+        propertyChangeSupport.firePropertyChange("store", oldLocation, store);
     }
 
     public String getOrganizer() {
@@ -204,7 +200,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
     public void setOrganizer(String organizer) {
         String oldOrganizer = this.organizer;
         this.organizer = organizer;
-        changeSupport.firePropertyChange("organizer", oldOrganizer, organizer);
+        propertyChangeSupport.firePropertyChange("organizer", oldOrganizer, organizer);
     }
 
     public void setNumRounds(int targetRounds) {
@@ -222,7 +218,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
         }
         numRounds = rounds.size();
         //this.persist(this);
-        changeSupport.firePropertyChange("numRounds", oldRounds, numRounds);
+        propertyChangeSupport.firePropertyChange("numRounds", oldRounds, numRounds);
     }
     
     public int getNumRounds() {
@@ -234,7 +230,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
         //List<Player> oldPlayers = new ArrayList<>( this.getPlayers() );
         players.add(player);
         player.addPropertyChangeListener(this);        
-        changeSupport.firePropertyChange(PLAYER_CHANGE, null, this.getPlayers());
+        propertyChangeSupport.firePropertyChange(PLAYER_CHANGE, null, this.getPlayers());
     }
 
     public List<Round> getRounds()
@@ -248,7 +244,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
         this.rounds = FXCollections.observableList( new ArrayList<>(this.rounds) );
         Round newRound = new Round();
         rounds.add( newRound );
-        changeSupport.firePropertyChange("rounds", oldRounds, rounds);
+        propertyChangeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
         
     public void addRound(Round round) 
@@ -257,7 +253,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
         this.rounds = FXCollections.observableList( new ArrayList<>(this.rounds) );      
         this.rounds.add(round);
         this.numRounds = rounds.size();
-        changeSupport.firePropertyChange("rounds", oldRounds, rounds);
+        propertyChangeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
 
     public void removeLastRound()
@@ -268,7 +264,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
         this.rounds.remove( rounds.size()-1 );
         this.numRounds = rounds.size();
         System.out.println("");
-        changeSupport.firePropertyChange("rounds", oldRounds, rounds);
+        propertyChangeSupport.firePropertyChange("rounds", oldRounds, rounds);
     }
     
     public void copyProperties(Tournament master)
@@ -315,7 +311,7 @@ public class Tournament implements Serializable, PropertyChangeListener {
 
     @Override
     public String toString() {
-        return "Tournament{" + "changeSupport=" + changeSupport + ", todaysDate=" + todaysDate + ", store=" + store + ", organizer=" + organizer + ", numRounds=" + numRounds + ", format=" + format + ", players=" + players + ", rounds=" + rounds + ", currentRound=" + currentRound + ", id=" + id + '}';
+        return "Tournament{ todaysDate=" + todaysDate + ", store=" + store + ", organizer=" + organizer + ", numRounds=" + numRounds + ", format=" + format + ", players=" + players + ", rounds=" + rounds + ", currentRound=" + currentRound + ", id=" + id + '}';
     }
 
     @Override
@@ -323,13 +319,12 @@ public class Tournament implements Serializable, PropertyChangeListener {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
+
+    @Override
+    public void onChanged(Change change) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
-    }
 
 
     

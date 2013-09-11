@@ -6,10 +6,7 @@ package net.geeklythings.fieldmarshal.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.table.AbstractTableModel;
 import net.geeklythings.fieldmarshal.model.entity.Player;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;

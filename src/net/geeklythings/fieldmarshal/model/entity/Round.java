@@ -7,22 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Access(AccessType.FIELD)
 @Table(name="ROUND")
-public class Round implements Serializable {
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+public class Round extends AbstractEntityModel implements Serializable {
+
 
     @Column(name="ROUNDNUMBER")
     private int roundNumber;
@@ -70,7 +67,7 @@ public class Round implements Serializable {
     public void setId(Long id) {
         Long oldId = this.id;
         this.id = id;
-        changeSupport.firePropertyChange("id", oldId, id);
+        propertyChangeSupport.firePropertyChange("id", oldId, id);
     }    
     
     public List<MatchResult> getRoundResults()
@@ -90,15 +87,7 @@ public class Round implements Serializable {
     public void setRoundNumber(int roundNumber) {
         int oldRoundNumber = this.roundNumber;
         this.roundNumber = roundNumber;
-        changeSupport.firePropertyChange("roundNumber", oldRoundNumber, roundNumber);
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
+        propertyChangeSupport.firePropertyChange("roundNumber", oldRoundNumber, roundNumber);
     }
 
     public List<MatchPairing> getPairings() {

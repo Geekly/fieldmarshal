@@ -25,10 +25,7 @@ import net.geeklythings.fieldmarshal.type.Faction;
 @Access(AccessType.FIELD)
 @Table(name="PLAYER")
 @NamedQuery(name="Player.findByName", query="SELECT p FROM Player p WHERE p.firstName LIKE :first AND p.lastName LIKE :last")
-public class Player implements Serializable {
-
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+public class Player extends AbstractEntityModel implements Serializable {
 
     @Override
     public String toString() {
@@ -96,7 +93,7 @@ public class Player implements Serializable {
     public void setLastRoundPlayed(int lastRoundPlayed) {
         int oldValue = this.lastRoundPlayed;
         this.lastRoundPlayed = lastRoundPlayed;
-        changeSupport.firePropertyChange("lastRoundPlayed", oldValue, this.lastRoundPlayed);
+        propertyChangeSupport.firePropertyChange("lastRoundPlayed", oldValue, this.lastRoundPlayed);
     }
     public Long getId() {
         return id;
@@ -173,7 +170,7 @@ public class Player implements Serializable {
     public void setFaction(Faction faction) {
         Faction oldFaction = this.faction;
         this.faction = faction;
-        changeSupport.firePropertyChange("faction", oldFaction, this.faction);
+        propertyChangeSupport.firePropertyChange("faction", oldFaction, this.faction);
     }
 
     public PlayerStatus getActiveStatus() {
@@ -183,7 +180,7 @@ public class Player implements Serializable {
     public void setActiveStatus(PlayerStatus activeStatus) {
         PlayerStatus oldValue = this.activeStatus;
         this.activeStatus = activeStatus;
-        changeSupport.firePropertyChange("activeStatus", oldValue, this.activeStatus);
+        propertyChangeSupport.firePropertyChange("activeStatus", oldValue, this.activeStatus);
     }
   
      public String getFirstName() {
@@ -193,7 +190,7 @@ public class Player implements Serializable {
     public void setFirstName(String firstName) {
         String oldValue = this.firstName;
         this.firstName = firstName;
-        changeSupport.firePropertyChange("firstName", oldValue, this.firstName);
+        propertyChangeSupport.firePropertyChange("firstName", oldValue, this.firstName);
     }
 
     public String getLastName() {
@@ -203,7 +200,7 @@ public class Player implements Serializable {
     public void setLastName(String lastName) {
         String oldValue = this.lastName;
         this.lastName = lastName;
-        changeSupport.firePropertyChange("lastName", oldValue, this.lastName);
+        propertyChangeSupport.firePropertyChange("lastName", oldValue, this.lastName);
     }
 
     public String getHomeTown() {
@@ -213,7 +210,7 @@ public class Player implements Serializable {
     public void setHomeTown(String homeTown) {
         String oldValue = this.homeTown;
         this.homeTown = homeTown;
-        changeSupport.firePropertyChange("homeTown", oldValue, this.homeTown);
+        propertyChangeSupport.firePropertyChange("homeTown", oldValue, this.homeTown);
     }
     
     public String getEmail() {
@@ -222,14 +219,6 @@ public class Player implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-    
-     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
     }
     
     @Override

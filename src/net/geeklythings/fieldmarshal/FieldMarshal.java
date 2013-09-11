@@ -1,8 +1,10 @@
+package net.geeklythings.fieldmarshal;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.geeklythings.fieldmarshal.ui;
+
 
 import javax.persistence.EntityManagerFactory;
 import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
@@ -30,10 +32,12 @@ public class FieldMarshal extends javax.swing.JFrame {
         
         _emf = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalMySqlPU");
         tournamentJpaController = new TournamentJpaController(_emf);
+        tournamentManager = new TournamentManager( _emf );
+        
         
         initComponents();
-        tournamentManager = new TournamentManager( _emf );
-        playerManager = new PlayerManager( _emf );
+        
+        //playerManager = new PlayerManager( _emf );
         
         //loadTournamentView.setEntityManager(_em);
         loadTournamentView.addPropertyChangeListener(tournamentManager);

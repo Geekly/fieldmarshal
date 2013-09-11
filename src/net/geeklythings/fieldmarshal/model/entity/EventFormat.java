@@ -18,7 +18,7 @@ import javax.persistence.Transient;
  */
 //@Entity
 @Embeddable
-public class EventFormat implements Serializable {
+public class EventFormat extends AbstractEntityModel implements Serializable {
     private static final long serialVersionUID = 1L;
   
     @Column(name="FORMATTYPE")
@@ -36,9 +36,6 @@ public class EventFormat implements Serializable {
     //@GeneratedValue(strategy = GenerationType.AUTO)
     //@Column(name="EVENTFORMAT_ID")
     //private Long id;
-
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     public EventFormat()
     {
@@ -72,7 +69,7 @@ public class EventFormat implements Serializable {
     public void setId(Long id) {
         Long oldId = this.id;
         this.id = id;
-        changeSupport.firePropertyChange("id", oldId, id);
+        propertyChangeSupport.firePropertyChange("id", oldId, id);
     }*/
     
 
@@ -91,7 +88,7 @@ public class EventFormat implements Serializable {
     public void setFormatType(String formatType) {
         String oldValue = this.formatType;
         this.formatType = formatType;      
-        changeSupport.firePropertyChange("formatType", oldValue, formatType);
+        propertyChangeSupport.firePropertyChange("formatType", oldValue, formatType);
     }
 
     public String getClockType() {
@@ -101,7 +98,7 @@ public class EventFormat implements Serializable {
     public void setClockType(String clockType) {
         String oldValue = this.clockType;
         this.clockType = clockType;
-        changeSupport.firePropertyChange("clockType", oldValue, clockType);
+        propertyChangeSupport.firePropertyChange("clockType", oldValue, clockType);
     }
 
     public int getClockTime() {
@@ -111,7 +108,7 @@ public class EventFormat implements Serializable {
     public void setClockTime(int turnLength) {
         int oldValue = this.clockTime;
         this.clockTime = turnLength;
-        changeSupport.firePropertyChange("clockTime", oldValue, clockTime);
+        propertyChangeSupport.firePropertyChange("clockTime", oldValue, clockTime);
     }
 
     public int getDeathClockTime() {
@@ -121,7 +118,7 @@ public class EventFormat implements Serializable {
     public void setDeathClockTime(int deathClockTime) {
         int oldValue = this.clockTime;
         this.clockTime = deathClockTime;
-        changeSupport.firePropertyChange("clockTime", oldValue, clockTime);
+        propertyChangeSupport.firePropertyChange("clockTime", oldValue, clockTime);
     }
     /*
     @Override
@@ -149,12 +146,5 @@ public class EventFormat implements Serializable {
         return "net.geeklythings.fieldmarshal.data.EventFormat[ description=" + formatDescription + " ]";
     }
     
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
-    }
     
 }
