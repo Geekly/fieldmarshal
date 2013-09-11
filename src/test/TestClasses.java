@@ -19,6 +19,7 @@ import net.geeklythings.fieldmarshal.type.ResultType;
 import net.geeklythings.fieldmarshal.model.entity.Round;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import net.geeklythings.fieldmarshal.model.PlayerStatus;
+import net.geeklythings.fieldmarshal.util.EventListenerLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,21 +30,25 @@ import org.apache.logging.log4j.Logger;
  */
 public class TestClasses {
 
-    static final public Logger logger = LogManager.getLogger(TestClasses.class.getName());
-    static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalMySqlPU");
-    static final TournamentManager manager = new TournamentManager(emf);
-    
+    static final public Logger logger = LogManager.getLogger(TestClasses.class.getName());   
+    static final EventListenerLogger eventLogger = new EventListenerLogger();
+    //static private EntityManagerFactory emf;
+    static private TournamentManager manager;
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-                
+         
+        
+        //emf = Persistence.createEntityManagerFactory("FieldMarshalMySqlPU");
+        manager = new TournamentManager( Persistence.createEntityManagerFactory("FieldMarshalMySqlPU") );
+        
         //EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
         try {       
                // TODO code application logic here
         TestClasses test = new TestClasses();
-        test.TestPlayer();
+        //test.TestPlayer();
         test.TestTournament();
         } catch (Exception e) {}  
         //test.TestPairings();
@@ -78,32 +83,42 @@ public class TestClasses {
     {
         //PlayerJpaController jpc = new PlayerJpaController(TestClasses.emf);
         //TournamentJpaController tpc = new TournamentJpaController(TestClasses.emf);
+        Tournament tournament = Tournament.createTournament(3);
+        
+        manager.addPropertyChangeListener(eventLogger);
+        manager.setTournament(tournament);
+        tournament.addPropertyChangeListener(eventLogger);
+        
+        
         
         Player pl1 = new Player("Rufus", "McGillicutty", Faction.CIRCLE);
+        pl1.addPropertyChangeListener(eventLogger);
         pl1.setEmail("rufus@warmachine.com");
         pl1.setHomeTown("Dallas");
         //jpc.create(pl1);
                 
         Player pl2 = new Player("Hank", "Haliburton", Faction.CONVERGENCE);
+        pl2.addPropertyChangeListener(eventLogger);
         pl2.setEmail("hank@warmachine.com");
         pl2.setHomeTown("Toledo");
         //jpc.create(pl2);
         
-        Tournament tournament = Tournament.createTournament(3);
-        //tournament.addPropertyChangeListener(manager);
-        manager.setTournament(tournament);
-        //TournamentManager tm = new TournamentManager(em);
-        //PlayerManager pm = new PlayerManager(em);
-        
-        tournament.addPlayer(pl2);
         tournament.addPlayer(pl1);
+        tournament.addPlayer(pl2);
+        
+        manager.jpaController.edit(tournament);
+        
+        
+        
+        //tournament.addPlayer(pl2);
+        //tournament.addPlayer(pl1);
        
         //tpc.create(tournament);
         //tournament.changeSupport.firePropertyChange(null);
-        logger.debug("Active Players: {}", tournament.getActivePlayers());
-        tournament.dropPlayer(pl1);
-        pl2.setActiveStatus(PlayerStatus.INACTIVE);
-        logger.debug("Active Players: {}", tournament.getActivePlayers());
+        //logger.debug("Active Players: {}", tournament.getActivePlayers());
+        //tournament.dropPlayer(pl1);
+        //pl2.setActiveStatus(PlayerStatus.INACTIVE);
+        //logger.debug("Active Players: {}", tournament.getActivePlayers());
        
         //manager.getJpaController().edit(tournament);
         //logger.debug(tournament.toString());
@@ -113,7 +128,7 @@ public class TestClasses {
     {
         
         //PlayerJpaController jpc = new PlayerJpaController(TestClasses.emf);
-        TournamentJpaController tpc = new TournamentJpaController(TestClasses.emf);
+        //TournamentJpaController tpc = new TournamentJpaController(TestClasses.emf);
         
         Player pl1 = new Player("Rufus", "McGillicutty", Faction.CIRCLE);   
                 

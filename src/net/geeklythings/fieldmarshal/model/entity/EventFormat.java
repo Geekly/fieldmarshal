@@ -7,6 +7,8 @@ package net.geeklythings.fieldmarshal.model.entity;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.PrePersist;
@@ -23,8 +25,8 @@ public class EventFormat extends AbstractEntityModel implements Serializable {
   
     @Column(name="FORMATTYPE")
     protected String formatType = "Steamroller 2013"; //Steamroller, etc..
-    @Column(name="FORMATDESCRIPTION")
-    protected String formatDescription = "Format Description"; 
+    //@Column(name="DESCRIPTION")
+    //protected String description;  
     @Column(name="CLOCKTYPE")
     protected String clockType = "Death Clock";
     @Column(name="CLOCKTIME")
@@ -44,42 +46,18 @@ public class EventFormat extends AbstractEntityModel implements Serializable {
     public EventFormat(EventFormat ef)
     {
         formatType = ef.formatType;
-        formatDescription = ef.formatDescription;
         clockType = ef.clockType;
         clockTime = ef.clockTime;
         
     }
     //TODO: make this work and make the field transient
-    //@Access(AccessType.PROPERTY)
-    private String getDescription()
+    @Access(AccessType.PROPERTY)
+    @Column(name="DESCRIPTION")
+    public String getDescription()
     {
         return String.format("%s, %s,  Time: %d min", formatType, clockType, clockTime);
     }
 
-    @PrePersist
-    protected void updateDescription()
-    {
-        this.formatDescription = this.getDescription();
-    }
-    
-    /*public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        Long oldId = this.id;
-        this.id = id;
-        propertyChangeSupport.firePropertyChange("id", oldId, id);
-    }*/
-    
-
-    
-    public String getFormatDescription()
-    {
-        this.formatDescription = this.getDescription();
-        return this.formatDescription;
-    }
- 
      
     public String getFormatType() {
         return this.formatType;
@@ -88,7 +66,7 @@ public class EventFormat extends AbstractEntityModel implements Serializable {
     public void setFormatType(String formatType) {
         String oldValue = this.formatType;
         this.formatType = formatType;      
-        propertyChangeSupport.firePropertyChange("formatType", oldValue, formatType);
+        firePropertyChange("formatType", oldValue, formatType);
     }
 
     public String getClockType() {
@@ -98,7 +76,7 @@ public class EventFormat extends AbstractEntityModel implements Serializable {
     public void setClockType(String clockType) {
         String oldValue = this.clockType;
         this.clockType = clockType;
-        propertyChangeSupport.firePropertyChange("clockType", oldValue, clockType);
+        firePropertyChange("clockType", oldValue, clockType);
     }
 
     public int getClockTime() {
@@ -108,7 +86,7 @@ public class EventFormat extends AbstractEntityModel implements Serializable {
     public void setClockTime(int turnLength) {
         int oldValue = this.clockTime;
         this.clockTime = turnLength;
-        propertyChangeSupport.firePropertyChange("clockTime", oldValue, clockTime);
+        firePropertyChange("clockTime", oldValue, clockTime);
     }
 
     public int getDeathClockTime() {
@@ -118,9 +96,11 @@ public class EventFormat extends AbstractEntityModel implements Serializable {
     public void setDeathClockTime(int deathClockTime) {
         int oldValue = this.clockTime;
         this.clockTime = deathClockTime;
-        propertyChangeSupport.firePropertyChange("clockTime", oldValue, clockTime);
+        firePropertyChange("clockTime", oldValue, clockTime);
     }
+    
     /*
+     * Embedded doesn't need
     @Override
     public int hashCode() {
         int hash = 0;
@@ -139,11 +119,11 @@ public class EventFormat extends AbstractEntityModel implements Serializable {
             return false;
         }
         return true;
-    }*/
+    }*/ 
 
     @Override
     public String toString() {
-        return "net.geeklythings.fieldmarshal.data.EventFormat[ description=" + formatDescription + " ]";
+        return  getDescription();
     }
     
     

@@ -8,8 +8,6 @@ import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
@@ -23,7 +21,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author khooks
  */
-public class TournamentView extends javax.swing.JPanel implements PropertyChangeListener, Observer{
+public class TournamentView extends javax.swing.JPanel implements PropertyChangeListener {
     
     private static final Logger logger = LogManager.getLogger(TournamentView.class.getName());
     private TournamentManager manager;
@@ -44,8 +42,14 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
 
     public void setManager(TournamentManager manager)
     {
+        // remove any existing changer listener
+        if( this.manager != null)
+        {
+            removePropertyChangeListener(this.manager);
+        }
         this.manager = manager;
-        this.localTournament = manager.getTournament();
+        setTournament( manager.getTournament() );
+        addPropertyChangeListener(manager);  // notify the manager of propertyChanges
         //this.manager.addObserver(this);
         
     }
@@ -240,14 +244,15 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
 
     private void cbFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFormatActionPerformed
         // TODO add your handling code here:
-        Tournament t = manager.getTournament();
+        //Tournament t = manager.getTournament();
         if( localTournament != null )
         {
+            String oldValue = localTournament.getFormat().getFormatType();
             String format = cbFormat.getSelectedItem().toString();
             logger.debug("TournamentView: FormatComboBox selected: {}", format);
             logger.debug("Selected Item {}", cbFormat.getSelectedItem());
-            t.getFormat().setFormatType(format);
-            //manager.notifyObservers();
+            localTournament.getFormat().setFormatType(format);
+            firePropertyChange(Tournament.FORMAT, oldValue, format);
         }
     }//GEN-LAST:event_cbFormatActionPerformed
 
@@ -290,17 +295,6 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void update(Observable manager, Object o) {
-        
-        if( o instanceof Tournament )
-        {
-            logger.debug("TournamentView: update: {}", o);
-            localTournament = (Tournament)o;
-            updateView();
-        }
-        
-    }
     
     class FormatListRenderer extends DefaultListCellRenderer
     {

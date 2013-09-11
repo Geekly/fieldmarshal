@@ -23,51 +23,59 @@ import net.geeklythings.fieldmarshal.type.Faction;
 
 @Entity
 @Access(AccessType.FIELD)
-@Table(name="PLAYER")
-@NamedQuery(name="Player.findByName", query="SELECT p FROM Player p WHERE p.firstName LIKE :first AND p.lastName LIKE :last")
+@Table(name = "PLAYER")
+@NamedQuery(name = "Player.findByName", query = "SELECT p FROM Player p WHERE p.firstName LIKE :first AND p.lastName LIKE :last")
 public class Player extends AbstractEntityModel implements Serializable {
+    private static final long serialVersionUID = 1L;
+    public static final String FIRSTNAME = "firstName";
+    public static final String LASTNAME = "lastName";
+    public static final String EMAIL = "email";
+    public static final String HOMETOWN = "hometown";
+    public static final String FACTION = "faction";
+    public static final String LASTROUNDPLAYED = "lastRoundPlayed";
+    public static final String ACTIVESTATUS = "activeStatus";
+           
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "PLAYER_ID")
+    private Long id;
+    @Column(name = "FIRSTNAME")
+    private String firstName;
+    @Column(name = "LASTNAME")
+    private String lastName;
+    @Column(name = "EMAIL")
+    private String email;
+    @Column(name = "HOMETOWN")
+    private String homeTown;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "FACTION")
+    private Faction faction;
+    @Column(name = "LASTROUNDPLAYED")
+    private int lastRoundPlayed = 1;
+    //@OneToMany(cascade = {CascadeType.ALL}) 
+    // TODO: make this persisted
+    @Transient
+    private List<PlayerResult> results = new ArrayList<>();
+    @Transient
+    private PlayerStatus activeStatus = PlayerStatus.ACTIVE;
+
+    public Player() {
+    }
+
+    public Player(String firstName, String lastName, Faction addfaction) {
+        //When creating a new Player, we don't want to use an existing person if possible
+
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.faction = addfaction;
+    }
 
     @Override
     public String toString() {
         return "Player{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", homeTown=" + homeTown + ", faction=" + faction + ", lastRoundPlayed=" + lastRoundPlayed + ", activeStatus=" + activeStatus + '}';
     }
-  
-    private static final long serialVersionUID = 1L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="PLAYER_ID")
-    private Long id;
-    
-    @Column(name="FIRSTNAME")
-    private String firstName;
-    @Column(name="LASTNAME")
-    private String lastName;
-    @Column(name="EMAIL")
-    private String email;
-    @Column(name="HOMETOWN")
-    private String homeTown;
-    
-    /*@JoinColumn(name = "ID_PERSON")
-    @ManyToOne(cascade= { CascadeType.MERGE })
-    private Person person;*/
-    
-    @Enumerated(EnumType.STRING)
-    @Column(name="FACTION")
-    private Faction faction;
-    
-    @Column(name="LASTROUNDPLAYED")
-    private int lastRoundPlayed = 1;
 
-    //@OneToMany(cascade = {CascadeType.MERGE}) 
-    // TODO: make this persisted
-    @Transient
-    private List<PlayerResult> results = new ArrayList<>();
-
-    @Transient
-    private PlayerStatus activeStatus = PlayerStatus.ACTIVE;
-   
-    
     /**
      * Get the value of results
      *
@@ -85,7 +93,7 @@ public class Player extends AbstractEntityModel implements Serializable {
     public void setResults(List<PlayerResult> results) {
         this.results = results;
     }
-    
+
     public int getLastRoundPlayed() {
         return lastRoundPlayed;
     }
@@ -93,8 +101,9 @@ public class Player extends AbstractEntityModel implements Serializable {
     public void setLastRoundPlayed(int lastRoundPlayed) {
         int oldValue = this.lastRoundPlayed;
         this.lastRoundPlayed = lastRoundPlayed;
-        propertyChangeSupport.firePropertyChange("lastRoundPlayed", oldValue, this.lastRoundPlayed);
+        firePropertyChange(LASTROUNDPLAYED, oldValue, this.lastRoundPlayed);
     }
+
     public Long getId() {
         return id;
     }
@@ -103,66 +112,18 @@ public class Player extends AbstractEntityModel implements Serializable {
         this.id = id;
     }
 
-    public Player(){}
-    
-    public Player(String firstName, String lastName, Faction addfaction) {
-        //When creating a new Player, we don't want to use an existing person if possible
-
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.faction = addfaction;   
+    public int getWins() {
+        return 0;
     }
 
-    public int getWins(){return 0;}
-    
-    public int getLosses() {return 0;}
-    
-    public int getStandings(){return 0;    }
-    
-
-   /* public final void setPerson(Person person) {
-        // add an un-persisted person 
-        try {
-            
-            Person oldPerson = this.getPerson();
-        
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
-            EntityManager em = emf.createEntityManager();
-
-            Query query = em.createQuery("SELECT P FROM Person P WHERE P.firstName=?1 AND P.lastName=?2 ");
-            query.setParameter(1, person.getFirstName());
-            query.setParameter(2, person.getLastName());
-
-            Person tempPerson = null; 
-            //check if this person already exists in the database
-            try {
-                tempPerson = (Person)query.getSingleResult();
-            } catch (NoResultException e) {
-                //no result found
-            } 
-
-            em.getTransaction().begin();
-            if( tempPerson == null) //no records found, doesn't exist
-            {   
-                em.persist(person); //persist the new person
-            }
-            else // person exists in the database
-            {
-                person = em.merge(tempPerson);
-            }
-            this.person = person;
-            em.getTransaction().commit();
-            emf.close();
-            propertyChangeSupport.firePropertyChange("person", oldPerson, this.getPerson());
-
-            } 
-        catch( Exception e) { 
-            e.printStackTrace(); 
-        }
-            
+    public int getLosses() {
+        return 0;
     }
-    */
-    
+
+    public int getStandings() {
+        return 0;
+    }
+
     public Faction getFaction() {
         return faction;
     }
@@ -170,7 +131,7 @@ public class Player extends AbstractEntityModel implements Serializable {
     public void setFaction(Faction faction) {
         Faction oldFaction = this.faction;
         this.faction = faction;
-        propertyChangeSupport.firePropertyChange("faction", oldFaction, this.faction);
+        firePropertyChange(FACTION, oldFaction, this.faction);
     }
 
     public PlayerStatus getActiveStatus() {
@@ -180,17 +141,17 @@ public class Player extends AbstractEntityModel implements Serializable {
     public void setActiveStatus(PlayerStatus activeStatus) {
         PlayerStatus oldValue = this.activeStatus;
         this.activeStatus = activeStatus;
-        propertyChangeSupport.firePropertyChange("activeStatus", oldValue, this.activeStatus);
+        firePropertyChange(ACTIVESTATUS, oldValue, this.activeStatus);
     }
-  
-     public String getFirstName() {
+
+    public String getFirstName() {
         return firstName;
     }
 
     public void setFirstName(String firstName) {
         String oldValue = this.firstName;
         this.firstName = firstName;
-        propertyChangeSupport.firePropertyChange("firstName", oldValue, this.firstName);
+        firePropertyChange(FIRSTNAME, oldValue, this.firstName);
     }
 
     public String getLastName() {
@@ -200,7 +161,7 @@ public class Player extends AbstractEntityModel implements Serializable {
     public void setLastName(String lastName) {
         String oldValue = this.lastName;
         this.lastName = lastName;
-        propertyChangeSupport.firePropertyChange("lastName", oldValue, this.lastName);
+        firePropertyChange(LASTNAME, oldValue, this.lastName);
     }
 
     public String getHomeTown() {
@@ -210,32 +171,36 @@ public class Player extends AbstractEntityModel implements Serializable {
     public void setHomeTown(String homeTown) {
         String oldValue = this.homeTown;
         this.homeTown = homeTown;
-        propertyChangeSupport.firePropertyChange("homeTown", oldValue, this.homeTown);
+        firePropertyChange(HOMETOWN, oldValue, this.homeTown);
     }
-    
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
+        String oldValue = this.email;
         this.email = email;
+        firePropertyChange(EMAIL, oldValue, this.email);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        
-        if ( this == obj)
-            return true;
-        if ( obj == null)
-            return false;
-        if ( obj.getClass() != getClass() )
-            return false;
-        //Player player = (Player)obj;
-        if ( this.hashCode() == obj.hashCode() )
-        {
+
+        if (this == obj) {
             return true;
         }
- 
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        //Player player = (Player)obj;
+        if (this.hashCode() == obj.hashCode()) {
+            return true;
+        }
+
         return false; //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -246,5 +211,4 @@ public class Player extends AbstractEntityModel implements Serializable {
         hash = 83 * hash + Objects.hashCode(this.lastName);
         return hash;
     }
-    
 }

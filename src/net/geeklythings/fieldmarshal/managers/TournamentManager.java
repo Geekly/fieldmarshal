@@ -30,7 +30,7 @@ public class TournamentManager implements PropertyChangeListener {
     private final PropertyChangeSupport changeSupport = new java.beans.PropertyChangeSupport(this);
     
     //public static final String LOAD_TOURNAMENT_ID = "LoadTournamentId";
-    private TournamentJpaController jpaController; 
+    public TournamentJpaController jpaController; 
     private Tournament tournament;
     
     public TournamentManager( EntityManagerFactory emf )
@@ -93,7 +93,7 @@ public class TournamentManager implements PropertyChangeListener {
     
     @Override
     public void propertyChange(PropertyChangeEvent pce) {
-        logger.debug("PropertyChangeEvent: {}", pce);
+        logger.debug("TournamentManager: propertyChange: {} from class: {}", pce.getPropertyName(), pce.getSource().getClass().getName());
         
         if( pce.getPropertyName().matches(LoadView.LOAD_TOURNAMENT_ID))
         {
@@ -109,9 +109,9 @@ public class TournamentManager implements PropertyChangeListener {
             changeSupport.firePropertyChange( "newTournament", null, tournament);
 
         }
-        if( pce.getPropertyName().matches(Tournament.PLAYER_CHANGE))
+        if( pce.getPropertyName().matches(Tournament.ADDPLAYER))
         {
-        
+            
             
         }
         

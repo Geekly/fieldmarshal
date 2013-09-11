@@ -67,7 +67,7 @@ public class Round extends AbstractEntityModel implements Serializable {
     public void setId(Long id) {
         Long oldId = this.id;
         this.id = id;
-        propertyChangeSupport.firePropertyChange("id", oldId, id);
+        firePropertyChange("id", oldId, id);
     }    
     
     public List<MatchResult> getRoundResults()
@@ -87,7 +87,7 @@ public class Round extends AbstractEntityModel implements Serializable {
     public void setRoundNumber(int roundNumber) {
         int oldRoundNumber = this.roundNumber;
         this.roundNumber = roundNumber;
-        propertyChangeSupport.firePropertyChange("roundNumber", oldRoundNumber, roundNumber);
+        firePropertyChange("roundNumber", oldRoundNumber, roundNumber);
     }
 
     public List<MatchPairing> getPairings() {

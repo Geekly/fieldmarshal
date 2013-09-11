@@ -26,8 +26,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import net.geeklythings.fieldmarshal.model.PlayerStatus;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -37,15 +37,24 @@ import javafx.collections.ListChangeListener;
 @Entity
 @Access(AccessType.FIELD)
 @Table(name="TOURNAMENT")
-public class Tournament extends AbstractEntityModel implements Serializable, PropertyChangeListener, ListChangeListener {
+public class Tournament extends AbstractEntityModel implements Serializable, PropertyChangeListener {
     
-    public static final String PLAYER_CHANGE = "playerChange";
-    public static final String ROUND_CHANGE = "roundChange";
     private static final long serialVersionUID = 1L;
+    private final static Logger logger = LogManager.getLogger(Tournament.class);    
     
     @Id  @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="TOURNAMENT_ID")
     private Long id;   
+    
+    public static final String STORE = "storeChange";
+    public static final String ORGANIZER = "organizerChange";
+    public static final String ADDPLAYER = "addPlayer";
+    public static final String REMOVEPLAYER = "removePlayer";
+    public static final String ADDROUND = "addRound";
+    public static final String REMOVEROUND = "removeRound";
+    public static final String DROPPLAYER = "dropPlayer";
+    public static final String FORMAT = "formatChange";
+    public static final String TODAYSDATE = "dateChange";
     
     public Long getId() {
         return id;
@@ -54,7 +63,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     public void setId(Long id) {
         Long oldId = this.id;
         this.id = id;
-        propertyChangeSupport.firePropertyChange("id", oldId, id);
+        firePropertyChange("id", oldId, id);
     }
     
     @Temporal(TemporalType.TIMESTAMP)
@@ -82,8 +91,9 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     {
         return players;
     }
-    public void setPlayers( List<Player> players)
+    public void setPlayers( List<Player> players) throws Exception
     {
+        throw new Exception("Can't change the players list directly");
         //this.players = (ObservableList<Player>) FXCollections.observableList(players);
     }
     
@@ -91,14 +101,11 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     private int currentRound = 1;
      
     public Tournament() {
-        
-        format = new EventFormat();
-        format.addPropertyChangeListener(this);
-        //todaysDate = new Date();    
-        //startTime = todaysDate;
-        //format = new EventFormat();
-        //players = new ArrayList<>();
-        //rounds = new ArrayList<>(numRounds);
+        // initialize with dummy variables to reduce chance of null exceptions in the ui
+        setFormat ( new EventFormat() );
+        //format.addPropertyChangeListener(this);
+        players = new ArrayList<>();
+        rounds = new ArrayList<>(numRounds);
     }
     
     public static Tournament createTournament(int numRounds) 
@@ -107,21 +114,16 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
         Tournament tournament = new Tournament();      
         //tournament.addPropertyChangeListener(this);  //the manager that creates it will listen to it
         
-        EventFormat ef = new EventFormat();       
+        //EventFormat ef = new EventFormat();       
         //ef.setNumRounds(numRounds);
-        List<Player> players = new ArrayList<>();
-        tournament.players = FXCollections.observableList(players);
+        //tournament.setFormat( ef );  // setters need to register listeners      
+        tournament.players = new ArrayList<>();       
+        tournament.rounds = new ArrayList<>();
         
-        //tournament.players = new Players();
-        
-        tournament.setFormat( ef );
-        
-        List<Round> rounds = new ArrayList<>();
-        tournament.rounds = FXCollections.observableList(rounds);
         
         for( int i=1; i<=numRounds; i++)
         {
-            tournament.addRound(new Round(i));
+            tournament.addNewRound();
         }
 
         Date today = new Date();
@@ -145,7 +147,9 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     public void setFormat(EventFormat format) {
         EventFormat oldformat = this.format;
         this.format = format;
-        propertyChangeSupport.firePropertyChange("format", oldformat, format);
+        //logger.debug("Tournament: setFormat: {}", format);
+        format.addPropertyChangeListener(this);
+        firePropertyChange(FORMAT, oldformat, format);
         
     }
 
@@ -170,7 +174,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     public void setTodaysDate(Date todaysDate) {
         Date oldTodaysDate = this.todaysDate;
         this.todaysDate = todaysDate;
-        propertyChangeSupport.firePropertyChange("todaysDate", oldTodaysDate, todaysDate);
+        firePropertyChange(TODAYSDATE, oldTodaysDate, todaysDate);
     }
     
     /*public Date getStartTime() {
@@ -180,7 +184,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     public void setStartTime(Date startTime) {
         Date oldStartTime = this.startTime;
         this.startTime = startTime;
-        propertyChangeSupport.firePropertyChange("startTime", oldStartTime, startTime);
+        firePropertyChange("startTime", oldStartTime, startTime);
     }*/
 
     public String getStore() {
@@ -190,7 +194,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     public void setStore(String store) {
         String oldLocation = this.store;
         this.store = store;
-        propertyChangeSupport.firePropertyChange("store", oldLocation, store);
+        firePropertyChange(STORE, oldLocation, store);
     }
 
     public String getOrganizer() {
@@ -200,7 +204,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     public void setOrganizer(String organizer) {
         String oldOrganizer = this.organizer;
         this.organizer = organizer;
-        propertyChangeSupport.firePropertyChange("organizer", oldOrganizer, organizer);
+        firePropertyChange(ORGANIZER, oldOrganizer, organizer);
     }
 
     public void setNumRounds(int targetRounds) {
@@ -218,7 +222,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
         }
         numRounds = rounds.size();
         //this.persist(this);
-        propertyChangeSupport.firePropertyChange("numRounds", oldRounds, numRounds);
+        firePropertyChange("numRounds", oldRounds, numRounds);
     }
     
     public int getNumRounds() {
@@ -230,7 +234,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
         //List<Player> oldPlayers = new ArrayList<>( this.getPlayers() );
         players.add(player);
         player.addPropertyChangeListener(this);        
-        propertyChangeSupport.firePropertyChange(PLAYER_CHANGE, null, this.getPlayers());
+        firePropertyChange(ADDPLAYER, null, this.getPlayers());
     }
 
     public List<Round> getRounds()
@@ -241,52 +245,29 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     public void addNewRound()
     {
         List<Round> oldRounds = this.rounds;
-        this.rounds = FXCollections.observableList( new ArrayList<>(this.rounds) );
-        Round newRound = new Round();
-        rounds.add( newRound );
-        propertyChangeSupport.firePropertyChange("rounds", oldRounds, rounds);
+        this.rounds = new ArrayList<>(this.rounds);     
+        rounds.add( new Round() );
+        firePropertyChange(ADDROUND, oldRounds, rounds);
     }
         
-    public void addRound(Round round) 
-    {
-        List<Round> oldRounds = this.rounds;
-        this.rounds = FXCollections.observableList( new ArrayList<>(this.rounds) );      
-        this.rounds.add(round);
-        this.numRounds = rounds.size();
-        propertyChangeSupport.firePropertyChange("rounds", oldRounds, rounds);
-    }
-
     public void removeLastRound()
     {
         // TODO: change this to utilize the observable list properties
         List<Round> oldRounds = this.rounds;
-        this.rounds = FXCollections.observableList( new ArrayList<>(this.rounds) );
-        this.rounds.remove( rounds.size()-1 );
+        this.rounds = new ArrayList<>(this.rounds );
+        int lastRoundIndex = rounds.size()-1;
+        this.rounds.remove( lastRoundIndex );
         this.numRounds = rounds.size();
-        System.out.println("");
-        propertyChangeSupport.firePropertyChange("rounds", oldRounds, rounds);
-    }
-    
-    public void copyProperties(Tournament master)
-    /* Don't create new objects in here */
-    {
-        //setId(master.id);  //don't ever copy the id, or chaos will ensue
-        setTodaysDate(master.todaysDate);
-        //setNumRounds (master.numRounds);  //we won't set this in the dialog any more
-        setStore(master.store);   
-        setOrganizer(master.organizer);
-        //setPlayers( master.players);  //don't change this anywhere
-        //rounds = master.rounds; //don't change this anywhere
-        getFormat().setClockTime(master.getFormat().getClockTime());
-        getFormat().setClockType(master.getFormat().getClockType());
-        getFormat().setFormatType(master.getFormat().getFormatType());
-
+        logger.debug("Tournament: RemoveLastRound #{}", lastRoundIndex);
+        firePropertyChange(REMOVEROUND, oldRounds, rounds);
     }
        
     public void dropPlayer(Player dropped)
     {
+        logger.debug("Tournament: Dropping Player: {}", dropped);
         //keep the player in the tournament, but eliminate from pairings
         dropped.setActiveStatus(PlayerStatus.INACTIVE);
+        firePropertyChange(DROPPLAYER, null, true);
     }
     
     @Override
@@ -316,14 +297,10 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
 
     @Override
     public void propertyChange(PropertyChangeEvent pce) {
+        //logger.debug("PropertChange event in Tournament: {}", pce);
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
-    @Override
-    public void onChanged(Change change) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 
 
