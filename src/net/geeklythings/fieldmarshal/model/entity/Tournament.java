@@ -70,7 +70,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     @Column(name="TODAYSDATE")
     private Date todaysDate = new Date();
     @Column(name="LOCATION")
-    private String store = "Fort Bourne";
+    private String location = "Fort Bourne";
     @Column(name="ORGANIZER")
     private String organizer = "Anastasia deBray";
     @Column(name="NUMROUNDS")
@@ -129,7 +129,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
         Date today = new Date();
         tournament.setTodaysDate(today);
         tournament.setOrganizer("Coleman Stryker");
-        tournament.setStore("Corvis Convention Center");
+        tournament.setLocation("Corvis Convention Center");
        
         //TODO: Set up Rounds first
 
@@ -187,13 +187,13 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
         firePropertyChange("startTime", oldStartTime, startTime);
     }*/
 
-    public String getStore() {
-        return store;
+    public String getLocation() {
+        return location;
     }
 
-    public void setStore(String store) {
-        String oldLocation = this.store;
-        this.store = store;
+    public void setLocation(String store) {
+        String oldLocation = this.location;
+        this.location = store;
         firePropertyChange(STORE, oldLocation, store);
     }
 
@@ -292,13 +292,13 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
 
     @Override
     public String toString() {
-        return "Tournament{ todaysDate=" + todaysDate + ", store=" + store + ", organizer=" + organizer + ", numRounds=" + numRounds + ", format=" + format + ", players=" + players + ", rounds=" + rounds + ", currentRound=" + currentRound + ", id=" + id + '}';
+        return "Tournament{ todaysDate=" + todaysDate + ", store=" + location + ", organizer=" + organizer + ", numRounds=" + numRounds + ", format=" + format + ", players=" + players + ", rounds=" + rounds + ", currentRound=" + currentRound + ", id=" + id + '}';
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent pce) {
         //logger.debug("PropertChange event in Tournament: {}", pce);
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        firePropertyChange(pce);
     }
 
 

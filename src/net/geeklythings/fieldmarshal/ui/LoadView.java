@@ -61,6 +61,7 @@ public class LoadView extends javax.swing.JPanel implements PropertyChangeListen
         manager = mgr;
         manager.addPropertyChangeListener(this);  // manager notifies this view
         addPropertyChangeListener(manager);  // the view notifies the manager
+        updateList();
     }
     
     public void updateList()
@@ -79,7 +80,7 @@ public class LoadView extends javax.swing.JPanel implements PropertyChangeListen
         if( tournamentList != null){
             for(Tournament t: tournamentList ){            
                 listString = String.format("Id: %d, Location: %s, Organizer: %s, Date: %s", 
-                        t.getId(), t.getStore(), t.getOrganizer(), t.getTodaysDate());
+                        t.getId(), t.getLocation(), t.getOrganizer(), t.getTodaysDate());
                 listModel.addElement(listString);
             }
         }

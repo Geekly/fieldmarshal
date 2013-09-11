@@ -13,6 +13,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
+import net.geeklythings.fieldmarshal.type.ClockType;
 import net.geeklythings.fieldmarshal.type.EventFormatType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,21 +38,22 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
         this.setEnabled(false);
  
         cbFormat.setModel( new DefaultComboBoxModel( EventFormatType.values() ));
-        cbFormat.setRenderer( new FormatListRenderer() );
+        cbClock.setModel( new DefaultComboBoxModel( ClockType.values() ));
+        //cbFormat.setRenderer( new FormatListRenderer() );
     }
 
-    public void setManager(TournamentManager manager)
+    public void setManager(TournamentManager mgr)
     {
         // remove any existing changer listener
         if( this.manager != null)
         {
             removePropertyChangeListener(this.manager);
         }
-        this.manager = manager;
-        setTournament( manager.getTournament() );
-        addPropertyChangeListener(manager);  // notify the manager of propertyChanges
-        //this.manager.addObserver(this);
-        
+        this.manager = mgr;
+        setTournament( mgr.getTournament() );
+        mgr.addPropertyChangeListener(this);
+        addPropertyChangeListener(mgr);  // notify the manager of propertyChanges
+        updateView();
     }
     
     public TournamentManager getManager(){ return this.manager; }
@@ -63,9 +65,11 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
     
     public void updateView()
     {
+        localTournament = manager.getTournament();
+        
         if( localTournament != null)
         { 
-            txtLocation.setText(localTournament.getStore());
+            txtLocation.setText(localTournament.getLocation());
             txtOrganizer.setText(localTournament.getOrganizer());
        }
     }
@@ -109,6 +113,11 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
         jLabel1.setText("Number of Rounds:");
 
         txtOrganizer.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtOrganizer.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtOrganizerFocusLost(evt);
+            }
+        });
         txtOrganizer.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtOrganizerKeyPressed(evt);
@@ -122,7 +131,7 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
         jLabel6.setText("Edit Tournament Information");
 
         cbClock.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cbClock.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Death Clock", "Timed Turns" }));
+        cbClock.setModel(new javax.swing.DefaultComboBoxModel(ClockType.values()));
         cbClock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbClockActionPerformed(evt);
@@ -142,6 +151,16 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
 
         txtLocation.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtLocation.setName(""); // NOI18N
+        txtLocation.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtLocationFocusLost(evt);
+            }
+        });
+        txtLocation.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtLocationKeyPressed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Format:");
@@ -257,7 +276,13 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
     }//GEN-LAST:event_cbFormatActionPerformed
 
     private void cbClockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbClockActionPerformed
-        // TODO add your handling code here:
+        if( localTournament != null )
+        {
+            String oldValue = localTournament.getFormat().getClockType();
+            String newValue = cbClock.getSelectedItem().toString();
+            localTournament.getFormat().setClockType(newValue);
+            firePropertyChange(Tournament.FORMAT, oldValue, newValue);
+        }
         
     }//GEN-LAST:event_cbClockActionPerformed
 
@@ -265,13 +290,42 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
         // TODO add your handling code here:
         if( evt.getKeyCode() == KeyEvent.VK_ENTER)
         {
-            Tournament t = manager.getTournament();
-            t.setOrganizer( txtOrganizer.getText());
-            
-            //manager.notifyObservers();
+            updateOrganizer( txtOrganizer.getText());
+
         }
     }//GEN-LAST:event_txtOrganizerKeyPressed
 
+    private void txtOrganizerFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrganizerFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtOrganizerFocusLost
+
+    private void txtLocationFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLocationFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLocationFocusLost
+
+    private void txtLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLocationKeyPressed
+                if( evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            updateLocation( txtLocation.getText());
+
+        }
+    }//GEN-LAST:event_txtLocationKeyPressed
+
+    private void updateOrganizer(String newValue)
+    {
+            Tournament t = manager.getTournament();
+            String oldValue = t.getOrganizer();
+            t.setOrganizer( newValue );          
+            firePropertyChange( Tournament.ORGANIZER, oldValue, newValue );
+    }
+    
+    private void updateLocation(String newValue)
+    {
+            Tournament t = manager.getTournament();
+            String oldValue = t.getLocation();
+            t.setLocation( newValue );          
+            firePropertyChange( Tournament.ORGANIZER, oldValue, newValue );
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbClock;
     private javax.swing.JComboBox cbFormat;
@@ -292,10 +346,10 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
 
     @Override
     public void propertyChange(PropertyChangeEvent pce) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        updateView();
     }
 
-    
+    /*
     class FormatListRenderer extends DefaultListCellRenderer
     {
 
@@ -312,5 +366,5 @@ public class TournamentView extends javax.swing.JPanel implements PropertyChange
             return this;
         }
         
-    }
+    }*/
 }

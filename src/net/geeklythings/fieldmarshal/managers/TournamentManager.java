@@ -9,8 +9,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Observable;
+import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import net.geeklythings.fieldmarshal.controller.exceptions.NonexistentEntityException;
 import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import net.geeklythings.fieldmarshal.ui.LoadView;
@@ -115,8 +117,16 @@ public class TournamentManager implements PropertyChangeListener {
 
         }
         if( pce.getPropertyName().matches(Tournament.ADDPLAYER))
-        {
-            
+        {   
+            try {
+                // players were added
+                jpaController.edit(tournament);
+                changeSupport.firePropertyChange( "addPlayer", null, tournament);
+            } catch (NonexistentEntityException ex) {
+                java.util.logging.Logger.getLogger(TournamentManager.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(TournamentManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
         }
         

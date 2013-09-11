@@ -4,6 +4,7 @@
  */
 package net.geeklythings.fieldmarshal.model.entity;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import javax.persistence.Transient;
@@ -35,5 +36,8 @@ public abstract class AbstractEntityModel
         propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
     }
 
-
+    protected void firePropertyChange(PropertyChangeEvent event)
+    {
+        propertyChangeSupport.firePropertyChange(event);
+    }
 }

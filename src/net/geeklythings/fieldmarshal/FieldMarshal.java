@@ -42,12 +42,12 @@ public class FieldMarshal extends javax.swing.JFrame {
         //loadTournamentView.setEntityManager(_em);
         loadView.setManager(tournamentManager);
         //loadView.addPropertyChangeListener(tournamentManager);
-        loadView.updateList();
+        //loadView.updateList();
         
         ///tournamentManager.addObserver(tournamentView);
         ///tournamentManager.addObserver(playersView);      
         
-        //tournamentView.setManager(tournamentManager);
+        tournamentView.setManager(tournamentManager);
         //playersView.setManager(tournamentManager);
         
                
@@ -67,6 +67,8 @@ public class FieldMarshal extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         loadView = new net.geeklythings.fieldmarshal.ui.LoadView();
+        tournamentView = new net.geeklythings.fieldmarshal.ui.TournamentView();
+        playersView1 = new net.geeklythings.fieldmarshal.ui.PlayersView();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -76,6 +78,8 @@ public class FieldMarshal extends javax.swing.JFrame {
         });
 
         jTabbedPane1.addTab("Load Tournament", loadView);
+        jTabbedPane1.addTab("Tournament Details", tournamentView);
+        jTabbedPane1.addTab("Players", playersView1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,7 +89,7 @@ public class FieldMarshal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
 
         pack();
@@ -140,6 +144,8 @@ public class FieldMarshal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane jTabbedPane1;
     private net.geeklythings.fieldmarshal.ui.LoadView loadView;
+    private net.geeklythings.fieldmarshal.ui.PlayersView playersView1;
+    private net.geeklythings.fieldmarshal.ui.TournamentView tournamentView;
     // End of variables declaration//GEN-END:variables
 
     

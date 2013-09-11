@@ -8,18 +8,15 @@ package net.geeklythings.fieldmarshal.type;
  *
  * @author khooks
  */
-public enum EventFormatType {
+public enum ClockType {
+    
+    TIMEDTURNS ("Timed Turns"),
+    DEATHCLOCK ("Death Clock"),
+    CASUAL ("Casual");
+    
+    	private final String name;
 	
-	SR2013 ("Steam Roller 2013"),
-	MANGLEDMETAL ("Mangled Metal"),
-	HARDCORE ("Hardcore"),
-	IRONGAUNTLET ("Iron Gauntlet"),
-        RELEASE ("Release Event");
-
-	 
-	private final String name;
-	
-	private EventFormatType(String s) {
+	private ClockType(String s) {
 		name = s;
 	}
 	
@@ -34,12 +31,14 @@ public enum EventFormatType {
             return name;
         }
         
+        // use ClockType.values() instead
+        
 	public static String[] enumsToStringArray() {
 		
-		String result[] = new String[EventFormatType.values().length];
+		String result[] = new String[ClockType.values().length];
 	
 		int count = 0;
-		for ( EventFormatType each : EventFormatType.values()) {
+		for ( ClockType each : ClockType.values()) {
 			result[count] = each.getName();
 			count++;
 		}
