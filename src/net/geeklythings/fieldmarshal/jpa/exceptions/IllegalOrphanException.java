@@ -1,4 +1,4 @@
-package net.geeklythings.fieldmarshal.controller.exceptions;
+package net.geeklythings.fieldmarshal.jpa.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;

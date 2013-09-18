@@ -12,7 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import net.geeklythings.fieldmarshal.controller.exceptions.NonexistentEntityException;
+import net.geeklythings.fieldmarshal.jpa.exceptions.NonexistentEntityException;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
 
 /**

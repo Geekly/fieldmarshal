@@ -1,4 +1,4 @@
-package net.geeklythings.fieldmarshal.controller.exceptions;
+package net.geeklythings.fieldmarshal.jpa.exceptions;
 
 public class PreexistingEntityException extends Exception {
     public PreexistingEntityException(String message, Throwable cause) {

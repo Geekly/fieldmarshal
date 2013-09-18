@@ -144,7 +144,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
         return format;
     }
 
-    public void setFormat(EventFormat format) {
+    public final void setFormat(EventFormat format) {
         EventFormat oldformat = this.format;
         this.format = format;
         //logger.debug("Tournament: setFormat: {}", format);

@@ -8,15 +8,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
-import java.util.Observable;
 import java.util.logging.Level;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import net.geeklythings.fieldmarshal.controller.exceptions.NonexistentEntityException;
+import net.geeklythings.fieldmarshal.jpa.exceptions.NonexistentEntityException;
 import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import net.geeklythings.fieldmarshal.ui.LoadView;
-import net.geeklythings.fieldmarshal.ui.PlayersView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,4 +1,4 @@
-package net.geeklythings.fieldmarshal.controller.exceptions;
+package net.geeklythings.fieldmarshal.jpa.exceptions;
 
 public class NonexistentEntityException extends Exception {
     public NonexistentEntityException(String message, Throwable cause) {

@@ -4,13 +4,10 @@
  */
 package net.geeklythings.fieldmarshal.ui;
 
-import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JList;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
 import net.geeklythings.fieldmarshal.type.ClockType;

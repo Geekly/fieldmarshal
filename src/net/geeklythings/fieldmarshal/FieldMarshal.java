@@ -8,7 +8,6 @@ package net.geeklythings.fieldmarshal;
 
 import javax.persistence.EntityManagerFactory;
 import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
-import net.geeklythings.fieldmarshal.model.entity.Tournament;
 import net.geeklythings.fieldmarshal.managers.PlayerManager;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
 

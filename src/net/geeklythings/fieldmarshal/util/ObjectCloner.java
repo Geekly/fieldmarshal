@@ -10,8 +10,6 @@ package net.geeklythings.fieldmarshal.util;
  */
 
 import java.io.*;
-import java.util.*;
-import java.awt.*;
 
 public class ObjectCloner
 {

@@ -5,10 +5,8 @@
 package test;
 
 import com.google.gson.Gson;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
-import net.geeklythings.fieldmarshal.controller.exceptions.NonexistentEntityException;
+import net.geeklythings.fieldmarshal.jpa.exceptions.NonexistentEntityException;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
 import net.geeklythings.fieldmarshal.model.entity.EventFormat;
 import net.geeklythings.fieldmarshal.type.Faction;
@@ -18,7 +16,6 @@ import net.geeklythings.fieldmarshal.model.entity.PlayerResult;
 import net.geeklythings.fieldmarshal.type.ResultType;
 import net.geeklythings.fieldmarshal.model.entity.Round;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
-import net.geeklythings.fieldmarshal.model.PlayerStatus;
 import net.geeklythings.fieldmarshal.util.EventListenerLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

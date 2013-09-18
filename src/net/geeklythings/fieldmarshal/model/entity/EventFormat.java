@@ -4,15 +4,11 @@
  */
 package net.geeklythings.fieldmarshal.model.entity;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.PrePersist;
-import javax.persistence.Transient;
 
 /**
  *

@@ -4,7 +4,6 @@
  */
 package test;
 
-import net.geeklythings.fieldmarshal.type.Faction;
 import net.geeklythings.fieldmarshal.type.EventFormatType;
 
 /**
