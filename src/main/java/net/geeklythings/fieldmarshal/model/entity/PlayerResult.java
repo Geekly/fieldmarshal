@@ -18,7 +18,6 @@ import javax.persistence.Transient;
 import net.geeklythings.fieldmarshal.type.ResultType;
 
 @Entity
-@Access(AccessType.FIELD)
 @Table(name="PLAYERRESULT")
 public class PlayerResult {
 

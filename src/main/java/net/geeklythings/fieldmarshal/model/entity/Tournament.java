@@ -10,8 +10,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -35,7 +33,6 @@ import org.apache.logging.log4j.Logger;
  * @author khooks
  */
 @Entity
-@Access(AccessType.FIELD)
 @Table(name="TOURNAMENT")
 public class Tournament extends AbstractEntityModel implements Serializable, PropertyChangeListener {
     
@@ -144,7 +141,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
         return format;
     }
 
-    public final void setFormat(EventFormat format) {
+    public void setFormat(EventFormat format) {
         EventFormat oldformat = this.format;
         this.format = format;
         //logger.debug("Tournament: setFormat: {}", format);

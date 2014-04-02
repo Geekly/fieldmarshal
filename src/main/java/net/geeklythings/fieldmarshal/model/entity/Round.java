@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Access(AccessType.FIELD)
 @Table(name="ROUND")
 public class Round extends AbstractEntityModel implements Serializable {
 
