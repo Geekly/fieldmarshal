@@ -17,3 +17,4 @@ database/derby.log
 derby.log
 /database/
 logs/
+/target/

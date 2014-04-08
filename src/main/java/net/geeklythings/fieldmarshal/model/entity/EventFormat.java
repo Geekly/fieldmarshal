@@ -4,6 +4,7 @@
  */
 package net.geeklythings.fieldmarshal.model.entity;
 
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -21,8 +22,9 @@ public class EventFormat extends AbstractEntityModel implements Serializable {
   
     @Column(name="FORMATTYPE")
     protected String formatType = "Steamroller 2013"; //Steamroller, etc..
-    //@Column(name="DESCRIPTION")
-    //protected String description;  
+
+    @Column(name="DESCRIPTION")
+    protected String description;  
     @Column(name="CLOCKTYPE")
     protected String clockType = "Death Clock";
     @Column(name="CLOCKTIME")
@@ -47,14 +49,13 @@ public class EventFormat extends AbstractEntityModel implements Serializable {
         
     }
     //TODO: make this work and make the field transient
-    @Access(AccessType.PROPERTY)
-    @Column(name="DESCRIPTION")
+    //@Access(AccessType.PROPERTY)  this happens automatically when the @Column is placed above the getter()
+    @Column(name = "DESCRIPTION")
     public String getDescription()
     {
         return String.format("%s, %s,  Time: %d min", formatType, clockType, clockTime);
     }
-
-     
+      
     public String getFormatType() {
         return this.formatType;
     }

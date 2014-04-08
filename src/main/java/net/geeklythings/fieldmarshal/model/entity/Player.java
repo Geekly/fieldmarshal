@@ -20,7 +20,6 @@ import net.geeklythings.fieldmarshal.model.PlayerStatus;
 import net.geeklythings.fieldmarshal.type.Faction;
 
 @Entity
-@Access(AccessType.FIELD)
 @Table(name = "PLAYER")
 @NamedQuery(name = "Player.findByName", query = "SELECT p FROM Player p WHERE p.firstName LIKE :first AND p.lastName LIKE :last")
 public class Player extends AbstractEntityModel implements Serializable {
