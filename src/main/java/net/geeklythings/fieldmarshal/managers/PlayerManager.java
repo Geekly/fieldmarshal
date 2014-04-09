@@ -22,6 +22,13 @@ public class PlayerManager {
         //pjc = new PlayerJpaController( emf );
     }
     
+    /**
+     * Add a player to the passed tournament.  If the player exists in the DB,
+     * grab it and use it.  Otherwise, create a new player. 
+     * @param player
+     * @param tournament
+     * @return 
+     */
     public boolean AddPlayer(Player player, Tournament tournament)
     {
         /*

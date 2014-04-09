@@ -58,7 +58,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="net.geeklythings.fieldmarshal.ui.PlayersView" name="playersView1">
+        <Component class="net.geeklythings.fieldmarshal.ui.PlayersView" name="playersView">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Players">

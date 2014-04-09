@@ -49,7 +49,7 @@ public class EventFormat extends AbstractEntityModel implements Serializable {
         
     }
     //TODO: make this work and make the field transient
-    //@Access(AccessType.PROPERTY)  this happens automatically when the @Column is placed above the getter()
+    @Access(AccessType.PROPERTY)  //this happens automatically when the @Column is placed above the getter()
     @Column(name = "DESCRIPTION")
     public String getDescription()
     {

@@ -2,11 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package test;
+
 
 import net.geeklythings.fieldmarshal.model.entity.Player;
 import net.geeklythings.fieldmarshal.type.Faction;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
+import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
 
 import java.util.Date;
 import javax.persistence.EntityManager;
@@ -14,6 +15,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+
 
 /**
  *
@@ -26,7 +28,11 @@ public class TryJPA {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalMySqlPU");
+        TournamentJpaController tjc = new TournamentJpaController(emf);
+                
+                
+                
         //Tournament activeTournament = TournamentFactory.createTournament(3);
         //EventFormat ef = new EventFormat();
         Player person1 = new Player();
@@ -65,7 +71,7 @@ public class TryJPA {
             //activeTournament.addPerson(player);
 
             
-            Tournament to = new Tournament();
+            Tournament to = Tournament.createTournament(3);
             Date today = to.getTodaysDate();
             System.out.println(to.getTodaysDate());
             System.out.println(to.getTodaysDate().toString());

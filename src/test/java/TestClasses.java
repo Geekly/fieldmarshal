@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package test;
 
-import com.google.gson.Gson;
+
+//import com.google.gson.Gson;
 import javax.persistence.Persistence;
 import net.geeklythings.fieldmarshal.jpa.exceptions.NonexistentEntityException;
 import net.geeklythings.fieldmarshal.managers.TournamentManager;
@@ -39,7 +39,7 @@ public class TestClasses {
          
         
         //emf = Persistence.createEntityManagerFactory("FieldMarshalMySqlPU");
-        manager = new TournamentManager( Persistence.createEntityManagerFactory("FieldMarshalMySqlPU") );
+        //manager = new TournamentManager( Persistence.createEntityManagerFactory("FieldMarshalMySqlPU") );
         
         //EntityManagerFactory emf = Persistence.createEntityManagerFactory("FieldMarshalPU2");
         try {       
@@ -191,7 +191,7 @@ public class TestClasses {
     
     public void TestFormat()
     {
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
         
         EventFormat ef1 = new EventFormat();
         
@@ -205,13 +205,13 @@ public class TestClasses {
         ef2.setClockType("Deathclock");
         
         
-        Tournament to = new Tournament();
+        Tournament to = Tournament.createTournament(3);
         to.setId(12516L);
         to.setFormat(ef2);
         
 
-        System.out.println(gson.toJson(ef1));
-        System.out.println(gson.toJson(ef2));
+        //System.out.println(gson.toJson(ef1));
+        //System.out.println(gson.toJson(ef2));
 
 
     }

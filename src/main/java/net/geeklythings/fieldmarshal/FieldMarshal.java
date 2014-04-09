@@ -13,31 +13,31 @@ import net.geeklythings.fieldmarshal.managers.TournamentManager;
 
 
 /**
- *
- * @author khooks
+ * FieldMarshal is an application for organizing and running Warmachine 
+ * tournaments. FieldMarshal is the main class and entry point for 
+ * the application.
+ * @author Keith Hooks
  */
 public class FieldMarshal extends javax.swing.JFrame {
     
     static final String TOURNAMENT_PROP = "Active Tournament";
-    private EntityManagerFactory _emf;
+    private final EntityManagerFactory _emf;
     TournamentJpaController tournamentJpaController;
     TournamentManager tournamentManager; // = new TournamentManager(this);
     PlayerManager playerManager;
     
     /**
-     * Creates new form MainJFrame
+     * Creates new application form MainJFrame and initializes the 
+     * Jpa controller, tournament manager, and player manager.
      */
     public FieldMarshal() {
         
         _emf = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("FieldMarshalMySqlPU");
         tournamentJpaController = new TournamentJpaController(_emf);
-        tournamentManager = new TournamentManager( _emf );
-        
-        
-        initComponents();
-        
+        tournamentManager = new TournamentManager( tournamentJpaController ); 
         //playerManager = new PlayerManager( _emf );
-        
+        initComponents();
+       
         //loadTournamentView.setEntityManager(_em);
         loadView.setManager(tournamentManager);
         //loadView.addPropertyChangeListener(tournamentManager);
@@ -52,7 +52,7 @@ public class FieldMarshal extends javax.swing.JFrame {
                
         //tournamentView.updateView();
         //playersView.updateView();
-        //playersView.setEntityManager(_em);
+        playersView.setManager(tournamentManager);
     }
     
     /**
@@ -67,7 +67,7 @@ public class FieldMarshal extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         loadView = new net.geeklythings.fieldmarshal.ui.LoadView();
         tournamentView = new net.geeklythings.fieldmarshal.ui.TournamentView();
-        playersView1 = new net.geeklythings.fieldmarshal.ui.PlayersView();
+        playersView = new net.geeklythings.fieldmarshal.ui.PlayersView();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -78,7 +78,7 @@ public class FieldMarshal extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Load Tournament", loadView);
         jTabbedPane1.addTab("Tournament Details", tournamentView);
-        jTabbedPane1.addTab("Players", playersView1);
+        jTabbedPane1.addTab("Players", playersView);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -143,7 +143,7 @@ public class FieldMarshal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane jTabbedPane1;
     private net.geeklythings.fieldmarshal.ui.LoadView loadView;
-    private net.geeklythings.fieldmarshal.ui.PlayersView playersView1;
+    private net.geeklythings.fieldmarshal.ui.PlayersView playersView;
     private net.geeklythings.fieldmarshal.ui.TournamentView tournamentView;
     // End of variables declaration//GEN-END:variables
 

@@ -96,10 +96,14 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     
     @Transient
     private int currentRound = 1;
-     
-    public Tournament() {
+    
+    /**
+    *   Don't call this constructor manually.  Instead, use the factory
+    *   createTournament
+    **/
+    private Tournament() {
         // initialize with dummy variables to reduce chance of null exceptions in the ui
-        setFormat ( new EventFormat() );
+        //setFormat( new EventFormat() );
         //format.addPropertyChangeListener(this);
         players = new ArrayList<>();
         rounds = new ArrayList<>(numRounds);
@@ -108,16 +112,16 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     public static Tournament createTournament(int numRounds) 
     {
 
-        Tournament tournament = new Tournament();      
+        Tournament tournament = new Tournament(); 
+        tournament.setNumRounds(numRounds);
         //tournament.addPropertyChangeListener(this);  //the manager that creates it will listen to it
         
-        //EventFormat ef = new EventFormat();       
+        tournament.setFormat( new EventFormat() );       
         //ef.setNumRounds(numRounds);
         //tournament.setFormat( ef );  // setters need to register listeners      
         tournament.players = new ArrayList<>();       
         tournament.rounds = new ArrayList<>();
-        
-        
+           
         for( int i=1; i<=numRounds; i++)
         {
             tournament.addNewRound();
@@ -227,11 +231,33 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     }
 
 
-    public void addPlayer(Player player) {
+    public boolean addPlayer(Player player) {
         //List<Player> oldPlayers = new ArrayList<>( this.getPlayers() );
-        players.add(player);
-        player.addPropertyChangeListener(this);        
-        firePropertyChange(ADDPLAYER, null, this.getPlayers());
+        if( players.contains(player))
+        {   
+            return false; 
+        }
+        else {
+            players.add(player);
+            player.addPropertyChangeListener(this);        
+            firePropertyChange(ADDPLAYER, null, this.getPlayers());
+            return true;
+        }
+    }
+    /**
+     * Remove the player from the tournament
+     * @param player
+     * @return success Returns true if player was found and removed, false
+     * otherwise
+     */
+    public boolean removePlayer( Player player)
+    {
+        if( players.contains(player))
+        {
+            players.remove(player);
+            return true;
+        }
+        else { return false; }
     }
 
     public List<Round> getRounds()
@@ -258,13 +284,20 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
         logger.debug("Tournament: RemoveLastRound #{}", lastRoundIndex);
         firePropertyChange(REMOVEROUND, oldRounds, rounds);
     }
-       
+    
+    /**
+     * Change the players status to dropped
+     * @param dropped Player to drop
+     */
     public void dropPlayer(Player dropped)
     {
         logger.debug("Tournament: Dropping Player: {}", dropped);
+        if( players.contains(dropped) )
+        {
         //keep the player in the tournament, but eliminate from pairings
-        dropped.setActiveStatus(PlayerStatus.INACTIVE);
-        firePropertyChange(DROPPLAYER, null, true);
+            dropped.setActiveStatus(PlayerStatus.INACTIVE);
+            firePropertyChange(DROPPLAYER, null, true);
+        }
     }
     
     @Override

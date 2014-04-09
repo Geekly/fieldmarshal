@@ -9,10 +9,11 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.logging.Level;
-import javax.persistence.EntityManagerFactory;
 import net.geeklythings.fieldmarshal.jpa.exceptions.NonexistentEntityException;
 import net.geeklythings.fieldmarshal.jpa.TournamentJpaController;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
+import net.geeklythings.fieldmarshal.model.entity.Player;
+import net.geeklythings.fieldmarshal.model.entity.Round;
 import net.geeklythings.fieldmarshal.ui.LoadView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,11 +33,12 @@ public class TournamentManager implements PropertyChangeListener {
     //public static final String LOAD_TOURNAMENT_ID = "LoadTournamentId";
     public TournamentJpaController jpaController; 
     private Tournament tournament;
+    //private PlayerManager playerManager;
     
-    public TournamentManager( EntityManagerFactory emf )
+    public TournamentManager( TournamentJpaController jpaController)
     {
-        jpaController = new TournamentJpaController( emf );
-            
+        this.jpaController = jpaController;
+        //playerManager = new PlayerManager();    
     }
     public Tournament getTournament()
     {
@@ -47,7 +49,7 @@ public class TournamentManager implements PropertyChangeListener {
     {
         return jpaController.findTournamentEntities();
     }
-    
+         
     public void setTournament(Tournament t)
     /* Assumes that t does not exist in the database yet
      */
@@ -58,9 +60,24 @@ public class TournamentManager implements PropertyChangeListener {
         }
         
         this.tournament = t;
+        //playerManager.setTournament(t);
         this.tournament.addPropertyChangeListener(this);
         changeSupport.firePropertyChange("setTournament", null, this.tournament);
         jpaController.create(this.tournament);
+    }
+    
+    public void updateTournament(Tournament t)
+    {
+        //this.tournament = t;
+        //playerManager.setTournament(t);
+        //this.tournament.addPropertyChangeListener(this);
+        ///changeSupport.firePropertyChange("setTournament", null, this.tournament);
+        try {
+            jpaController.edit(t);        
+        } catch (NonexistentEntityException e){} catch (Exception ex) { 
+            java.util.logging.Logger.getLogger(TournamentManager.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    
     }
     
     public Tournament LoadTournament(long tournamentId)
@@ -108,12 +125,12 @@ public class TournamentManager implements PropertyChangeListener {
         else 
         if (pce.getPropertyName().matches(LoadView.NEW_TOURNAMENT_ID))
         {   
-            tournament = new Tournament();
+            tournament = Tournament.createTournament(0);
             jpaController.create(tournament);
             changeSupport.firePropertyChange( "newTournament", null, tournament);
 
         }
-        if( pce.getPropertyName().matches(Tournament.ADDPLAYER))
+        else if( pce.getPropertyName().matches(Tournament.ADDPLAYER))
         {   
             try {
                 // players were added
