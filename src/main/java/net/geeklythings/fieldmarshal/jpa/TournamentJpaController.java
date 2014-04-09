@@ -16,7 +16,8 @@ import net.geeklythings.fieldmarshal.jpa.exceptions.NonexistentEntityException;
 import net.geeklythings.fieldmarshal.model.entity.Tournament;
 
 /**
- *
+ * This is the generated JPA controller that handles create, persist, edit
+ * and destroy commands to the DB.
  * @author khooks
  */
 public class TournamentJpaController implements Serializable {

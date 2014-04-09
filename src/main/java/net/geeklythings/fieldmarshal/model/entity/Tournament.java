@@ -53,16 +53,7 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     public static final String FORMAT = "formatChange";
     public static final String TODAYSDATE = "dateChange";
     
-    public Long getId() {
-        return id;
-    }
-    
-    public void setId(Long id) {
-        Long oldId = this.id;
-        this.id = id;
-        firePropertyChange("id", oldId, id);
-    }
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="TODAYSDATE")
     private Date todaysDate = new Date();
@@ -76,32 +67,43 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
     @Embedded  // don't create a seperate table for it
     private EventFormat format;// = new EventFormat();
         
-    @OneToMany(cascade={CascadeType.ALL})
+    @OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="OWNER_ID", referencedColumnName="TOURNAMENT_ID")
     private List<Player> players;
     
     @OneToMany(cascade={CascadeType.ALL}, orphanRemoval=true)
     @JoinColumn(name="OWNER_ID", referencedColumnName="TOURNAMENT_ID")
     private List<Round> rounds;   
+         
+    @Transient
+    private int currentRound = 1;
         
     public List<Player> getPlayers()
     {
         return players;
+    }    
+   
+    public Long getId() {
+        return id;
     }
+    
+    public void setId(Long id) {
+        Long oldId = this.id;
+        this.id = id;
+        firePropertyChange("id", oldId, id);
+    }
+    
     public void setPlayers( List<Player> players) throws Exception
     {
         throw new Exception("Can't change the players list directly");
         //this.players = (ObservableList<Player>) FXCollections.observableList(players);
     }
     
-    @Transient
-    private int currentRound = 1;
-    
     /**
     *   Don't call this constructor manually.  Instead, use the factory
     *   createTournament
     **/
-    private Tournament() {
+    public Tournament() {
         // initialize with dummy variables to reduce chance of null exceptions in the ui
         //setFormat( new EventFormat() );
         //format.addPropertyChangeListener(this);
@@ -331,9 +333,5 @@ public class Tournament extends AbstractEntityModel implements Serializable, Pro
         firePropertyChange(pce);
     }
 
-
-
-
-    
-    
+   
 }
